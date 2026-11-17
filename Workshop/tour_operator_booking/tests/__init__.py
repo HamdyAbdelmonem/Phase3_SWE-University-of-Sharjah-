@@ -1,1 +1,1 @@
-# Import test modules here when executable test cases are implemented.
+from . import test_booking

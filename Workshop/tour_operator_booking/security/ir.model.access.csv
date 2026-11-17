@@ -1,1 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_package_staff,package staff,model_tour_operator_package,group_booking_staff,1,0,0,0
+access_schedule_staff,schedule staff,model_tour_operator_schedule,group_booking_staff,1,0,0,0
+access_booking_staff,booking staff,model_tour_operator_booking,group_booking_staff,1,1,1,1
+access_package_manager,package manager,model_tour_operator_package,group_tour_manager,1,1,1,1
+access_schedule_manager,schedule manager,model_tour_operator_schedule,group_tour_manager,1,1,1,1

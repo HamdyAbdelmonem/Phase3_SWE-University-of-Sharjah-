@@ -1,4 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <!-- Scaffold only. Booking reference sequence. Owner: Hamdy. -->
+<odoo noupdate="1">
+    <record id="sequence_tour_booking" model="ir.sequence">
+        <field name="name">Tour Booking Reference</field>
+        <field name="code">tour.operator.booking</field>
+        <field name="prefix">TB/</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
 </odoo>

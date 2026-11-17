@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Scaffold only. Shared menu definitions. Coordinator: Hamdy. Load after actions exist. -->
+    <menuitem id="menu_tour_root" name="Tour Operator" sequence="20" groups="tour_operator_booking.group_booking_staff"/>
+    <menuitem id="menu_bookings" name="Bookings" parent="menu_tour_root" action="action_bookings" sequence="10"/>
+    <menuitem id="menu_setup" name="Tour Setup" parent="menu_tour_root" sequence="20" groups="tour_operator_booking.group_tour_manager"/>
+    <menuitem id="menu_packages" name="Tour Packages" parent="menu_setup" action="action_packages" sequence="10"/>
+    <menuitem id="menu_schedules" name="Tour Departures" parent="menu_setup" action="action_schedules" sequence="20"/>
 </odoo>
