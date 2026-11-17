@@ -1,12 +1,16 @@
 {
-    'name':'Real Estate',
-    'depends':['base'],
-    'application':True,
-    'data' : [
-        "views/estate_property_views.xml",
-        "views/estate_property_type_view.xml",
+    "name": "Real Estate",
+    "version": "19.0.1.0.0",
+    "author": "University of Sharjah Project Team",
+    "license": "LGPL-3",
+    "depends": ["base"],
+    "data": [
+        "security/ir.model.access.csv",
+        "views/estate_property_type_views.xml",
         "views/estate_property_tag_views.xml",
+        "views/estate_property_views.xml",
         "views/estate_menus.xml",
-        "security/ir.model.access.csv"
-    ]
+    ],
+    "application": True,
+    "installable": True,
 }
