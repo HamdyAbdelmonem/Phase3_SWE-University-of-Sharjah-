@@ -5,7 +5,7 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">tour_operator_booking.booking_voucher_document</field>
         <field name="report_file">tour_operator_booking.booking_voucher_document</field>
-        <field name="groups_id" eval="[(4, ref('tour_operator_booking.group_booking_staff'))]"/>
+        <field name="group_ids" eval="[(4, ref('tour_operator_booking.group_booking_staff'))]"/>
         <field name="print_report_name">'Voucher-%s' % object.name.replace('/', '-')</field>
     </record>
     <template id="booking_voucher_document">

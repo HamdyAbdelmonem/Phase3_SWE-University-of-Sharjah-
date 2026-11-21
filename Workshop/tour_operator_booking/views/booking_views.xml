@@ -34,7 +34,7 @@
                         <field name="company_id" groups="base.group_multi_company" readonly="True"/>
                         <field name="customer_id" readonly="state == 'confirmed'" options="{'no_quick_create': True}"/>
                         <field name="package_id" readonly="state == 'confirmed'" options="{'no_create': True}"/>
-                        <field name="schedule_id" readonly="state == 'confirmed'" domain="[('package_id','=',package_id),('state','=','published')]" options="{'no_create': True}"/>
+                        <field name="schedule_id" readonly="state == 'confirmed'" domain="[('state','=','published'),('start_datetime','&gt;',context_today().strftime('%Y-%m-%d')),('package_id','=?',package_id)]" options="{'no_create': True}"/>
                         <field name="booking_source" readonly="state == 'confirmed'"/>
                     </group>
                     <group string="Guests and price">

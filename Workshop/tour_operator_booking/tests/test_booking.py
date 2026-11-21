@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from odoo import fields
 from odoo.exceptions import AccessError, UserError, ValidationError
-from odoo.tests import TransactionCase, tagged
+from odoo.tests import Form, TransactionCase, tagged
 from odoo.tests.common import new_test_user
 
 
@@ -86,6 +86,19 @@ class TestTourBooking(TransactionCase):
         self._book(4).action_confirm()
         with self.assertRaises(ValidationError), self.cr.savepoint():
             self.schedule.capacity = 3
+
+    def test_form_gui_flow(self):
+        # Simulates the Create Booking screen: picking a departure fills package and price.
+        form = Form(self.env["tour.operator.booking"].with_user(self.staff))
+        form.customer_id = self.customer
+        form.schedule_id = self.schedule
+        self.assertEqual(form.package_id, self.package)
+        self.assertEqual(form.unit_price, 100)
+        form.number_of_guests = 3
+        self.assertEqual(form.total_price, 300)
+        booking = form.save()
+        self.assertEqual(booking.state, "draft")
+        self.assertIn("5 seats left", self.schedule.display_name)
 
     def test_permissions(self):
         with self.assertRaises(AccessError), self.cr.savepoint():

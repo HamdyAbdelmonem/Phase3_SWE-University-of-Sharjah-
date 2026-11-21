@@ -1,5 +1,6 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
+from odoo.tools import format_datetime
 
 
 class TourSchedule(models.Model):
@@ -27,6 +28,15 @@ class TourSchedule(models.Model):
                 schedule.booking_ids.filtered(lambda b: b.state == "confirmed").mapped("number_of_guests")
             )
             schedule.available_seats = schedule.capacity - schedule.reserved_guests
+
+    @api.depends("name", "start_datetime", "available_seats")
+    @api.depends_context("tz", "lang")
+    def _compute_display_name(self):
+        # Show date and remaining seats in the booking form's departure dropdown.
+        for schedule in self:
+            when = format_datetime(self.env, schedule.start_datetime, dt_format="short") if schedule.start_datetime else ""
+            schedule.display_name = _("%(name)s — %(when)s (%(seats)s seats left)",
+                                      name=schedule.name or "", when=when, seats=schedule.available_seats)
 
     def _lock_capacity(self):
         # Serialize reservation decisions and schedule edits on the same departure.

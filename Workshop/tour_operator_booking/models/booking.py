@@ -38,7 +38,20 @@ class TourBooking(models.Model):
 
     @api.onchange("schedule_id")
     def _onchange_schedule(self):
+        # Picking a departure first fills in its tour package.
+        if self.schedule_id and self.package_id != self.schedule_id.package_id:
+            self.package_id = self.schedule_id.package_id
         self.unit_price = self.schedule_id.package_id.price_per_guest if self.schedule_id else 0
+
+    @api.onchange("number_of_guests", "schedule_id")
+    def _onchange_guests_warning(self):
+        # Warn while typing; the real check still runs on save and on confirmation.
+        if self.number_of_guests <= 0:
+            return {"warning": {"title": _("Invalid guest count"),
+                                "message": _("Number of guests must be greater than zero.")}}
+        if self.schedule_id and self.number_of_guests > self.schedule_id.available_seats:
+            return {"warning": {"title": _("Not enough seats"),
+                                "message": _("Only %s places remain on this departure.", self.schedule_id.available_seats)}}
 
     @api.model_create_multi
     def create(self, vals_list):
