@@ -11,22 +11,46 @@ class TestTourBooking(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.staff = new_test_user(cls.env, login="tour_test_staff", groups="tour_operator_booking.group_booking_staff")
-        cls.outsider = new_test_user(cls.env, login="tour_test_outsider", groups="base.group_user")
+        cls.staff = new_test_user(
+            cls.env,
+            login="tour_test_staff",
+            groups="tour_operator_booking.group_booking_staff",
+        )
+        cls.outsider = new_test_user(
+            cls.env,
+            login="tour_test_outsider",
+            groups="base.group_user",
+        )
         cls.customer = cls.env["res.partner"].create({"name": "Tour Test Customer"})
-        cls.package = cls.env["tour.operator.package"].create({"name": "Safari", "price_per_guest": 100})
-        cls.schedule = cls.env["tour.operator.schedule"].create({
-            "name": "Tomorrow's safari", "package_id": cls.package.id,
-            "start_datetime": fields.Datetime.now() + timedelta(days=1),
-            "end_datetime": fields.Datetime.now() + timedelta(days=1, hours=3),
-            "capacity": 5, "state": "published",
-        })
+        cls.package = cls.env["tour.operator.package"].create(
+            {"name": "Safari", "price_per_guest": 100}
+        )
+        cls.schedule = cls.env["tour.operator.schedule"].create(
+            {
+                "name": "Tomorrow's safari",
+                "package_id": cls.package.id,
+                "start_datetime": fields.Datetime.now() + timedelta(days=1),
+                "end_datetime": fields.Datetime.now() + timedelta(days=1, hours=3),
+                "capacity": 5,
+                "state": "published",
+            }
+        )
 
     def _book(self, guests=1, **extra):
-        return self.env["tour.operator.booking"].with_user(self.staff).create({
-            "customer_id": self.customer.id, "package_id": self.package.id,
-            "schedule_id": self.schedule.id, "number_of_guests": guests, **extra,
-        })
+        return self.env["tour.operator.booking"].with_user(self.staff).create(
+            {
+                "customer_id": self.customer.id,
+                "package_id": self.package.id,
+                "schedule_id": self.schedule.id,
+                "number_of_guests": guests,
+                **extra,
+            }
+        )
+
+    def _confirm(self, guests=1):
+        booking = self._book(guests)
+        booking.action_confirm()
+        return booking
 
     def test_saved_price_and_draft_capacity(self):
         booking = self._book(2, unit_price=1)
@@ -59,26 +83,34 @@ class TestTourBooking(TransactionCase):
         for guests in [0, -1, 6]:
             with self.assertRaises(ValidationError), self.cr.savepoint():
                 self._book(guests)
-        other = self.env["tour.operator.package"].create({"name": "Yacht", "price_per_guest": 200})
+        other = self.env["tour.operator.package"].create(
+            {"name": "Yacht", "price_per_guest": 200}
+        )
         with self.assertRaises(ValidationError), self.cr.savepoint():
             self._book(package_id=other.id)
 
     def test_no_direct_state_bypass(self):
         with self.assertRaises(UserError), self.cr.savepoint():
             self._book(state="confirmed")
+        with self.assertRaises(UserError), self.cr.savepoint():
+            self._book(state="cancelled")
         booking = self._book()
         with self.assertRaises(UserError):
             booking.write({"state": "confirmed"})
+        with self.assertRaises(UserError):
+            booking.write({"state": "cancelled"})
 
     def test_departure_rules(self):
         self.schedule.state = "draft"
         with self.assertRaises(ValidationError), self.cr.savepoint():
             self._book()
-        self.schedule.write({
-            "state": "published",
-            "start_datetime": fields.Datetime.now() - timedelta(hours=2),
-            "end_datetime": fields.Datetime.now() - timedelta(hours=1),
-        })
+        self.schedule.write(
+            {
+                "state": "published",
+                "start_datetime": fields.Datetime.now() - timedelta(hours=2),
+                "end_datetime": fields.Datetime.now() - timedelta(hours=1),
+            }
+        )
         with self.assertRaises(ValidationError), self.cr.savepoint():
             self._book()
 
@@ -88,7 +120,6 @@ class TestTourBooking(TransactionCase):
             self.schedule.capacity = 3
 
     def test_form_gui_flow(self):
-        # Simulates the Create Booking screen: picking a departure fills package and price.
         form = Form(self.env["tour.operator.booking"].with_user(self.staff))
         form.customer_id = self.customer
         form.schedule_id = self.schedule
@@ -100,11 +131,75 @@ class TestTourBooking(TransactionCase):
         self.assertEqual(booking.state, "draft")
         self.assertIn("5 seats left", self.schedule.display_name)
 
+    def test_cancel_confirmed_booking_releases_capacity(self):
+        booking = self._confirm(3)
+        self.assertEqual(self.schedule.available_seats, 2)
+
+        booking.action_cancel("Customer requested cancellation")
+
+        self.assertEqual(booking.state, "cancelled")
+        self.assertEqual(
+            booking.cancellation_reason,
+            "Customer requested cancellation",
+        )
+        self.assertTrue(booking.cancelled_at)
+        self.assertEqual(booking.cancelled_by_id, self.staff)
+        self.assertEqual(self.schedule.available_seats, 5)
+
+        with self.assertRaises(UserError):
+            booking.action_print_voucher()
+
+    def test_cancel_requires_confirmed_booking_and_reason(self):
+        draft = self._book(1)
+        with self.assertRaises(UserError):
+            draft.action_cancel("Customer request")
+
+        booking = self._confirm(1)
+        with self.assertRaises(ValidationError):
+            booking.action_cancel("   ")
+
+        booking.action_cancel("Customer request")
+        with self.assertRaises(UserError):
+            booking.action_cancel("Cancel again")
+
+    def test_cancel_wizard_flow(self):
+        booking = self._confirm(2)
+        action = booking.action_open_cancel_wizard()
+        self.assertEqual(
+            action["res_model"],
+            "tour.operator.booking.cancel.wizard",
+        )
+        self.assertEqual(action["target"], "new")
+
+        wizard = self.env[
+            "tour.operator.booking.cancel.wizard"
+        ].with_user(self.staff).create(
+            {
+                "booking_id": booking.id,
+                "reason": "Unable to attend",
+            }
+        )
+        wizard.action_cancel_booking()
+        self.assertEqual(booking.state, "cancelled")
+        self.assertEqual(self.schedule.available_seats, 5)
+
+    def test_cancelled_booking_is_locked_and_kept(self):
+        booking = self._confirm(1)
+        booking.action_cancel("Customer request")
+
+        with self.assertRaises(UserError):
+            booking.write({"number_of_guests": 2})
+        with self.assertRaises(UserError):
+            booking.unlink()
+
     def test_permissions(self):
         with self.assertRaises(AccessError), self.cr.savepoint():
-            self.env["tour.operator.booking"].with_user(self.outsider).create({
-                "customer_id": self.customer.id, "schedule_id": self.schedule.id,
-                "package_id": self.package.id,
-            })
+            self.env["tour.operator.booking"].with_user(self.outsider).create(
+                {
+                    "customer_id": self.customer.id,
+                    "schedule_id": self.schedule.id,
+                    "package_id": self.package.id,
+                }
+            )
         with self.assertRaises(AccessError), self.cr.savepoint():
             self.schedule.with_user(self.staff).write({"capacity": 100})
