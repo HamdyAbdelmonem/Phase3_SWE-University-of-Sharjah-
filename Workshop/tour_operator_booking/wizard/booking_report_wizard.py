@@ -31,8 +31,14 @@ class BookingReportWizard(models.TransientModel):
     string='Total Revenue',
     currency_field='currency_id',
     readonly=True
-)
+    )
 
+    currency_id = fields.Many2one(
+    'res.currency',
+    string='Currency',
+    default=lambda self: self.env.company.currency_id,
+    readonly=True
+    )
 
 
     @api.constrains('date_from', 'date_to')
