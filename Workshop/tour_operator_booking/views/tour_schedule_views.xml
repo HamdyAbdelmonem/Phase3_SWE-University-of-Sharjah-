@@ -1,27 +1,170 @@
 <odoo>
     <record id="view_schedule_list" model="ir.ui.view">
-        <field name="name">tour.operator.schedule.list</field><field name="model">tour.operator.schedule</field>
-        <field name="arch" type="xml"><list decoration-muted="state == 'draft'">
-            <field name="name"/><field name="package_id"/><field name="start_datetime"/><field name="end_datetime"/><field name="capacity"/><field name="reserved_guests"/><field name="available_seats"/><field name="state" widget="badge"/>
-        </list></field>
+        <field name="name">tour.operator.schedule.list</field>
+        <field name="model">tour.operator.schedule</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'published'" decoration-muted="state == 'draft'">
+                <field name="name"/>
+                <field name="package_id"/>
+                <field name="start_datetime"/>
+                <field name="end_datetime"/>
+                <field name="capacity" string="Guest Capacity"/>
+                <field name="driver_id"/>
+                <field name="guide_id"/>
+                <field name="vehicle_id"/>
+                <field name="available_seats"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
     </record>
+
+    <record id="view_schedule_search" model="ir.ui.view">
+        <field name="name">tour.operator.schedule.search</field>
+        <field name="model">tour.operator.schedule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="package_id"/>
+                <field name="driver_id"/>
+                <field name="guide_id"/>
+                <field name="vehicle_id"/>
+                <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="published" string="Published" domain="[('state','=','published')]"/>
+                <separator/>
+                <filter name="group_package" string="Tour Package" context="{'group_by':'package_id'}"/>
+                <filter name="group_state" string="Status" context="{'group_by':'state'}"/>
+            </search>
+        </field>
+    </record>
+
     <record id="view_schedule_form" model="ir.ui.view">
-        <field name="name">tour.operator.schedule.form</field><field name="model">tour.operator.schedule</field>
-        <field name="arch" type="xml"><form><sheet>
-            <h1><field name="name" placeholder="Safari — evening departure"/></h1>
-            <group><group><field name="company_id" groups="base.group_multi_company"/><field name="package_id"/><field name="state"/></group>
-            <group><field name="start_datetime"/><field name="end_datetime"/><field name="capacity"/><field name="reserved_guests"/><field name="available_seats"/></group></group>
-            <group string="Resource Assignments"><field name="driver_id" options="{'no_create': True}"/><field name="vehicle_id" options="{'no_create': True}"/></group>
-            <div class="text-muted">Draft departures cannot be booked. Publish a future departure to make it available to Booking Staff.</div>
-        </sheet></form></field>
+        <field name="name">tour.operator.schedule.form</field>
+        <field name="model">tour.operator.schedule</field>
+        <field name="arch" type="xml">
+            <form string="Schedule Tour">
+                <header>
+                    <button name="action_check_resources"
+                            type="object"
+                            string="Check Availability"
+                            invisible="state != 'draft'"
+                            help="Checks the tour time, required resources, resource conflicts, and vehicle capacity. It does not publish the departure."/>
+                    <button name="action_publish"
+                            type="object"
+                            string="Publish"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"
+                            confirm="Publish this departure? Once published, Booking Staff can select it for new bookings."
+                            help="Publishes the departure after validating the tour, driver, guide, vehicle, and capacity."/>
+                    <button name="action_set_draft"
+                            type="object"
+                            string="Return to Draft"
+                            invisible="state != 'published'"/>
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,published"
+                           readonly="True"/>
+                </header>
+
+                <sheet>
+                    <h1>
+                        <field name="name" placeholder="Example: Desert Safari — Evening"/>
+                    </h1>
+
+                    <div role="status" class="alert alert-info" invisible="state != 'draft'">
+                        <strong>Required before publishing:</strong>
+                        tour package, future start/end time, guest capacity, driver, tour guide, and vehicle.
+                        <br/>
+                        <strong>Check Availability</strong> validates conflicts and capacity without publishing.
+                        <strong>Publish</strong> makes the departure selectable by Booking Staff.
+                    </div>
+
+                    <div role="status" class="alert alert-success" invisible="state != 'published'">
+                        This departure is published and can now be selected by Booking Staff when creating a booking.
+                    </div>
+
+                    <group>
+                        <group string="Departure Details">
+                            <field name="company_id"
+                                   groups="base.group_multi_company"
+                                   readonly="state == 'published'"/>
+                            <field name="package_id"
+                                   readonly="state == 'published'"
+                                   options="{'no_create': True}"/>
+                            <field name="start_datetime" readonly="state == 'published'"/>
+                            <field name="end_datetime" readonly="state == 'published'"/>
+                            <field name="capacity"
+                                   string="Guest Capacity"
+                                   readonly="state == 'published'"/>
+                        </group>
+
+                        <group string="Current Capacity">
+                            <field name="reserved_guests" readonly="True"/>
+                            <field name="available_seats" readonly="True"/>
+                            <field name="scheduled_at" invisible="state != 'published'"/>
+                            <field name="scheduled_by_id" invisible="state != 'published'"/>
+                        </group>
+                    </group>
+
+                    <group string="Required Resources">
+                        <group>
+                            <field name="driver_id"
+                                   string="Driver *"
+                                   readonly="state == 'published'"
+                                   domain="[('kind','=','driver')]"
+                                   options="{'no_create': True}"/>
+                            <field name="guide_id"
+                                   string="Tour Guide *"
+                                   readonly="state == 'published'"
+                                   domain="[('kind','=','guide')]"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="vehicle_id"
+                                   string="Vehicle *"
+                                   readonly="state == 'published'"
+                                   domain="[('kind','=','vehicle')]"
+                                   options="{'no_create': True}"/>
+                            <field name="vehicle_capacity" readonly="True"/>
+                        </group>
+                    </group>
+
+                    <div class="text-muted" invisible="state != 'draft'">
+                        * Driver, Tour Guide, and Vehicle are required for publishing.
+                    </div>
+                </sheet>
+            </form>
+        </field>
     </record>
+
     <record id="view_schedule_calendar" model="ir.ui.view">
-        <field name="name">tour.operator.schedule.calendar</field><field name="model">tour.operator.schedule</field>
-        <field name="arch" type="xml"><calendar string="Departures" date_start="start_datetime" date_stop="end_datetime" color="package_id" quick_create="false">
-            <field name="name"/><field name="driver_id"/><field name="vehicle_id"/>
-        </calendar></field>
+        <field name="name">tour.operator.schedule.calendar</field>
+        <field name="model">tour.operator.schedule</field>
+        <field name="arch" type="xml">
+            <calendar string="Tour Schedule"
+                      date_start="start_datetime"
+                      date_stop="end_datetime"
+                      color="package_id"
+                      quick_create="false">
+                <field name="name"/>
+                <field name="package_id"/>
+                <field name="capacity"/>
+                <field name="driver_id"/>
+                <field name="guide_id"/>
+                <field name="vehicle_id"/>
+                <field name="state"/>
+            </calendar>
+        </field>
     </record>
+
     <record id="action_schedules" model="ir.actions.act_window">
-        <field name="name">Tour Departures</field><field name="res_model">tour.operator.schedule</field><field name="view_mode">list,calendar,form</field>
+        <field name="name">Schedule Tours</field>
+        <field name="res_model">tour.operator.schedule</field>
+        <field name="view_mode">list,calendar,form</field>
+        <field name="search_view_id" ref="view_schedule_search"/>
+        <field name="context">{'default_state': 'draft'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Schedule your first tour</p>
+            <p>Enter the departure details, assign the required resources, check availability, then publish it for Booking Staff.</p>
+        </field>
     </record>
 </odoo>
