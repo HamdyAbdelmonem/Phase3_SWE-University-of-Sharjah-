@@ -3,10 +3,20 @@
         <field name="name">tour.operator.resource.list</field>
         <field name="model">tour.operator.resource</field>
         <field name="arch" type="xml">
-            <list editable="bottom"><field name="name"/><field name="kind" readonly="id"/><field name="company_id" readonly="id" groups="base.group_multi_company"/></list>
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="kind" readonly="id"/>
+                <field name="vehicle_capacity"/>
+                <field name="company_id"
+                       readonly="id"
+                       groups="base.group_multi_company"/>
+            </list>
         </field>
     </record>
+
     <record id="action_resources" model="ir.actions.act_window">
-        <field name="name">Drivers and Vehicles</field><field name="res_model">tour.operator.resource</field><field name="view_mode">list</field>
+        <field name="name">Drivers, Guides and Vehicles</field>
+        <field name="res_model">tour.operator.resource</field>
+        <field name="view_mode">list</field>
     </record>
 </odoo>
