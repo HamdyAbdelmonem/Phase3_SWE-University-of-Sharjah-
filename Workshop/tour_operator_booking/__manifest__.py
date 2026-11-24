@@ -1,6 +1,6 @@
 {
     "name": "Tour Operator Booking Suite",
-    "version": "19.0.4.0.0",
+    "version": "19.0.5.0.0",
     "summary": "Schedule tours, reserve seats, issue vouchers, and report confirmed booking value",
     "category": "Services",
     "author": "University of Sharjah Phase 3 Team",
