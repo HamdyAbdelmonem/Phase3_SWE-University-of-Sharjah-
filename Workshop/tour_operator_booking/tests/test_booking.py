@@ -25,6 +25,16 @@ class TestTourBooking(TransactionCase):
         cls.package = cls.env["tour.operator.package"].create(
             {"name": "Safari", "price_per_guest": 100}
         )
+        resources = cls.env["tour.operator.resource"]
+        cls.driver = resources.create({"name": "Booking Test Driver", "kind": "driver"})
+        cls.guide = resources.create({"name": "Booking Test Guide", "kind": "guide"})
+        cls.vehicle = resources.create(
+            {
+                "name": "Booking Test Vehicle",
+                "kind": "vehicle",
+                "vehicle_capacity": 10,
+            }
+        )
         cls.schedule = cls.env["tour.operator.schedule"].create(
             {
                 "name": "Tomorrow's safari",
@@ -33,6 +43,9 @@ class TestTourBooking(TransactionCase):
                 "end_datetime": fields.Datetime.now() + timedelta(days=1, hours=3),
                 "capacity": 5,
                 "state": "published",
+                "driver_id": cls.driver.id,
+                "guide_id": cls.guide.id,
+                "vehicle_id": cls.vehicle.id,
             }
         )
 
@@ -106,15 +119,14 @@ class TestTourBooking(TransactionCase):
         self.schedule.state = "draft"
         with self.assertRaises(ValidationError), self.cr.savepoint():
             self._book()
-        self.schedule.write(
-            {
-                "state": "published",
-                "start_datetime": fields.Datetime.now() - timedelta(hours=2),
-                "end_datetime": fields.Datetime.now() - timedelta(hours=1),
-            }
-        )
         with self.assertRaises(ValidationError), self.cr.savepoint():
-            self._book()
+            self.schedule.write(
+                {
+                    "state": "published",
+                    "start_datetime": fields.Datetime.now() - timedelta(hours=2),
+                    "end_datetime": fields.Datetime.now() - timedelta(hours=1),
+                }
+            )
 
     def test_confirmed_schedule_cannot_shrink(self):
         self._book(4).action_confirm()
