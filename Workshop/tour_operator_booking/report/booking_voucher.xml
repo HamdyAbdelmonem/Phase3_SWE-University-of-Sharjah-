@@ -1,4 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Scaffold only. Confirmation voucher containing a QR code. Owner: Hassan. -->
+    <record id="action_booking_voucher" model="ir.actions.report">
+        <field name="name">Booking Voucher / QR</field>
+        <field name="model">tour.operator.booking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tour_operator_booking.booking_voucher_document</field>
+        <field name="report_file">tour_operator_booking.booking_voucher_document</field>
+        <field name="group_ids" eval="[(4, ref('tour_operator_booking.group_booking_staff'))]"/>
+        <field name="print_report_name">'Voucher-%s' % object.name.replace('/', '-')</field>
+    </record>
+    <template id="booking_voucher_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="company" t-value="o.company_id"/>
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <t t-if="o.state == 'confirmed'">
+                            <h2>Tour Booking Voucher</h2>
+                            <h3 t-field="o.name"/>
+                            <p>Customer: <span t-field="o.customer_id.name"/></p>
+                            <p>Tour: <span t-field="o.package_id.name"/></p>
+                            <p>Departure: <span t-field="o.schedule_id.start_datetime"/></p>
+                            <p>Guests: <span t-field="o.number_of_guests"/></p>
+                            <p>Booking value: <span t-field="o.total_price"/></p>
+                            <p>Confirmed: <span t-field="o.confirmed_at"/></p>
+                            <div t-field="o.name" t-options="{'widget':'barcode','symbology':'QR','width':160,'height':160}"/>
+                            <p class="text-muted">The QR code contains the booking reference. This voucher is not a payment receipt.</p>
+                        </t>
+                        <t t-elif="o.state == 'cancelled'">
+                            <h2>Cancelled Booking — Voucher Invalid</h2>
+                            <h3 t-field="o.name"/>
+                            <p>Cancelled: <span t-field="o.cancelled_at"/></p>
+                            <p>Reason: <span t-field="o.cancellation_reason"/></p>
+                            <p class="text-muted">No valid QR code is issued for a cancelled booking.</p>
+                        </t>
+                        <t t-else="">
+                            <h2>Draft booking — no valid voucher</h2>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
 </odoo>

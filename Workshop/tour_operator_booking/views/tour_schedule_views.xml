@@ -1,4 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Scaffold only. Schedule form, list, and calendar views. Owner: Zayed. -->
+    <record id="view_schedule_list" model="ir.ui.view">
+        <field name="name">tour.operator.schedule.list</field><field name="model">tour.operator.schedule</field>
+        <field name="arch" type="xml"><list decoration-muted="state == 'draft'">
+            <field name="name"/><field name="package_id"/><field name="start_datetime"/><field name="end_datetime"/><field name="capacity"/><field name="reserved_guests"/><field name="available_seats"/><field name="state" widget="badge"/>
+        </list></field>
+    </record>
+    <record id="view_schedule_form" model="ir.ui.view">
+        <field name="name">tour.operator.schedule.form</field><field name="model">tour.operator.schedule</field>
+        <field name="arch" type="xml"><form><sheet>
+            <h1><field name="name" placeholder="Safari — evening departure"/></h1>
+            <group><group><field name="company_id" groups="base.group_multi_company"/><field name="package_id"/><field name="state"/></group>
+            <group><field name="start_datetime"/><field name="end_datetime"/><field name="capacity"/><field name="reserved_guests"/><field name="available_seats"/></group></group>
+            <group string="Resource Assignments"><field name="driver_id" options="{'no_create': True}"/><field name="vehicle_id" options="{'no_create': True}"/></group>
+            <div class="text-muted">Draft departures cannot be booked. Publish a future departure to make it available to Booking Staff.</div>
+        </sheet></form></field>
+    </record>
+    <record id="view_schedule_calendar" model="ir.ui.view">
+        <field name="name">tour.operator.schedule.calendar</field><field name="model">tour.operator.schedule</field>
+        <field name="arch" type="xml"><calendar string="Departures" date_start="start_datetime" date_stop="end_datetime" color="package_id" quick_create="false">
+            <field name="name"/><field name="driver_id"/><field name="vehicle_id"/>
+        </calendar></field>
+    </record>
+    <record id="action_schedules" model="ir.actions.act_window">
+        <field name="name">Tour Departures</field><field name="res_model">tour.operator.schedule</field><field name="view_mode">list,calendar,form</field>
+    </record>
 </odoo>

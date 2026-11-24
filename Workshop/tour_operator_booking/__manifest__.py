@@ -1,14 +1,25 @@
 {
     "name": "Tour Operator Booking Suite",
-    "version": "19.0.1.0.0",
-    "summary": "Phase 3 foundation for bookings, tour scheduling, and reports",
+    "version": "19.0.4.0.0",
+    "summary": "Schedule tours, reserve seats, issue vouchers, and report confirmed booking value",
     "category": "Services",
     "author": "University of Sharjah Phase 3 Team",
     "license": "LGPL-3",
-    # Contacts supplies the existing customer model, res.partner.
-    "depends": ["base", "contacts"],
-    # Register XML/CSV files here only when their referenced models exist.
-    "data": [],
+    "depends": ["base", "contacts", "web"],
+    "data": [
+        "security/security.xml",
+        "security/ir.model.access.csv",
+        "security/company_rules.xml",
+        "data/booking_sequence.xml",
+        "views/tour_package_views.xml",
+        "views/tour_schedule_views.xml",
+        "views/booking_views.xml",
+        "wizard/cancel_booking_wizard_views.xml",
+        "report/booking_voucher.xml",
+        "views/operational_resource_views.xml",
+        "wizard/booking_report_wizard_views.xml",
+        "views/menu_views.xml"
+    ],
     "application": True,
-    "installable": True,
+    "installable": True
 }
