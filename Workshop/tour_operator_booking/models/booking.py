@@ -16,9 +16,10 @@ class TourBooking(models.Model):
     schedule_id = fields.Many2one("tour.operator.schedule", required=True, ondelete="restrict", check_company=True)
     number_of_guests = fields.Integer(required=True, default=1)
     booking_source = fields.Selection(
-        [("direct", "Direct"), ("phone", "Phone"), ("email", "Email")],
+        [("direct", "Direct"), ("ota", "OTA")],
         required=True,
         default="direct",
+        help="Choose Direct for bookings made with your tour business, or OTA for bookings received from an online travel agency.",
     )
     unit_price = fields.Monetary(readonly=True, currency_field="currency_id")
     total_price = fields.Monetary(compute="_compute_total_price", store=True, currency_field="currency_id")

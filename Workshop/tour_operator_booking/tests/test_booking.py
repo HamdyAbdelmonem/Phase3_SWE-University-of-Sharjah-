@@ -54,6 +54,7 @@ class TestTourBooking(TransactionCase):
 
     def test_saved_price_and_draft_capacity(self):
         booking = self._book(2, unit_price=1)
+        self.assertEqual(booking.booking_source, "direct")
         self.assertEqual(booking.total_price, 200)
         self.assertTrue(booking.name.startswith("TB/"))
         self.assertEqual(self.schedule.available_seats, 5)
@@ -61,10 +62,11 @@ class TestTourBooking(TransactionCase):
         self.assertEqual(booking.total_price, 200)
 
     def test_confirm_reserves_once_and_returns_voucher(self):
-        booking = self._book(5)
+        booking = self._book(5, booking_source="ota")
         action = booking.action_confirm()
         self.assertEqual(action["report_type"], "qweb-pdf")
         self.assertEqual(booking.state, "confirmed")
+        self.assertEqual(booking.booking_source, "ota")
         self.assertEqual(self.schedule.available_seats, 0)
         with self.assertRaises(UserError):
             booking.action_confirm()
