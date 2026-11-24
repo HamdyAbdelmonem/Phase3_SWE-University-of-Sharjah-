@@ -3,7 +3,7 @@
     <menuitem id="menu_bookings" name="Bookings" parent="menu_tour_root" groups="tour_operator_booking.group_booking_staff" action="action_bookings" sequence="10"/>
     <menuitem id="menu_setup" name="Tour Setup" parent="menu_tour_root" sequence="20" groups="tour_operator_booking.group_operations_staff"/>
     <menuitem id="menu_packages" name="Tour Packages" parent="menu_setup" action="action_packages" sequence="10"/>
-    <menuitem id="menu_schedules" name="Tour Departures" parent="menu_setup" action="action_schedules" sequence="20"/>
-    <menuitem id="menu_resources" name="Drivers and Vehicles" parent="menu_setup" action="action_resources" sequence="30"/>
+    <menuitem id="menu_schedules" name="Schedule Tours" parent="menu_setup" action="action_schedules" sequence="20"/>
+    <menuitem id="menu_resources" name="Operational Resources" parent="menu_setup" action="action_resources" sequence="30"/>
     <menuitem id="menu_report" name="Booking Report" parent="menu_tour_root" action="action_booking_report" groups="tour_operator_booking.group_tour_manager" sequence="30"/>
 </odoo>
