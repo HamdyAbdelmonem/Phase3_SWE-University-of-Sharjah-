@@ -12,6 +12,8 @@ class TourSchedule(models.Model):
     name = fields.Char(required=True)
     company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company)
     package_id = fields.Many2one("tour.operator.package", required=True, ondelete="restrict", check_company=True)
+    driver_id = fields.Many2one("tour.operator.resource", domain=[("kind", "=", "driver")], check_company=True, ondelete="restrict")
+    vehicle_id = fields.Many2one("tour.operator.resource", domain=[("kind", "=", "vehicle")], check_company=True, ondelete="restrict")
     start_datetime = fields.Datetime(required=True)
     end_datetime = fields.Datetime(required=True)
     capacity = fields.Integer(required=True, default=10)
@@ -62,6 +64,25 @@ class TourSchedule(models.Model):
                 raise ValidationError(_("Departure capacity must be greater than zero."))
             if schedule.end_datetime <= schedule.start_datetime:
                 raise ValidationError(_("Departure end must be after its start."))
+
+    @api.constrains("driver_id", "vehicle_id", "state", "start_datetime", "end_datetime")
+    def _check_assignments(self):
+        published = self.filtered(lambda s: s.state == "published")
+        (published.driver_id | published.vehicle_id)._lock_assignments()
+        for schedule in self:
+            for field, kind in (("driver_id", "driver"), ("vehicle_id", "vehicle")):
+                resource = schedule[field]
+                if not resource:
+                    continue
+                if resource.kind != kind:
+                    raise ValidationError(_("Choose the correct resource type for this assignment."))
+                if schedule.state == "published" and self.sudo().search_count([
+                    ("id", "!=", schedule.id), ("state", "=", "published"),
+                    (field, "=", resource.id),
+                    ("start_datetime", "<", schedule.end_datetime),
+                    ("end_datetime", ">", schedule.start_datetime),
+                ], limit=1):
+                    raise ValidationError(_("This resource is already assigned to an overlapping departure."))
 
     def write(self, vals):
         self.check_access("write")

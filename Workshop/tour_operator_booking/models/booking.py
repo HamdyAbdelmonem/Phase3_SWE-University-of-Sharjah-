@@ -80,6 +80,7 @@ class TourBooking(models.Model):
             if not schedule:
                 raise ValidationError(_("Select an existing tour departure."))
             schedule.check_access("read")
+            vals["state"] = "draft"
             vals["unit_price"] = schedule.package_id.price_per_guest
             vals.setdefault("package_id", schedule.package_id.id)
             vals["name"] = self.env["ir.sequence"].next_by_code("tour.operator.booking") or "New"
@@ -124,7 +125,15 @@ class TourBooking(models.Model):
             if not schedule:
                 raise ValidationError(_("Select an existing tour departure."))
             schedule.check_access("read")
-            vals = dict(vals, unit_price=schedule.package_id.price_per_guest)
+            # An explicit re-save of the same departure keeps its quoted price.
+            same = self.filtered(lambda booking: booking.schedule_id == schedule)
+            changed = self - same
+            if same:
+                unchanged_price = {key: value for key, value in vals.items() if key not in ("schedule_id", "unit_price")}
+                super(TourBooking, same).write(unchanged_price)
+            if not changed:
+                return True
+            return super(TourBooking, changed).write(dict(vals, unit_price=schedule.package_id.price_per_guest))
         elif "unit_price" in vals:
             vals = dict(vals)
             vals.pop("unit_price")
@@ -135,12 +144,12 @@ class TourBooking(models.Model):
         for booking in self:
             if booking.number_of_guests <= 0:
                 raise ValidationError(_("Number of guests must be greater than zero."))
-            if booking.schedule_id.package_id != booking.package_id:
-                raise ValidationError(_("The departure must belong to the selected tour package."))
             booking._validate_departure()
 
     def _validate_departure(self):
         self.ensure_one()
+        if self.schedule_id.package_id != self.package_id:
+            raise ValidationError(_("The departure must belong to the selected tour package."))
         if self.schedule_id.state != "published":
             raise ValidationError(_("Select a published departure."))
         if self.schedule_id.start_datetime <= fields.Datetime.now():
@@ -247,6 +256,7 @@ class TourBooking(models.Model):
             "params": {
                 "title": _("Booking cancelled"),
                 "message": _("%s has been cancelled and its seats are available again.", self.name),
+                "next": {"type": "ir.actions.act_window_close"},
                 "type": "success",
                 "sticky": False,
             },

@@ -59,10 +59,10 @@
                 <sheet>
                     <h1><field name="name"/></h1>
 
-                    <div class="alert alert-info" invisible="state != 'draft'">
+                    <div role="status" class="alert alert-info" invisible="state != 'draft'">
                         Drafts do not reserve seats. Availability is checked again when you confirm.
                     </div>
-                    <div class="alert alert-warning" invisible="state != 'cancelled'">
+                    <div role="status" class="alert alert-warning" invisible="state != 'cancelled'">
                         This booking is cancelled. Its voucher / QR code is invalid and its seats have been released.
                     </div>
 
@@ -72,7 +72,7 @@
                             <field name="customer_id" readonly="state != 'draft'" options="{'no_quick_create': True}"/>
                             <field name="package_id" readonly="state != 'draft'" options="{'no_create': True}"/>
                             <field name="schedule_id" readonly="state != 'draft'"
-                                   domain="[('state','=','published'),('start_datetime','&gt;',context_today().strftime('%Y-%m-%d')),('package_id','=?',package_id)]"
+                                   domain="[('state','=','published'),('start_datetime','&gt;','now'),('package_id','=?',package_id)]"
                                    options="{'no_create': True}"/>
                             <field name="booking_source" readonly="state != 'draft'"/>
                         </group>

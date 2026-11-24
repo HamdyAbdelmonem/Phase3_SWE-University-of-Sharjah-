@@ -1,7 +1,7 @@
 {
     "name": "Tour Operator Booking Suite",
-    "version": "19.0.3.0.0",
-    "summary": "Create, confirm, and cancel tour bookings with capacity control",
+    "version": "19.0.4.0.0",
+    "summary": "Schedule tours, reserve seats, issue vouchers, and report confirmed booking value",
     "category": "Services",
     "author": "University of Sharjah Phase 3 Team",
     "license": "LGPL-3",
@@ -16,6 +16,8 @@
         "views/booking_views.xml",
         "wizard/cancel_booking_wizard_views.xml",
         "report/booking_voucher.xml",
+        "views/operational_resource_views.xml",
+        "wizard/booking_report_wizard_views.xml",
         "views/menu_views.xml"
     ],
     "application": True,

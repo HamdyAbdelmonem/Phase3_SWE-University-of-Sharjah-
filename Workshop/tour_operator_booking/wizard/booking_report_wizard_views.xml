@@ -1,4 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Scaffold only. Date-range report form and action. Owner: Nasser. -->
+    <record id="view_booking_report_form" model="ir.ui.view">
+        <field name="name">booking.report.wizard.form</field>
+        <field name="model">booking.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Booking Report">
+                <group string="Departure dates"><field name="date_from"/><field name="date_to"/></group>
+                <group><field name="total_bookings"/><field name="currency_id" invisible="1"/><field name="total_revenue"/></group>
+                <footer><button name="action_show_report" type="object" string="Refresh Report" class="btn-primary"/>
+                    <button string="Close" special="cancel"/></footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_booking_report" model="ir.actions.act_window">
+        <field name="name">Booking Report</field><field name="res_model">booking.report.wizard</field>
+        <field name="view_mode">form</field><field name="target">new</field>
+        <field name="group_ids" eval="[(4, ref('group_tour_manager'))]"/>
+    </record>
 </odoo>
