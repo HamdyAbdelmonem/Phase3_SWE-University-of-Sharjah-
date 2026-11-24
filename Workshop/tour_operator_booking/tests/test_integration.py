@@ -19,14 +19,16 @@ class TestTourWorkflows(TransactionCase):
         })
         cls.customer = cls.env["res.partner"].with_user(cls.staff).create({"name": "Test traveller"})
         cls.resources = cls.env["tour.operator.resource"].with_user(cls.ops)
-        cls.driver, cls.vehicle = cls.resources.create([
-            {"name": "Salma", "kind": "driver"}, {"name": "Bus 7", "kind": "vehicle"},
+        cls.driver, cls.guide, cls.vehicle = cls.resources.create([
+            {"name": "Salma", "kind": "driver"},
+            {"name": "Mariam", "kind": "guide"},
+            {"name": "Bus 7", "kind": "vehicle", "vehicle_capacity": 20},
         ])
         cls.start = datetime.combine(fields.Date.today() + timedelta(days=8), datetime.min.time()).replace(hour=21)
         cls.values = {
             "name": "City departure", "package_id": cls.package.id, "start_datetime": cls.start,
             "end_datetime": cls.start + timedelta(hours=1), "capacity": 5, "state": "published",
-            "driver_id": cls.driver.id, "vehicle_id": cls.vehicle.id,
+            "driver_id": cls.driver.id, "guide_id": cls.guide.id, "vehicle_id": cls.vehicle.id,
         }
         cls.schedules = cls.env["tour.operator.schedule"].with_user(cls.ops)
         cls.schedule = cls.schedules.create(cls.values)
@@ -69,16 +71,36 @@ class TestTourWorkflows(TransactionCase):
         self.assertEqual((report.total_bookings, report.total_revenue), (0, 0))
 
     def test_resource_conflicts(self):
-        for resource in ("driver_id", "vehicle_id"):
-            values = dict(self.values, driver_id=False, vehicle_id=False, state="draft")
+        for resource in ("driver_id", "guide_id", "vehicle_id"):
+            values = dict(
+                self.values,
+                driver_id=False,
+                guide_id=False,
+                vehicle_id=False,
+                state="draft",
+            )
             values[resource] = self.values[resource]
             draft = self.schedules.create(values)
             with self.assertRaises(ValidationError), self.cr.savepoint():
-                draft.state = "published"
-        self.schedules.create(dict(self.values, start_datetime=self.schedule.end_datetime,
-                                   end_datetime=self.schedule.end_datetime + timedelta(hours=1)))
+                draft.write({
+                    "driver_id": self.driver.id,
+                    "guide_id": self.guide.id,
+                    "vehicle_id": self.vehicle.id,
+                    "state": "published",
+                })
+        self.schedules.create(dict(
+            self.values,
+            name="Adjacent city departure",
+            start_datetime=self.schedule.end_datetime,
+            end_datetime=self.schedule.end_datetime + timedelta(hours=1),
+        ))
         with self.assertRaises(ValidationError), self.cr.savepoint():
-            self.schedules.create(dict(self.values, state="draft", driver_id=self.vehicle.id))
+            self.schedules.create(dict(
+                self.values,
+                name="Wrong resource type",
+                state="draft",
+                driver_id=self.vehicle.id,
+            ))
 
     def test_role_and_date_validation(self):
         for user in (self.ops, self.staff):
