@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from odoo import fields
 from odoo.exceptions import AccessError, ValidationError
-from odoo.tests import TransactionCase, tagged
+from odoo.tests import Form, TransactionCase, tagged
 from odoo.tests.common import new_test_user
 
 
@@ -150,3 +150,19 @@ class TestScheduleTour(TransactionCase):
         )
         with self.assertRaises(ValidationError):
             schedule.action_publish()
+
+    def test_booking_staff_can_select_published_departure(self):
+        schedule = self._draft()
+        schedule.action_publish()
+
+        customer = self.env["res.partner"].with_user(self.booking_staff).create(
+            {"name": "Schedule Test Customer"}
+        )
+        form = Form(
+            self.env["tour.operator.booking"].with_user(self.booking_staff)
+        )
+        form.customer_id = customer
+        form.schedule_id = schedule
+
+        self.assertEqual(form.schedule_id, schedule)
+        self.assertEqual(form.package_id, self.package)
