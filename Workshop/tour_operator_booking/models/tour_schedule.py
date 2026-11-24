@@ -124,7 +124,11 @@ class TourSchedule(models.Model):
             self.invalidate_recordset()
 
     def _assigned_resources(self):
-        return self.driver_id | self.guide_id | self.vehicle_id
+        return (
+            self.mapped("driver_id")
+            | self.mapped("guide_id")
+            | self.mapped("vehicle_id")
+        )
 
     def _validate_schedule_details(self):
         now = fields.Datetime.now()
@@ -253,22 +257,7 @@ class TourSchedule(models.Model):
         self.check_access("read")
         self._validate_schedule_details()
         self._validate_resource_types()
-
-        original_state = self.state
-        if original_state != "published":
-            # Reuse the exact publish validation without saving a state change.
-            self.state = "published"
-            try:
-                self._validate_publish_requirements()
-            finally:
-                self.invalidate_recordset(["state"])
-                self.env.cr.execute(
-                    "UPDATE tour_operator_schedule SET state = %s WHERE id = %s",
-                    [original_state, self.id],
-                )
-                self.invalidate_recordset(["state"])
-        else:
-            self._validate_publish_requirements()
+        self._validate_publish_requirements()
 
         return {
             "type": "ir.actions.client",
