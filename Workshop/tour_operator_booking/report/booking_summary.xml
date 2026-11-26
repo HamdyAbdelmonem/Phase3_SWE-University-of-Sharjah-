@@ -1,4 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Scaffold only. Printable booking summary. Owner: Nasser. -->
+    <record id="action_booking_summary" model="ir.actions.report">
+        <field name="name">All Bookings Summary</field>
+        <field name="model">tour.operator.booking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tour_operator_booking.booking_summary_document</field>
+        <field name="report_file">tour_operator_booking.booking_summary_document</field>
+        <field name="binding_model_id" ref="model_tour_operator_booking"/>
+        <field name="binding_type">report</field>
+        <field name="group_ids" eval="[(4, ref('tour_operator_booking.group_booking_staff'))]"/>
+        <field name="print_report_name">'All-Bookings-Summary'</field>
+    </record>
+
+    
+    <template id="booking_summary_document">
+
+        <t t-call="web.html_container">
+
+            <t t-set="company" t-value="company"/>
+
+            <t t-call="web.external_layout">
+
+                <div class="page">
+
+                    <h2 class="text-center">
+                        All Bookings Summary
+                    </h2>
+
+                    <p class="text-center text-muted">
+                        Overview of tour bookings
+                    </p>
+
+                    <hr/>
+
+                  
+                    <h3>Booking Overview</h3>
+
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td><strong>Total Bookings</strong></td>
+                                <td><span t-out="total_bookings"/></td>
+                                <td><strong>Confirmed</strong></td>
+                                <td><span t-out="confirmed_count"/></td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Cancelled</strong></td>
+                                <td><span t-out="cancelled_count"/></td>
+                                <td><strong>Draft</strong></td>
+                                <td><span t-out="draft_count"/></td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Total Guests</strong></td>
+                                <td><span t-out="total_guests"/></td>
+                                <td><strong>Confirmed Guests</strong></td>
+                                <td><span t-out="confirmed_guests"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                 
+                    <h3>Financial Summary</h3>
+
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td><strong>Total Booking Value</strong></td>
+                                <td>
+                                    <span t-out="total_booking_value"
+                                          t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Confirmed Booking Revenue</strong></td>
+                                <td>
+                                    <span t-out="confirmed_revenue"
+                                          t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    
+                    <h3>Booking Details</h3>
+
+                    <t t-if="docs">
+
+                        <table class="table table-sm table-bordered">
+
+                            <thead>
+                                <tr>
+                                    <th>Reference</th>
+                                    <th>Customer</th>
+                                    <th>Tour Package</th>
+                                    <th>Departure</th>
+                                    <th>Guests</th>
+                                    <th>Source</th>
+                                    <th>Status</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr t-foreach="docs" t-as="booking">
+
+                                    <td>
+                                        <span t-field="booking.name"/>
+                                    </td>
+
+                                    <td>
+                                        <span t-field="booking.customer_id.name"/>
+                                    </td>
+
+                                    <td>
+                                        <span t-field="booking.package_id.name"/>
+                                    </td>
+
+                                    <td>
+                                        <span t-field="booking.schedule_id.start_datetime"/>
+                                    </td>
+
+                                    <td>
+                                        <span t-field="booking.number_of_guests"/>
+                                    </td>
+
+                                    <td>
+                                        <span t-field="booking.booking_source"/>
+                                    </td>
+
+                                    <td>
+                                        <span t-field="booking.state"/>
+                                    </td>
+
+                                    <td>
+                                        <span t-field="booking.total_price"/>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </t>
+
+                    <t t-else="">
+                        <p class="text-center text-muted">
+                            No bookings were found for this company.
+                        </p>
+                    </t>
+
+                </div>
+
+            </t>
+
+        </t>
+
+    </template>
 </odoo>
