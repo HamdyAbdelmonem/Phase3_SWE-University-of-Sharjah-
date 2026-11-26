@@ -16,6 +16,7 @@
         "views/booking_views.xml",
         "wizard/cancel_booking_wizard_views.xml",
         "report/booking_voucher.xml",
+        "report/booking_summary.xml",
         "views/operational_resource_views.xml",
         "wizard/booking_report_wizard_views.xml",
         "views/menu_views.xml"
