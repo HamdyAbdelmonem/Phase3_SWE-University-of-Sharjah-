@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="tour_operator_booking.Dashboard">
+
+        <div class="tob_dashboard">
+
+            <!-- Sidebar -->
+            <aside class="tob_sidebar">
+
+                <div class="tob_brand">
+                    <img src="/tour_operator_booking/static/src/img/tour_logo.png"
+     class="tob_logo"
+     alt="Nexus Logo"/>
+                    <div>
+                        <strong>Tour Operator</strong>
+                        <small>Booking Suite</small>
+                    </div>
+                </div>
+
+                <div class="tob_nav active">
+                    <i class="fa fa-home"/>
+                    Dashboard
+                </div>
+
+                <button class="tob_nav"
+                        t-on-click="openBookings">
+                    <i class="fa fa-ticket"/>
+                    Bookings
+                </button>
+
+                <button class="tob_nav"
+                        t-on-click="openSchedules">
+                    <i class="fa fa-calendar"/>
+                    Operations
+                </button>
+
+                <button class="tob_nav"
+                        t-on-click="openReports">
+                    <i class="fa fa-bar-chart"/>
+                    Reports
+                </button>
+
+            </aside>
+
+            <!-- Main content -->
+            <main class="tob_content">
+
+                <div class="tob_heading">
+                    <h1>Welcome Back!</h1>
+                    <p>Manage your tour operator business.</p>
+
+                    <button class="tob_button"
+                            t-on-click="loadDashboard">
+                        <i class="fa fa-refresh"/>
+                        Refresh
+                    </button>
+                </div>
+
+                <div t-if="state.error"
+                     class="alert alert-warning">
+                    Dashboard data could not be loaded.
+                    Please try refreshing.
+                </div>
+
+                <!-- Statistics -->
+                <div class="tob_cards">
+
+                    <div class="tob_card">
+                        <div class="tob_icon">
+                            <i class="fa fa-ticket"/>
+                        </div>
+                        <span>Total Bookings</span>
+                        <h2 t-esc="state.totalBookings"/>
+                    </div>
+
+                    <div class="tob_card">
+                        <div class="tob_icon">
+                            <i class="fa fa-check"/>
+                        </div>
+                        <span>Confirmed Bookings</span>
+                        <h2 t-esc="state.confirmedBookings"/>
+                    </div>
+
+                    <div class="tob_card">
+                        <div class="tob_icon">
+                            <i class="fa fa-calendar"/>
+                        </div>
+                        <span>Upcoming Tours</span>
+                        <h2 t-esc="state.upcomingTours"/>
+                    </div>
+
+                </div>
+
+                <!-- Quick Actions -->
+                <h2 class="tob_section_title">
+                    Quick Actions
+                </h2>
+
+                <div class="tob_cards">
+
+                    <button class="tob_action"
+                            t-on-click="addBooking">
+                        <i class="fa fa-plus-circle"/>
+                        <h3>Add Booking</h3>
+                        <p>Create a new tour reservation.</p>
+                    </button>
+
+                    <button class="tob_action"
+                            t-on-click="scheduleTour">
+                        <i class="fa fa-calendar-plus-o"/>
+                        <h3>Schedule Tour</h3>
+                        <p>Plan departures and resources.</p>
+                    </button>
+
+                    <button class="tob_action"
+                            t-on-click="openReports">
+                        <i class="fa fa-line-chart"/>
+                        <h3>Booking Reports</h3>
+                        <p>Analyze booking performance.</p>
+                    </button>
+
+                </div>
+
+            </main>
+
+        </div>
+
+    </t>
+
+</templates>

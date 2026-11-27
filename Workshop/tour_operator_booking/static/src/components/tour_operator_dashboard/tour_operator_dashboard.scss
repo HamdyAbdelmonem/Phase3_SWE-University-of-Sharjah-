@@ -1,0 +1,169 @@
+.tob_dashboard {
+    display: flex;
+    height: 100%;
+    overflow: auto;
+    background: #f0f5fa;
+    color: #172438;
+    font-family: "Inter", "Segoe UI", sans-serif;
+
+    .tob_sidebar {
+        width: 230px;
+        flex-shrink: 0;
+        background: #053b35;
+        color: white;
+        padding: 24px 14px;
+    }
+
+    .tob_brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px;
+        margin-bottom: 35px;
+
+        i {
+            font-size: 32px;
+            color: #f7c84b;
+        }
+
+        strong {
+            font-size: 17px;
+        }
+
+        small {
+            display: block;
+            color: #b5d6cd;
+        }
+    }
+
+    .tob_nav {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 100%;
+        border: none;
+        border-radius: 7px;
+        padding: 13px 14px;
+        margin-bottom: 6px;
+        color: white;
+        background: transparent;
+        text-align: left;
+        font-size: 14px;
+
+        &.active,
+        &:hover {
+            background: #008c50;
+        }
+    }
+
+    .tob_content {
+        flex: 1;
+        min-width: 0;
+        padding: 30px;
+        overflow: auto;
+    }
+
+    .tob_heading {
+        margin-bottom: 25px;
+
+        h1 {
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        p {
+            color: #64748b;
+        }
+    }
+
+    .tob_button {
+        background: #008c50;
+        color: white;
+        border: none;
+        border-radius: 7px;
+        padding: 10px 18px;
+    }
+
+    .tob_cards {
+        display: grid;
+        grid-template-columns:
+            repeat(auto-fit, minmax(190px, 1fr));
+        gap: 18px;
+    }
+
+    .tob_card,
+    .tob_action {
+        background: white;
+        border: 1px solid #e1e8ed;
+        border-radius: 12px;
+        padding: 22px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .tob_icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        height: 46px;
+        background: #dcfce7;
+        color: #008c50;
+        border-radius: 50%;
+        font-size: 21px;
+        margin-bottom: 15px;
+    }
+
+    .tob_card {
+        span {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        h2 {
+            font-size: 30px;
+            font-weight: 700;
+            margin: 8px 0 0;
+        }
+    }
+
+    .tob_section_title {
+        font-size: 20px;
+        font-weight: 700;
+        margin: 30px 0 16px;
+    }
+
+    .tob_action {
+        text-align: left;
+        color: #172438;
+        cursor: pointer;
+        transition: 0.2s ease;
+
+        i {
+            font-size: 28px;
+            color: #008c50;
+            margin-bottom: 18px;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        p {
+            color: #64748b;
+            margin: 0;
+        }
+
+        &:hover {
+            border-color: #008c50;
+            transform: translateY(-3px);
+            background: #f0fdf4;
+        }
+    }
+}
+.tob_dashboard .tob_logo {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
