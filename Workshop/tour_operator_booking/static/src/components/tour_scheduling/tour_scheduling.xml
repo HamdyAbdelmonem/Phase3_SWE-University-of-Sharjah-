@@ -1,0 +1,1442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="tour_operator_booking.TourScheduling">
+
+        <div class="ts_page">
+
+            <!-- ============================================== -->
+            <!-- NEXUS SIDEBAR                                  -->
+            <!-- ============================================== -->
+
+            <aside class="ts_sidebar">
+
+                <div class="ts_brand">
+
+                    <img src="/tour_operator_booking/static/src/img/tour_logo.png"
+                         alt="Nexus Logo"
+                         class="ts_logo"/>
+
+                    <div>
+                        <strong>Tour Operator</strong>
+                        <small>Booking Suite</small>
+                    </div>
+
+                </div>
+
+                <div class="ts_sidebar_label">
+                    WORKSPACE
+                </div>
+
+                <nav class="ts_navigation">
+
+                    <button t-if="state.isManager"
+                            type="button"
+                            class="ts_nav"
+                            t-on-click="openDashboard">
+
+                        <i class="fa fa-home"/>
+                        <span>Dashboard</span>
+
+                    </button>
+
+                    <button t-if="state.isBookingStaff"
+                            type="button"
+                            class="ts_nav"
+                            t-on-click="openBookings">
+
+                        <i class="fa fa-ticket"/>
+                        <span>Bookings</span>
+
+                    </button>
+
+                    <button type="button"
+                            class="ts_nav"
+                            t-on-click="openPackages">
+
+                        <i class="fa fa-map-marker"/>
+                        <span>Tours &amp; Packages</span>
+
+                    </button>
+
+                    <button type="button"
+                            class="ts_nav"
+                            t-on-click="openResources">
+
+                        <i class="fa fa-car"/>
+                        <span>Drivers &amp; Vehicles</span>
+
+                    </button>
+
+                    <button type="button"
+                            class="ts_nav active"
+                            aria-current="page">
+
+                        <i class="fa fa-calendar"/>
+                        <span>Operations</span>
+
+                    </button>
+
+                    <button t-if="state.isManager"
+                            type="button"
+                            class="ts_nav"
+                            t-on-click="openReports">
+
+                        <i class="fa fa-bar-chart"/>
+                        <span>Reports</span>
+
+                    </button>
+
+                </nav>
+
+                <div class="ts_sidebar_branding">
+                    <strong>NEXUS</strong>
+                    <small>Tour Management System</small>
+                </div>
+
+            </aside>
+
+            <!-- ============================================== -->
+            <!-- MAIN WORKSPACE                                 -->
+            <!-- ============================================== -->
+
+            <main class="ts_main">
+
+                <!-- PAGE HEADER -->
+
+                <header class="ts_header">
+
+                    <div>
+
+                        <div class="ts_breadcrumb">
+                            Operations / Tour Scheduling
+                        </div>
+
+                        <h1>Tour Scheduling &amp; Operations</h1>
+
+                        <p>
+                            Plan tour departures, manage resources
+                            and monitor operational capacity.
+                        </p>
+
+                    </div>
+
+                    <div class="ts_header_actions">
+
+                        <button type="button"
+                                class="ts_secondary_btn"
+                                t-on-click="loadSchedules"
+                                t-att-disabled="state.loading || state.saving">
+
+                            <i class="fa fa-refresh"/>
+                            Refresh
+
+                        </button>
+
+                        <button type="button"
+                                class="ts_primary_btn"
+                                t-on-click="newDeparture"
+                                t-att-disabled="state.loading || state.saving">
+
+                            <i class="fa fa-plus"/>
+                            New Departure
+
+                        </button>
+
+                    </div>
+
+                </header>
+
+                <!-- LOADING STATE -->
+
+                <div t-if="state.loading"
+                     class="ts_message">
+
+                    <i class="fa fa-spinner fa-spin"/>
+                    Loading tour schedules and resources...
+
+                </div>
+
+                <!-- ERROR STATE -->
+
+                <div t-elif="state.error"
+                     class="ts_alert danger">
+
+                    <i class="fa fa-exclamation-circle"/>
+
+                    <div>
+                        <strong>Unable to load schedules</strong>
+                        <p t-esc="state.error"/>
+                    </div>
+
+                </div>
+
+                <t t-else="">
+
+                    <!-- ====================================== -->
+                    <!-- LIVE STATISTICS                        -->
+                    <!-- ====================================== -->
+
+                    <t t-set="stats" t-value="statistics"/>
+
+                    <section class="ts_kpi_grid">
+
+                        <article class="ts_kpi">
+
+                            <div class="ts_kpi_icon green">
+                                <i class="fa fa-calendar"/>
+                            </div>
+
+                            <div>
+                                <span>Tour Departures</span>
+                                <h2 t-esc="stats.total"/>
+                                <small>In selected period</small>
+                            </div>
+
+                        </article>
+
+                        <article class="ts_kpi">
+
+                            <div class="ts_kpi_icon blue">
+                                <i class="fa fa-check-circle"/>
+                            </div>
+
+                            <div>
+                                <span>Published Tours</span>
+                                <h2 t-esc="stats.published"/>
+                                <small>Published departures</small>
+                            </div>
+
+                        </article>
+
+                        <article class="ts_kpi">
+
+                            <div class="ts_kpi_icon purple">
+                                <i class="fa fa-users"/>
+                            </div>
+
+                            <div>
+                                <span>Reserved Guests</span>
+                                <h2 t-esc="stats.reserved"/>
+                                <small>Confirmed reservations</small>
+                            </div>
+
+                        </article>
+
+                        <article class="ts_kpi">
+
+                            <div class="ts_kpi_icon teal">
+                                <i class="fa fa-ticket"/>
+                            </div>
+
+                            <div>
+                                <span>Available Seats</span>
+                                <h2 t-esc="stats.available"/>
+                                <small>Across published tours</small>
+                            </div>
+
+                        </article>
+
+                    </section>
+
+                    <!-- CAPACITY OVERVIEW -->
+
+                    <section class="ts_capacity_overview">
+
+                        <div class="ts_capacity_heading">
+
+                            <div>
+                                <i class="fa fa-pie-chart"/>
+                                <strong>Overall Capacity Utilization</strong>
+                            </div>
+
+                            <strong>
+                                <t t-esc="stats.utilization"/>%
+                            </strong>
+
+                        </div>
+
+                        <div class="ts_progress_track">
+
+                            <div class="ts_progress_fill"
+                                 t-attf-style="width: {{Math.min(100, Math.max(0, stats.utilization))}}%;"/>
+
+                        </div>
+
+                        <div class="ts_capacity_caption">
+
+                            <span>
+                                <t t-esc="stats.reserved"/>
+                                of
+                                <t t-esc="stats.capacity"/>
+                                seats reserved
+                            </span>
+
+                            <span>
+                                <t t-esc="stats.drafts"/>
+                                draft departures
+                            </span>
+
+                        </div>
+
+                    </section>
+
+                    <!-- ====================================== -->
+                    <!-- CALENDAR AND SELECTED TOUR             -->
+                    <!-- ====================================== -->
+
+                    <div class="ts_workspace">
+
+                        <section class="ts_panel ts_calendar_panel">
+
+                            <div class="ts_panel_header">
+
+                                <div>
+                                    <h3>Tour Calendar</h3>
+                                    <p>
+                                        View and manage scheduled departures
+                                    </p>
+                                </div>
+
+                                <div class="ts_view_switch">
+
+                                    <button type="button"
+                                            t-att-class="state.view === 'day' ? 'active' : ''"
+                                            t-on-click="() => this.setView('day')"
+                                            t-att-disabled="state.saving">
+
+                                        Day
+
+                                    </button>
+
+                                    <button type="button"
+                                            t-att-class="state.view === 'week' ? 'active' : ''"
+                                            t-on-click="() => this.setView('week')"
+                                            t-att-disabled="state.saving">
+
+                                        Week
+
+                                    </button>
+
+                                    <button type="button"
+                                            t-att-class="state.view === 'month' ? 'active' : ''"
+                                            t-on-click="() => this.setView('month')"
+                                            t-att-disabled="state.saving">
+
+                                        Month
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            <!-- CALENDAR FILTERS -->
+
+                            <div class="ts_filters">
+
+                                <div class="ts_filter">
+
+                                    <label for="ts_package_filter">
+                                        Tour Package
+                                    </label>
+
+                                    <select id="ts_package_filter"
+                                            t-on-change="changePackageFilter"
+                                            t-att-disabled="state.saving">
+
+                                        <option value=""
+                                                t-att-selected="!state.packageFilter">
+                                            All Packages
+                                        </option>
+
+                                        <t t-foreach="state.packages"
+                                           t-as="pkg"
+                                           t-key="pkg.id">
+
+                                            <option t-att-value="pkg.id"
+                                                    t-att-selected="state.packageFilter === pkg.id.toString()">
+
+                                                <t t-esc="pkg.name"/>
+
+                                            </option>
+
+                                        </t>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="ts_filter">
+
+                                    <label for="ts_status_filter">
+                                        Departure Status
+                                    </label>
+
+                                    <select id="ts_status_filter"
+                                            t-on-change="changeStatusFilter"
+                                            t-att-disabled="state.saving">
+
+                                        <option value=""
+                                                t-att-selected="!state.statusFilter">
+                                            All Statuses
+                                        </option>
+
+                                        <option value="published"
+                                                t-att-selected="state.statusFilter === 'published'">
+                                            Published
+                                        </option>
+
+                                        <option value="draft"
+                                                t-att-selected="state.statusFilter === 'draft'">
+                                            Draft
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <button type="button"
+                                        class="ts_secondary_btn"
+                                        t-on-click="resetFilters"
+                                        t-att-disabled="state.saving">
+
+                                    <i class="fa fa-filter"/>
+                                    Reset
+
+                                </button>
+
+                            </div>
+
+                            <!-- DATE NAVIGATION -->
+
+                            <div class="ts_calendar_toolbar">
+
+                                <div class="ts_period_controls">
+
+                                    <button type="button"
+                                            class="ts_icon_btn"
+                                            aria-label="Previous period"
+                                            t-on-click="previousPeriod"
+                                            t-att-disabled="state.saving">
+
+                                        <i class="fa fa-chevron-left"/>
+
+                                    </button>
+
+                                    <button type="button"
+                                            class="ts_today_btn"
+                                            t-on-click="goToday"
+                                            t-att-disabled="state.saving">
+
+                                        Today
+
+                                    </button>
+
+                                    <button type="button"
+                                            class="ts_icon_btn"
+                                            aria-label="Next period"
+                                            t-on-click="nextPeriod"
+                                            t-att-disabled="state.saving">
+
+                                        <i class="fa fa-chevron-right"/>
+
+                                    </button>
+
+                                </div>
+
+                                <h3 t-esc="calendarTitle"/>
+
+                            </div>
+
+                            <!-- ================================== -->
+                            <!-- MONTH VIEW                         -->
+                            <!-- ================================== -->
+
+                            <div t-if="state.view === 'month'"
+                                 class="ts_month_calendar">
+
+                                <div class="ts_weekdays">
+
+                                    <div t-foreach="weekdays"
+                                         t-as="weekday"
+                                         t-key="weekday"
+                                         class="ts_weekday">
+
+                                        <t t-esc="weekday"/>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="ts_month_grid">
+
+                                    <div t-foreach="calendarDays"
+                                         t-as="day"
+                                         t-key="day.date"
+                                         class="ts_day_cell"
+                                         t-att-class="{
+                                             'outside': !day.isCurrentMonth,
+                                             'today': day.isToday,
+                                             'weekend': day.isWeekend
+                                         }">
+
+                                        <button type="button"
+                                                class="ts_day_number"
+                                                t-att-title="day.fullLabel"
+                                                t-on-click="() => this.openDay(day.date)"
+                                                t-att-disabled="state.saving">
+
+                                            <t t-esc="day.dayNumber"/>
+
+                                        </button>
+
+                                        <div class="ts_day_events">
+
+                                            <button t-foreach="day.events"
+                                                    t-as="schedule"
+                                                    t-key="schedule.id"
+                                                    type="button"
+                                                    class="ts_event"
+                                                    t-att-class="{
+                                                        'selected': state.selectedId === schedule.id,
+                                                        'draft': schedule.state === 'draft'
+                                                    }"
+                                                    t-att-style="eventStyle(schedule)"
+                                                    t-att-title="schedule.name + ' | ' + eventTime(schedule)"
+                                                    t-on-click="() => this.selectDeparture(schedule.id)"
+                                                    t-att-disabled="state.saving">
+
+                                                <span class="ts_event_time"
+                                                      t-esc="formatTime(schedule.start_datetime)"/>
+
+                                                <strong t-esc="schedule.package_id ? schedule.package_id[1] : schedule.name"/>
+
+                                                <small>
+                                                    <t t-esc="schedule.reserved_guests"/> /
+                                                    <t t-esc="schedule.capacity"/>
+                                                    guests
+                                                </small>
+
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- ================================== -->
+                            <!-- WEEK VIEW                          -->
+                            <!-- ================================== -->
+
+                            <div t-elif="state.view === 'week'"
+                                 class="ts_week_calendar">
+
+                                <div t-foreach="calendarDays"
+                                     t-as="day"
+                                     t-key="day.date"
+                                     class="ts_week_column"
+                                     t-att-class="{
+                                         'today': day.isToday,
+                                         'weekend': day.isWeekend
+                                     }">
+
+                                    <button type="button"
+                                            class="ts_week_day_header"
+                                            t-on-click="() => this.openDay(day.date)"
+                                            t-att-disabled="state.saving">
+
+                                        <span t-esc="day.dayName"/>
+                                        <strong t-esc="day.dayNumber"/>
+
+                                    </button>
+
+                                    <div class="ts_week_events">
+
+                                        <button t-foreach="day.events"
+                                                t-as="schedule"
+                                                t-key="schedule.id"
+                                                type="button"
+                                                class="ts_week_event"
+                                                t-att-style="eventStyle(schedule)"
+                                                t-att-class="{
+                                                    'selected': state.selectedId === schedule.id,
+                                                    'draft': schedule.state === 'draft'
+                                                }"
+                                                t-on-click="() => this.selectDeparture(schedule.id)"
+                                                t-att-disabled="state.saving">
+
+                                            <span class="ts_event_time"
+                                                  t-esc="eventTime(schedule)"/>
+
+                                            <strong t-esc="schedule.name"/>
+
+                                            <small>
+                                                <t t-esc="schedule.reserved_guests"/> /
+                                                <t t-esc="schedule.capacity"/>
+                                                guests
+                                            </small>
+
+                                            <small t-esc="formatStatus(schedule.state)"/>
+
+                                        </button>
+
+                                        <div t-if="!day.events.length"
+                                             class="ts_week_empty">
+
+                                            No departures
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- ================================== -->
+                            <!-- DAY VIEW                           -->
+                            <!-- ================================== -->
+
+                            <div t-else=""
+                                 class="ts_day_calendar">
+
+                                <div t-foreach="calendarDays"
+                                     t-as="day"
+                                     t-key="day.date">
+
+                                    <div class="ts_agenda_heading">
+
+                                        <i class="fa fa-calendar-o"/>
+                                        <strong t-esc="day.fullLabel"/>
+
+                                        <span>
+                                            <t t-esc="day.events.length"/>
+                                            departures
+                                        </span>
+
+                                    </div>
+
+                                    <div t-foreach="day.events"
+                                         t-as="schedule"
+                                         t-key="schedule.id"
+                                         class="ts_agenda_row">
+
+                                        <div class="ts_agenda_time">
+
+                                            <strong t-esc="formatTime(schedule.start_datetime)"/>
+
+                                            <small t-esc="formatTime(schedule.end_datetime)"/>
+
+                                        </div>
+
+                                        <button type="button"
+                                                class="ts_agenda_event"
+                                                t-att-style="eventStyle(schedule)"
+                                                t-att-class="{
+                                                    'selected': state.selectedId === schedule.id,
+                                                    'draft': schedule.state === 'draft'
+                                                }"
+                                                t-on-click="() => this.selectDeparture(schedule.id)"
+                                                t-att-disabled="state.saving">
+
+                                            <div>
+
+                                                <strong t-esc="schedule.name"/>
+
+                                                <small t-esc="schedule.package_id ? schedule.package_id[1] : 'Tour departure'"/>
+
+                                            </div>
+
+                                            <div>
+
+                                                <span>
+                                                    <i class="fa fa-users"/>
+                                                    <t t-esc="schedule.reserved_guests"/> /
+                                                    <t t-esc="schedule.capacity"/>
+                                                </span>
+
+                                                <small t-esc="formatStatus(schedule.state)"/>
+
+                                            </div>
+
+                                        </button>
+
+                                    </div>
+
+                                    <div t-if="!day.events.length"
+                                         class="ts_empty">
+
+                                        <i class="fa fa-calendar-o"/>
+                                        <h4>No departures scheduled</h4>
+
+                                        <p>
+                                            Choose another date or create
+                                            a new departure.
+                                        </p>
+
+                                        <button type="button"
+                                                class="ts_primary_btn"
+                                                t-on-click="newDeparture"
+                                                t-att-disabled="state.saving">
+
+                                            <i class="fa fa-plus"/>
+                                            New Departure
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- CALENDAR LEGEND -->
+
+                            <div class="ts_legend">
+
+                                <div t-foreach="packageLegend"
+                                     t-as="item"
+                                     t-key="item.id"
+                                     class="ts_legend_item">
+
+                                    <span class="ts_legend_dot"
+                                          t-attf-style="background: {{item.color}};"/>
+
+                                    <span t-esc="item.name"/>
+
+                                </div>
+
+                                <div class="ts_legend_item">
+
+                                    <span class="ts_legend_draft"/>
+
+                                    <span>Draft Departure</span>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                        <!-- ================================== -->
+                        <!-- SELECTED DEPARTURE DETAILS         -->
+                        <!-- ================================== -->
+
+                        <section class="ts_panel ts_details_panel">
+
+                            <div class="ts_panel_header">
+
+                                <div>
+                                    <h3>Selected Departure</h3>
+                                    <p>Tour information and capacity</p>
+                                </div>
+
+                            </div>
+
+                            <t t-set="departure"
+                               t-value="selectedDeparture"/>
+
+                            <t t-if="departure">
+
+                                <div class="ts_selected_banner">
+
+                                    <div class="ts_selected_icon">
+                                        <i class="fa fa-map-marker"/>
+                                    </div>
+
+                                    <span t-attf-class="ts_status ts_status_{{departure.state}}">
+
+                                        <i class="fa fa-circle"/>
+                                        <t t-esc="formatStatus(departure.state)"/>
+
+                                    </span>
+
+                                    <h2 t-esc="departure.name"/>
+
+                                    <p t-esc="departure.package_id ? departure.package_id[1] : 'Tour Departure'"/>
+
+                                </div>
+
+                                <!-- TOUR INFORMATION -->
+
+                                <div class="ts_detail_list">
+
+                                    <div class="ts_detail_row">
+
+                                        <i class="fa fa-calendar"/>
+
+                                        <div>
+
+                                            <small>Departure Start</small>
+
+                                            <strong t-esc="formatDateTime(departure.start_datetime)"/>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="ts_detail_row">
+
+                                        <i class="fa fa-clock-o"/>
+
+                                        <div>
+
+                                            <small>Departure End</small>
+
+                                            <strong t-esc="formatDateTime(departure.end_datetime)"/>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="ts_detail_row">
+
+                                        <i class="fa fa-building"/>
+
+                                        <div>
+
+                                            <small>Company</small>
+
+                                            <strong t-esc="departure.company_id ? departure.company_id[1] : '—'"/>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- SELECTED TOUR CAPACITY -->
+
+                                <div class="ts_detail_capacity">
+
+                                    <div class="ts_capacity_heading">
+
+                                        <strong>Capacity Utilization</strong>
+
+                                        <strong t-attf-style="color: {{capacityColor(departure)}};">
+
+                                            <t t-esc="capacityPercent(departure)"/>%
+
+                                        </strong>
+
+                                    </div>
+
+                                    <div class="ts_progress_track">
+
+                                        <div class="ts_progress_fill"
+                                             t-attf-style="width: {{capacityPercent(departure)}}%; background: {{capacityColor(departure)}};"/>
+
+                                    </div>
+
+                                    <div class="ts_seat_grid">
+
+                                        <div class="ts_seat_stat">
+
+                                            <strong t-esc="departure.capacity"/>
+                                            <small>Capacity</small>
+
+                                        </div>
+
+                                        <div class="ts_seat_stat reserved">
+
+                                            <strong t-esc="departure.reserved_guests"/>
+                                            <small>Reserved</small>
+
+                                        </div>
+
+                                        <div class="ts_seat_stat available">
+
+                                            <strong t-esc="departure.available_seats"/>
+                                            <small>Remaining</small>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- PACKAGE DESCRIPTION -->
+
+                                <div t-if="selectedPackage &amp;&amp; selectedPackage.description"
+                                     class="ts_description">
+
+                                    <h4>
+                                        <i class="fa fa-info-circle"/>
+                                        Tour Description
+                                    </h4>
+
+                                    <p t-esc="selectedPackage.description"/>
+
+                                </div>
+
+                                <!-- DRAFT NOTICE -->
+
+                                <div t-if="departure.state === 'draft'"
+                                     class="ts_alert warning">
+
+                                    <i class="fa fa-info-circle"/>
+
+                                    <div>
+
+                                        <strong>Draft Departure</strong>
+
+                                        <p>
+                                            Publish a future departure
+                                            to make it available for booking.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- DEPARTURE ACTIONS -->
+
+                                <div class="ts_detail_actions">
+
+                                    <button type="button"
+                                            class="ts_secondary_btn"
+                                            t-on-click="editDeparture"
+                                            t-att-disabled="state.saving">
+
+                                        <i class="fa fa-pencil"/>
+                                        Edit Departure
+
+                                    </button>
+
+                                </div>
+
+                            </t>
+
+                            <div t-else=""
+                                 class="ts_empty">
+
+                                <i class="fa fa-calendar-check-o"/>
+
+                                <h4>No Departure Selected</h4>
+
+                                <p>
+                                    Select a departure from the calendar
+                                    to view its details.
+                                </p>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+                    <!-- ====================================== -->
+                    <!-- RESOURCE ASSIGNMENT                    -->
+                    <!-- ====================================== -->
+
+                    <section t-if="selectedDeparture"
+                             class="ts_panel ts_resource_panel">
+
+                        <div class="ts_panel_header">
+
+                            <div>
+
+                                <h3>Resource Assignment</h3>
+
+                                <p>
+                                    Assign a driver and vehicle to the
+                                    selected departure.
+                                </p>
+
+                            </div>
+
+                            <button type="button"
+                                    class="ts_secondary_btn"
+                                    t-on-click="openResources"
+                                    t-att-disabled="state.saving">
+
+                                <i class="fa fa-cog"/>
+                                Manage Resources
+
+                            </button>
+
+                        </div>
+
+                        <div class="ts_resource_grid">
+
+                            <!-- VEHICLE ASSIGNMENT -->
+
+                            <article class="ts_resource_card">
+
+                                <div class="ts_resource_header">
+
+                                    <div class="ts_resource_icon blue">
+                                        <i class="fa fa-car"/>
+                                    </div>
+
+                                    <div>
+
+                                        <h4>Vehicle Assignment</h4>
+
+                                        <small>
+                                            Select a company vehicle
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                                <label for="ts_vehicle">
+                                    Assigned Vehicle
+                                </label>
+
+                                <select id="ts_vehicle"
+                                        t-on-change="changeVehicle"
+                                        t-att-disabled="state.saving">
+
+                                    <option value=""
+                                            t-att-selected="!state.vehicleId">
+
+                                        No vehicle assigned
+
+                                    </option>
+
+                                    <t t-foreach="vehicles"
+                                       t-as="vehicle"
+                                       t-key="vehicle.id">
+
+                                        <option t-att-value="vehicle.id"
+                                                t-att-selected="state.vehicleId === vehicle.id.toString()">
+
+                                            <t t-esc="vehicle.name"/>
+
+                                        </option>
+
+                                    </t>
+
+                                </select>
+
+                                <t t-set="vStatus"
+                                   t-value="vehicleStatus"/>
+
+                                <div t-attf-class="ts_resource_status {{vStatus.tone}}">
+
+                                    <i t-att-class="vStatus.tone === 'success' ? 'fa fa-check-circle' : vStatus.tone === 'danger' ? 'fa fa-times-circle' : 'fa fa-info-circle'"/>
+
+                                    <strong t-esc="vStatus.label"/>
+
+                                </div>
+
+                                <p class="ts_resource_description"
+                                   t-esc="vStatus.detail"/>
+
+                            </article>
+
+                            <!-- DRIVER ASSIGNMENT -->
+
+                            <article class="ts_resource_card">
+
+                                <div class="ts_resource_header">
+
+                                    <div class="ts_resource_icon purple">
+                                        <i class="fa fa-user"/>
+                                    </div>
+
+                                    <div>
+
+                                        <h4>Driver Assignment</h4>
+
+                                        <small>
+                                            Select a company driver
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                                <label for="ts_driver">
+                                    Assigned Driver
+                                </label>
+
+                                <select id="ts_driver"
+                                        t-on-change="changeDriver"
+                                        t-att-disabled="state.saving">
+
+                                    <option value=""
+                                            t-att-selected="!state.driverId">
+
+                                        No driver assigned
+
+                                    </option>
+
+                                    <t t-foreach="drivers"
+                                       t-as="driver"
+                                       t-key="driver.id">
+
+                                        <option t-att-value="driver.id"
+                                                t-att-selected="state.driverId === driver.id.toString()">
+
+                                            <t t-esc="driver.name"/>
+
+                                        </option>
+
+                                    </t>
+
+                                </select>
+
+                                <t t-set="dStatus"
+                                   t-value="driverStatus"/>
+
+                                <div t-attf-class="ts_resource_status {{dStatus.tone}}">
+
+                                    <i t-att-class="dStatus.tone === 'success' ? 'fa fa-check-circle' : dStatus.tone === 'danger' ? 'fa fa-times-circle' : 'fa fa-info-circle'"/>
+
+                                    <strong t-esc="dStatus.label"/>
+
+                                </div>
+
+                                <p class="ts_resource_description"
+                                   t-esc="dStatus.detail"/>
+
+                            </article>
+
+                        </div>
+
+                        <!-- ================================== -->
+                        <!-- CONFLICT DETECTION                 -->
+                        <!-- ================================== -->
+
+                        <div t-if="state.checkingConflicts"
+                             class="ts_alert neutral">
+
+                            <i class="fa fa-spinner fa-spin"/>
+
+                            <div>
+                                Checking overlapping departures...
+                            </div>
+
+                        </div>
+
+                        <div t-elif="state.conflictError"
+                             class="ts_alert warning">
+
+                            <i class="fa fa-exclamation-triangle"/>
+
+                            <div>
+
+                                <strong>Availability not verified</strong>
+
+                                <p t-esc="state.conflictError"/>
+
+                            </div>
+
+                        </div>
+
+                        <div t-elif="selectedConflicts.length"
+                             class="ts_conflict_panel">
+
+                            <div class="ts_conflict_heading">
+
+                                <i class="fa fa-exclamation-triangle"/>
+
+                                <div>
+
+                                    <strong>
+                                        Scheduling Conflict Detected
+                                    </strong>
+
+                                    <p>
+                                        One or more selected resources are
+                                        assigned to overlapping departures.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div t-foreach="selectedConflicts"
+                                 t-as="conflict"
+                                 t-key="conflict.key"
+                                 class="ts_conflict_row">
+
+                                <i class="fa fa-times-circle"/>
+
+                                <div>
+
+                                    <strong>
+                                        <t t-esc="conflict.type"/>
+                                        Conflict
+                                    </strong>
+
+                                    <p t-esc="conflict.departure"/>
+
+                                    <small t-esc="conflict.time"/>
+
+                                </div>
+
+                            </div>
+
+                            <div class="ts_conflict_resolution">
+
+                                Select another resource before publishing
+                                or updating a published departure.
+
+                            </div>
+
+                        </div>
+
+                        <div t-elif="state.conflictsChecked &amp;&amp; state.driverId &amp;&amp; state.vehicleId"
+                             class="ts_alert success">
+
+                            <i class="fa fa-check-circle"/>
+
+                            <div>
+
+                                <strong>
+                                    No Visible Resource Conflicts
+                                </strong>
+
+                                <p>
+                                    No overlapping assignments were found
+                                    in accessible records.
+                                    Final validation is performed by Odoo.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div t-else=""
+                             class="ts_alert neutral">
+
+                            <i class="fa fa-info-circle"/>
+
+                            <div>
+
+                                Assign resources and check availability
+                                before publishing the departure.
+
+                            </div>
+
+                        </div>
+
+                        <!-- UNSAVED CHANGES -->
+
+                        <div t-if="hasPendingChanges"
+                             class="ts_pending_notice">
+
+                            <i class="fa fa-pencil"/>
+
+                            You have unsaved resource assignment changes.
+
+                        </div>
+
+                        <!-- RESOURCE ACTION BUTTONS -->
+
+                        <div class="ts_resource_actions">
+
+                            <button type="button"
+                                    class="ts_secondary_btn"
+                                    t-on-click="checkConflicts"
+                                    t-att-disabled="state.checkingConflicts || state.saving">
+
+                                <i class="fa fa-search"/>
+                                Check Availability
+
+                            </button>
+
+                            <button type="button"
+                                    class="ts_primary_btn"
+                                    t-on-click="saveAssignments"
+                                    t-att-disabled="!hasPendingChanges || state.saving">
+
+                                <i class="fa fa-save"/>
+                                Save Assignments
+
+                            </button>
+
+                            <button t-if="selectedDeparture.state === 'draft'"
+                                    type="button"
+                                    class="ts_publish_btn"
+                                    t-on-click="publishDeparture"
+                                    t-att-disabled="state.saving">
+
+                                <i class="fa fa-check-circle"/>
+                                Publish Departure
+
+                            </button>
+
+                        </div>
+
+                    </section>
+
+                    <!-- ====================================== -->
+                    <!-- DEPARTURE RECORDS TABLE                -->
+                    <!-- ====================================== -->
+
+                    <section class="ts_panel ts_table_panel">
+
+                        <div class="ts_panel_header">
+
+                            <div>
+
+                                <h3>Scheduled Departures</h3>
+
+                                <p>
+                                    <t t-esc="periodSchedules.length"/>
+                                    matching departures in selected period
+                                </p>
+
+                            </div>
+
+                            <button type="button"
+                                    class="ts_secondary_btn"
+                                    t-on-click="openNativeSchedules"
+                                    t-att-disabled="state.saving">
+
+                                <i class="fa fa-list"/>
+                                Manage Departures
+
+                            </button>
+
+                        </div>
+
+                        <div class="ts_table_wrapper">
+
+                            <table class="ts_table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Departure</th>
+                                        <th>Start Date</th>
+                                        <th>Driver</th>
+                                        <th>Vehicle</th>
+                                        <th>Capacity</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <tr t-foreach="periodSchedules"
+                                        t-as="schedule"
+                                        t-key="schedule.id"
+                                        t-att-class="{
+                                            'selected': state.selectedId === schedule.id
+                                        }">
+
+                                        <td>
+
+                                            <div class="ts_table_tour">
+
+                                                <span class="ts_legend_dot"
+                                                      t-attf-style="background: {{packageColor(schedule.package_id ? schedule.package_id[0] : 0).border}};"/>
+
+                                                <div>
+
+                                                    <strong t-esc="schedule.name"/>
+
+                                                    <small t-esc="schedule.package_id ? schedule.package_id[1] : '—'"/>
+
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+                                        <td t-esc="formatDateTime(schedule.start_datetime)"/>
+
+                                        <td t-esc="schedule.driver_id ? schedule.driver_id[1] : 'Unassigned'"/>
+
+                                        <td t-esc="schedule.vehicle_id ? schedule.vehicle_id[1] : 'Unassigned'"/>
+
+                                        <td>
+
+                                            <div class="ts_table_capacity">
+
+                                                <strong>
+
+                                                    <t t-esc="schedule.reserved_guests"/> /
+                                                    <t t-esc="schedule.capacity"/>
+
+                                                </strong>
+
+                                                <div class="ts_progress_track">
+
+                                                    <div class="ts_progress_fill"
+                                                         t-attf-style="width: {{capacityPercent(schedule)}}%; background: {{capacityColor(schedule)}};"/>
+
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+
+                                            <span t-attf-class="ts_status ts_status_{{schedule.state}}">
+
+                                                <i class="fa fa-circle"/>
+                                                <t t-esc="formatStatus(schedule.state)"/>
+
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+
+                                            <button type="button"
+                                                    class="ts_view_btn"
+                                                    t-on-click="() => this.selectDeparture(schedule.id)"
+                                                    t-att-disabled="state.saving">
+
+                                                <i class="fa fa-eye"/>
+                                                Select
+
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                    <tr t-if="!periodSchedules.length">
+
+                                        <td colspan="7"
+                                            class="ts_table_empty">
+
+                                            No departures match the
+                                            selected period and filters.
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </section>
+
+                </t>
+
+                <!-- PAGE FOOTER -->
+
+                <footer class="ts_footer">
+
+                    Nexus | Tour Operator Booking Suite
+
+                </footer>
+
+            </main>
+
+        </div>
+
+    </t>
+
+</templates>

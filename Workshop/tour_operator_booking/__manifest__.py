@@ -5,7 +5,9 @@
     "category": "Services",
     "author": "University of Sharjah Phase 3 Team",
     "license": "LGPL-3",
+
     "depends": ["base", "contacts", "web"],
+
     "data": [
         "security/security.xml",
         "security/ir.model.access.csv",
@@ -20,20 +22,27 @@
         "wizard/booking_report_wizard_views.xml",
         "views/menu_views.xml"
     ],
-        
-"assets": {
-    "web.assets_backend": [
-        # Nexus Dashboard
-        "tour_operator_booking/static/src/components/tour_operator_dashboard/tour_operator_dashboard.js",
-        "tour_operator_booking/static/src/components/tour_operator_dashboard/tour_operator_dashboard.xml",
-        "tour_operator_booking/static/src/components/tour_operator_dashboard/tour_operator_dashboard.scss",
 
-        # Nexus Booking Reports
-        "tour_operator_booking/static/src/components/booking_reports/booking_reports.js",
-        "tour_operator_booking/static/src/components/booking_reports/booking_reports.xml",
-        "tour_operator_booking/static/src/components/booking_reports/booking_reports.scss",
-    ],
-},
+    "assets": {
+        "web.assets_backend": [
+
+            # Nexus Dashboard
+            "tour_operator_booking/static/src/components/tour_operator_dashboard/tour_operator_dashboard.js",
+            "tour_operator_booking/static/src/components/tour_operator_dashboard/tour_operator_dashboard.xml",
+            "tour_operator_booking/static/src/components/tour_operator_dashboard/tour_operator_dashboard.scss",
+
+            # Nexus Booking Reports
+            "tour_operator_booking/static/src/components/booking_reports/booking_reports.js",
+            "tour_operator_booking/static/src/components/booking_reports/booking_reports.xml",
+            "tour_operator_booking/static/src/components/booking_reports/booking_reports.scss",
+
+            # Nexus Tour Scheduling
+            "tour_operator_booking/static/src/components/tour_scheduling/tour_scheduling.js",
+            "tour_operator_booking/static/src/components/tour_scheduling/tour_scheduling.xml",
+            "tour_operator_booking/static/src/components/tour_scheduling/tour_scheduling.scss",
+
+        ],
+    },
 
     "application": True,
     "installable": True

@@ -1,0 +1,2231 @@
+/* ==========================================================
+   NEXUS - TOUR OPERATOR BOOKING SUITE
+   Tour Scheduling & Operations
+   ========================================================== */
+
+.ts_page {
+
+    /* ======================================================
+       DESIGN SYSTEM
+       ====================================================== */
+
+    --ts-green: #008c50;
+    --ts-green-dark: #047857;
+    --ts-sidebar: #053b35;
+    --ts-turquoise: #09ddc3;
+    --ts-background: #f0f5fa;
+    --ts-white: #ffffff;
+    --ts-text: #172438;
+    --ts-muted: #64748b;
+    --ts-border: #dce5ee;
+    --ts-radius: 16px;
+
+    display: flex;
+    align-items: stretch;
+
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+
+    flex: 1 1 auto;
+    overflow: hidden;
+
+    background: var(--ts-background);
+    color: var(--ts-text);
+
+    font-family: "Inter", "Segoe UI", sans-serif;
+    font-size: 14px;
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    button,
+    select,
+    input {
+        font: inherit;
+    }
+
+    button {
+        cursor: pointer;
+    }
+
+    button:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+
+    button:focus-visible,
+    select:focus-visible {
+        outline: 3px solid #6ee7b7;
+        outline-offset: 2px;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+        margin: 0;
+    }
+
+    /* ======================================================
+       FULL-HEIGHT NEXUS SIDEBAR
+       ====================================================== */
+
+    .ts_sidebar {
+
+        width: 230px;
+        flex: 0 0 230px;
+
+        height: 100%;
+        min-height: 0;
+
+        display: flex;
+        flex-direction: column;
+        align-self: stretch;
+
+        padding: 30px 14px 20px;
+
+        background: var(--ts-sidebar);
+        color: white;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        border-radius: 0;
+
+        scrollbar-width: thin;
+        scrollbar-color: #ffffff33 transparent;
+    }
+
+    .ts_brand {
+
+        display: flex;
+        align-items: center;
+        gap: 13px;
+
+        padding: 6px 10px;
+        margin-bottom: 42px;
+
+        .ts_logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        strong {
+            display: block;
+            color: white;
+            font-size: 17px;
+            font-weight: 750;
+            white-space: nowrap;
+        }
+
+        small {
+            display: block;
+            color: #a7d8d4;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+    }
+
+    .ts_sidebar_label {
+
+        padding: 0 12px;
+        margin-bottom: 14px;
+
+        color: #82b7b2;
+
+        font-size: 10px;
+        font-weight: 750;
+        letter-spacing: 2px;
+    }
+
+    .ts_navigation {
+
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .ts_nav {
+
+        display: flex;
+        align-items: center;
+        gap: 13px;
+
+        width: 100%;
+        min-height: 47px;
+
+        padding: 13px 14px;
+
+        border: 0;
+        border-radius: 9px;
+
+        background: transparent;
+        color: #e1efed;
+
+        text-align: left;
+        font-size: 14px;
+        font-weight: 500;
+
+        transition:
+            background 0.18s ease,
+            color 0.18s ease;
+
+        i {
+            width: 20px;
+            flex-shrink: 0;
+            font-size: 17px;
+            text-align: center;
+        }
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.09);
+            color: white;
+        }
+
+        &.active {
+            background: var(--ts-green);
+            color: white;
+            font-weight: 650;
+        }
+    }
+
+    .ts_sidebar_branding {
+
+        margin-top: auto;
+        padding: 25px 12px 6px;
+
+        border-top: 1px solid rgba(255, 255, 255, 0.14);
+
+        strong {
+            display: block;
+            color: var(--ts-turquoise);
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 4px;
+        }
+
+        small {
+            display: block;
+            color: #82b7b2;
+            font-size: 11px;
+            margin-top: 7px;
+        }
+    }
+
+    /* ======================================================
+       MAIN SCROLLABLE WORKSPACE
+       ====================================================== */
+
+    .ts_main {
+
+        flex: 1 1 auto;
+
+        min-width: 0;
+        min-height: 0;
+        height: 100%;
+
+        padding: 28px 28px 18px;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        scrollbar-width: thin;
+        scrollbar-color: #a5b5c4 transparent;
+    }
+
+    /* ======================================================
+       PAGE HEADER
+       ====================================================== */
+
+    .ts_header {
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+
+        gap: 20px;
+        margin-bottom: 26px;
+
+        h1 {
+            font-size: clamp(24px, 2.3vw, 34px);
+            font-weight: 800;
+            line-height: 1.25;
+            letter-spacing: -0.8px;
+        }
+
+        p {
+            color: var(--ts-muted);
+            margin-top: 9px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    }
+
+    .ts_breadcrumb {
+
+        margin-bottom: 11px;
+
+        color: var(--ts-green);
+        font-size: 12px;
+        font-weight: 650;
+    }
+
+    .ts_header_actions {
+
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* ======================================================
+       BUTTONS
+       ====================================================== */
+
+    .ts_primary_btn,
+    .ts_secondary_btn,
+    .ts_publish_btn {
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        min-height: 41px;
+        padding: 10px 17px;
+
+        border: 1px solid transparent;
+        border-radius: 9px;
+
+        font-size: 13px;
+        font-weight: 650;
+
+        white-space: nowrap;
+
+        transition:
+            background 0.18s ease,
+            border-color 0.18s ease,
+            box-shadow 0.18s ease,
+            transform 0.18s ease;
+
+        &:hover:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+        }
+    }
+
+    .ts_primary_btn {
+
+        background: var(--ts-green);
+        color: white;
+
+        &:hover:not(:disabled) {
+            background: #007443;
+            box-shadow: 0 5px 14px #008c5025;
+        }
+    }
+
+    .ts_secondary_btn {
+
+        background: white;
+        color: var(--ts-green-dark);
+        border-color: var(--ts-border);
+
+        &:hover:not(:disabled) {
+            background: #f0fdf4;
+            border-color: #86d5ad;
+        }
+    }
+
+    .ts_publish_btn {
+
+        background: #047857;
+        color: white;
+
+        &:hover:not(:disabled) {
+            background: #065f46;
+        }
+    }
+
+    .ts_icon_btn,
+    .ts_today_btn {
+
+        min-height: 33px;
+
+        padding: 7px 11px;
+
+        border: 1px solid var(--ts-border);
+        border-radius: 7px;
+
+        background: white;
+        color: var(--ts-text);
+
+        font-size: 12px;
+        font-weight: 600;
+
+        &:hover:not(:disabled) {
+            background: #ecfdf5;
+            color: var(--ts-green);
+        }
+    }
+
+    /* ======================================================
+       KPI STATISTICS CARDS
+       ====================================================== */
+
+    .ts_kpi_grid {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .ts_kpi {
+
+        display: flex;
+        align-items: flex-start;
+        gap: 13px;
+
+        min-width: 0;
+
+        padding: 20px 16px;
+
+        background: white;
+
+        border: 1px solid var(--ts-border);
+        border-radius: var(--ts-radius);
+
+        box-shadow: 0 4px 16px #17243806;
+
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px #1724380d;
+        }
+
+        > div:last-child {
+            min-width: 0;
+        }
+
+        span {
+            display: block;
+            color: var(--ts-muted);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        h2 {
+            margin: 8px 0 6px;
+            color: var(--ts-text);
+            font-size: 30px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        small {
+            display: block;
+            color: var(--ts-muted);
+            font-size: 10px;
+            line-height: 1.5;
+        }
+    }
+
+    .ts_kpi_icon,
+    .ts_resource_icon {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 43px;
+        height: 43px;
+
+        flex-shrink: 0;
+
+        border-radius: 12px;
+        font-size: 19px;
+
+        &.green {
+            background: #dcfce7;
+            color: #008c50;
+        }
+
+        &.blue {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        &.purple {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        &.teal {
+            background: #ccfbf1;
+            color: #0d9488;
+        }
+    }
+
+    /* ======================================================
+       CAPACITY UTILIZATION
+       ====================================================== */
+
+    .ts_capacity_overview {
+
+        padding: 20px 24px;
+        margin-bottom: 22px;
+
+        background: white;
+        border: 1px solid var(--ts-border);
+        border-radius: var(--ts-radius);
+
+        box-shadow: 0 4px 16px #17243806;
+    }
+
+    .ts_capacity_heading {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+
+        margin-bottom: 13px;
+
+        font-size: 13px;
+
+        i {
+            margin-right: 8px;
+            color: var(--ts-green);
+        }
+
+        > strong:last-child {
+            color: var(--ts-green);
+            font-size: 16px;
+        }
+    }
+
+    .ts_progress_track {
+
+        width: 100%;
+        height: 9px;
+
+        overflow: hidden;
+
+        background: #e8eef4;
+        border-radius: 20px;
+    }
+
+    .ts_progress_fill {
+
+        height: 100%;
+
+        background: linear-gradient(
+            90deg,
+            #008c50,
+            #2bcf95
+        );
+
+        border-radius: inherit;
+
+        transition: width 0.35s ease;
+    }
+
+    .ts_capacity_caption {
+
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+
+        margin-top: 10px;
+
+        color: var(--ts-muted);
+        font-size: 11px;
+    }
+
+    /* ======================================================
+       COMMON PANELS
+       ====================================================== */
+
+    .ts_panel {
+
+        min-width: 0;
+
+        padding: 20px;
+
+        background: white;
+
+        border: 1px solid var(--ts-border);
+        border-radius: var(--ts-radius);
+
+        box-shadow: 0 4px 18px #17243806;
+    }
+
+    .ts_panel_header {
+
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        gap: 15px;
+        margin-bottom: 20px;
+
+        h3 {
+            color: var(--ts-text);
+            font-size: 18px;
+            font-weight: 750;
+        }
+
+        p {
+            margin-top: 6px;
+
+            color: var(--ts-muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+    }
+
+    .ts_workspace {
+
+        display: grid;
+
+        grid-template-columns:
+            minmax(0, 2.5fr)
+            minmax(260px, 1fr);
+
+        align-items: start;
+
+        gap: 20px;
+        margin-bottom: 22px;
+    }
+
+    /* ======================================================
+       DAY / WEEK / MONTH SWITCH
+       ====================================================== */
+
+    .ts_view_switch {
+
+        display: flex;
+        align-items: center;
+
+        padding: 3px;
+        gap: 3px;
+
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: 9px;
+
+        button {
+
+            padding: 7px 12px;
+
+            border: 0;
+            border-radius: 6px;
+
+            background: transparent;
+            color: #64748b;
+
+            font-size: 11px;
+            font-weight: 650;
+
+            &:hover:not(:disabled) {
+                color: var(--ts-green);
+            }
+
+            &.active {
+                background: var(--ts-green);
+                color: white;
+                box-shadow: 0 2px 6px #008c5025;
+            }
+        }
+    }
+
+    /* ======================================================
+       CALENDAR FILTERS
+       ====================================================== */
+
+    .ts_filters {
+
+        display: flex;
+        align-items: flex-end;
+        flex-wrap: wrap;
+
+        gap: 12px;
+
+        padding: 14px;
+        margin-bottom: 20px;
+
+        background: #f7f9fc;
+        border: 1px solid #e2e8f0;
+        border-radius: 11px;
+    }
+
+    .ts_filter {
+
+        flex: 1 1 140px;
+        min-width: 0;
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #475569;
+            font-size: 11px;
+            font-weight: 650;
+        }
+    }
+
+    select {
+
+        display: block;
+
+        width: 100%;
+        min-height: 41px;
+
+        padding: 9px 12px;
+
+        border: 1px solid var(--ts-border);
+        border-radius: 8px;
+
+        background: white;
+        color: var(--ts-text);
+
+        font-size: 12px;
+
+        &:focus {
+            border-color: var(--ts-green);
+            outline: 2px solid #dcfce7;
+        }
+
+        &:disabled {
+            background: #f1f5f9;
+            cursor: not-allowed;
+        }
+    }
+
+    /* ======================================================
+       CALENDAR DATE TOOLBAR
+       ====================================================== */
+
+    .ts_calendar_toolbar {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        gap: 12px;
+        margin-bottom: 17px;
+
+        h3 {
+            font-size: 17px;
+            font-weight: 750;
+        }
+    }
+
+    .ts_period_controls {
+
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    /* ======================================================
+       MONTHLY CALENDAR
+       ====================================================== */
+
+    .ts_month_calendar {
+
+        width: 100%;
+
+        overflow-x: auto;
+
+        border: 1px solid var(--ts-border);
+        border-radius: 11px;
+    }
+
+    .ts_weekdays {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(7, minmax(0, 1fr));
+
+        min-width: 560px;
+
+        background: #f8fafc;
+        border-bottom: 1px solid var(--ts-border);
+    }
+
+    .ts_weekday {
+
+        padding: 12px 4px;
+
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .ts_month_grid {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(7, minmax(0, 1fr));
+
+        min-width: 560px;
+    }
+
+    .ts_day_cell {
+
+        min-width: 0;
+        min-height: 104px;
+
+        padding: 6px;
+
+        border-right: 1px solid #e2e8f0;
+        border-bottom: 1px solid #e2e8f0;
+
+        background: white;
+
+        &:nth-child(7n) {
+            border-right: 0;
+        }
+
+        &:nth-last-child(-n + 7) {
+            border-bottom: 0;
+        }
+
+        &.weekend {
+            background: #fafcfe;
+        }
+
+        &.outside {
+
+            background: #f5f7fa;
+
+            .ts_day_number {
+                color: #aab6c4;
+            }
+        }
+
+        &.today {
+
+            background: #ecfdf5;
+
+            .ts_day_number {
+                background: var(--ts-green);
+                color: white;
+                font-weight: 750;
+            }
+        }
+    }
+
+    .ts_day_number {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 26px;
+        height: 26px;
+
+        padding: 0;
+        margin-bottom: 5px;
+
+        border: 0;
+        border-radius: 50%;
+
+        background: transparent;
+        color: #475569;
+
+        font-size: 12px;
+
+        &:hover:not(:disabled) {
+            background: #d1fae5;
+            color: #047857;
+        }
+    }
+
+    .ts_day_events {
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 5px;
+    }
+
+    /* ======================================================
+       COLOR-CODED CALENDAR EVENTS
+       ====================================================== */
+
+    .ts_event,
+    .ts_week_event,
+    .ts_agenda_event {
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        width: 100%;
+        min-width: 0;
+
+        padding: 8px 7px;
+        gap: 4px;
+
+        border: 1px solid transparent;
+        border-radius: 6px;
+
+        text-align: left;
+
+        transition:
+            box-shadow 0.18s ease,
+            filter 0.18s ease;
+
+        strong {
+            display: block;
+
+            width: 100%;
+
+            font-size: 11px;
+            font-weight: 750;
+            line-height: 1.35;
+
+            overflow-wrap: anywhere;
+        }
+
+        small {
+            font-size: 9px;
+            line-height: 1.4;
+        }
+
+        &.selected {
+            outline: 2px solid #008c50;
+            outline-offset: 1px;
+            box-shadow: 0 3px 8px #008c5020;
+        }
+
+        &.draft {
+            border-top-style: dashed;
+            border-right-style: dashed;
+            border-bottom-style: dashed;
+            border-color: currentColor;
+        }
+
+        &:hover:not(:disabled) {
+            filter: brightness(0.97);
+            box-shadow: 0 3px 10px #17243815;
+        }
+    }
+
+    .ts_event_time {
+
+        font-size: 9px;
+        font-weight: 650;
+        line-height: 1.4;
+    }
+
+    /* ======================================================
+       WEEKLY CALENDAR
+       ====================================================== */
+
+    .ts_week_calendar {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(7, minmax(95px, 1fr));
+
+        min-height: 390px;
+
+        overflow-x: auto;
+
+        border: 1px solid var(--ts-border);
+        border-radius: 10px;
+    }
+
+    .ts_week_column {
+
+        min-width: 0;
+
+        border-right: 1px solid #e2e8f0;
+
+        &:last-child {
+            border-right: 0;
+        }
+
+        &.weekend {
+            background: #f8fafc;
+        }
+
+        &.today {
+
+            background: #f0fdf4;
+
+            .ts_week_day_header {
+                background: #dcfce7;
+                color: #047857;
+            }
+        }
+    }
+
+    .ts_week_day_header {
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        width: 100%;
+        height: 68px;
+
+        gap: 4px;
+
+        background: #f8fafc;
+        color: #64748b;
+
+        border: 0;
+        border-bottom: 1px solid var(--ts-border);
+
+        span {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        strong {
+            font-size: 22px;
+            font-weight: 750;
+        }
+
+        &:hover:not(:disabled) {
+            background: #dcfce7;
+        }
+    }
+
+    .ts_week_events {
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 8px;
+        padding: 7px;
+    }
+
+    .ts_week_event {
+
+        min-height: 94px;
+
+        padding: 10px 8px;
+
+        strong {
+            font-size: 12px;
+        }
+
+        small {
+            font-size: 10px;
+        }
+    }
+
+    .ts_week_empty {
+
+        padding: 16px 2px;
+
+        color: #94a3b8;
+
+        text-align: center;
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    /* ======================================================
+       DAILY AGENDA
+       ====================================================== */
+
+    .ts_day_calendar {
+
+        min-height: 300px;
+
+        padding: 16px;
+
+        background: #f8fafc;
+
+        border: 1px solid var(--ts-border);
+        border-radius: 12px;
+    }
+
+    .ts_agenda_heading {
+
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+
+        padding-bottom: 15px;
+        margin-bottom: 18px;
+
+        border-bottom: 1px solid var(--ts-border);
+
+        i {
+            color: var(--ts-green);
+        }
+
+        strong {
+            font-size: 14px;
+        }
+
+        span {
+            margin-left: auto;
+            color: var(--ts-muted);
+            font-size: 11px;
+        }
+    }
+
+    .ts_agenda_row {
+
+        display: grid;
+
+        grid-template-columns: 85px minmax(0, 1fr);
+
+        align-items: center;
+
+        gap: 14px;
+        margin-bottom: 13px;
+    }
+
+    .ts_agenda_time {
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 5px;
+
+        strong {
+            font-size: 12px;
+        }
+
+        small {
+            font-size: 11px;
+            color: var(--ts-muted);
+        }
+    }
+
+    .ts_agenda_event {
+
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+
+        min-height: 80px;
+
+        padding: 14px;
+
+        > div {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        strong {
+            font-size: 14px;
+        }
+
+        small {
+            font-size: 11px;
+        }
+
+        span {
+            font-size: 12px;
+            font-weight: 700;
+        }
+    }
+
+    /* ======================================================
+       CALENDAR LEGEND
+       ====================================================== */
+
+    .ts_legend {
+
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
+        gap: 12px 16px;
+
+        margin-top: 18px;
+    }
+
+    .ts_legend_item {
+
+        display: flex;
+        align-items: center;
+
+        gap: 6px;
+
+        color: var(--ts-muted);
+
+        font-size: 10px;
+        font-weight: 500;
+    }
+
+    .ts_legend_dot {
+
+        display: inline-block;
+
+        width: 9px;
+        height: 9px;
+
+        flex-shrink: 0;
+
+        border-radius: 50%;
+    }
+
+    .ts_legend_draft {
+
+        width: 11px;
+        height: 11px;
+
+        border: 1px dashed #94a3b8;
+        border-radius: 3px;
+
+        background: #f1f5f9;
+    }
+
+    /* ======================================================
+       SELECTED DEPARTURE
+       ====================================================== */
+
+    .ts_selected_banner {
+
+        position: relative;
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        padding: 18px;
+
+        background: linear-gradient(
+            145deg,
+            #ecfdf5,
+            #f0fdfa
+        );
+
+        border: 1px solid #ccecdf;
+        border-radius: 12px;
+
+        .ts_status {
+            align-self: flex-start;
+            margin-top: 12px;
+        }
+
+        h2 {
+            margin-top: 12px;
+
+            color: #064e3b;
+            font-size: 20px;
+            line-height: 1.35;
+            font-weight: 800;
+
+            overflow-wrap: anywhere;
+        }
+
+        p {
+            margin-top: 7px;
+
+            color: #527b70;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+    }
+
+    .ts_selected_icon {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 48px;
+        height: 48px;
+
+        border-radius: 13px;
+
+        background: #d1fae5;
+        color: var(--ts-green);
+
+        font-size: 24px;
+    }
+
+    /* ======================================================
+       DEPARTURE STATUS BADGES
+       ====================================================== */
+
+    .ts_status {
+
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        padding: 6px 10px;
+
+        border-radius: 30px;
+
+        font-size: 10px;
+        font-weight: 700;
+        white-space: nowrap;
+
+        i {
+            font-size: 7px;
+        }
+    }
+
+    .ts_status_published {
+
+        background: #dcfce7;
+        color: #047857;
+    }
+
+    .ts_status_draft {
+
+        background: #fef3c7;
+        color: #a16207;
+    }
+
+    /* ======================================================
+       DEPARTURE INFORMATION
+       ====================================================== */
+
+    .ts_detail_list {
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 17px;
+
+        padding: 20px 0;
+    }
+
+    .ts_detail_row {
+
+        display: flex;
+        align-items: flex-start;
+
+        gap: 12px;
+
+        > i {
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 31px;
+            height: 31px;
+
+            flex-shrink: 0;
+
+            border-radius: 8px;
+
+            background: #f0f5fa;
+            color: #008c50;
+
+            font-size: 14px;
+        }
+
+        small {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--ts-muted);
+            font-size: 11px;
+        }
+
+        strong {
+            display: block;
+            font-size: 12px;
+            font-weight: 650;
+            line-height: 1.5;
+        }
+    }
+
+    .ts_detail_capacity {
+
+        padding: 16px 0;
+
+        border-top: 1px solid #e8eef4;
+        border-bottom: 1px solid #e8eef4;
+    }
+
+    .ts_seat_grid {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 7px;
+        margin-top: 15px;
+    }
+
+    .ts_seat_stat {
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        gap: 5px;
+        padding: 12px 3px;
+
+        background: #f1f5f9;
+        border-radius: 9px;
+
+        strong {
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        small {
+            font-size: 9px;
+            color: #64748b;
+        }
+
+        &.reserved {
+
+            background: #eff6ff;
+
+            strong {
+                color: #2563eb;
+            }
+        }
+
+        &.available {
+
+            background: #ecfdf5;
+
+            strong {
+                color: #008c50;
+            }
+        }
+    }
+
+    .ts_description {
+
+        margin-top: 18px;
+
+        h4 {
+            color: var(--ts-text);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        i {
+            margin-right: 5px;
+            color: var(--ts-green);
+        }
+
+        p {
+            margin-top: 8px;
+
+            color: var(--ts-muted);
+            font-size: 12px;
+            line-height: 1.7;
+
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    .ts_detail_actions {
+
+        margin-top: 18px;
+
+        button {
+            width: 100%;
+        }
+    }
+
+    /* ======================================================
+       RESOURCE ASSIGNMENT
+       ====================================================== */
+
+    .ts_resource_panel {
+
+        margin-bottom: 22px;
+    }
+
+    .ts_resource_grid {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 18px;
+
+        margin-bottom: 20px;
+    }
+
+    .ts_resource_card {
+
+        min-width: 0;
+
+        padding: 20px;
+
+        background: #f8fafc;
+
+        border: 1px solid var(--ts-border);
+        border-radius: 13px;
+
+        label {
+            display: block;
+
+            margin: 20px 0 8px;
+
+            color: #475569;
+            font-size: 12px;
+            font-weight: 650;
+        }
+    }
+
+    .ts_resource_header {
+
+        display: flex;
+        align-items: center;
+
+        gap: 13px;
+
+        h4 {
+            font-size: 15px;
+            font-weight: 750;
+        }
+
+        small {
+            display: block;
+            margin-top: 5px;
+            color: var(--ts-muted);
+            font-size: 11px;
+        }
+    }
+
+    .ts_resource_status {
+
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+
+        padding: 8px 11px;
+        margin-top: 15px;
+
+        border-radius: 7px;
+
+        font-size: 11px;
+
+        &.success {
+            background: #dcfce7;
+            color: #047857;
+        }
+
+        &.warning {
+            background: #fef3c7;
+            color: #a16207;
+        }
+
+        &.danger {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        &.neutral {
+            background: #e8eef4;
+            color: #64748b;
+        }
+    }
+
+    .ts_resource_description {
+
+        margin-top: 9px;
+
+        color: var(--ts-muted);
+        font-size: 11px;
+        line-height: 1.6;
+
+        overflow-wrap: anywhere;
+    }
+
+    .ts_resource_actions {
+
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-wrap: wrap;
+
+        gap: 10px;
+
+        padding-top: 20px;
+
+        border-top: 1px solid var(--ts-border);
+    }
+
+    .ts_pending_notice {
+
+        display: flex;
+        align-items: center;
+
+        gap: 8px;
+
+        margin: 16px 0;
+
+        color: #a16207;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* ======================================================
+       INFORMATION AND WARNING PANELS
+       ====================================================== */
+
+    .ts_alert {
+
+        display: flex;
+        align-items: flex-start;
+
+        gap: 12px;
+
+        padding: 15px;
+        margin: 16px 0;
+
+        border: 1px solid transparent;
+        border-radius: 10px;
+
+        font-size: 12px;
+        line-height: 1.6;
+
+        > i {
+            margin-top: 2px;
+            font-size: 18px;
+        }
+
+        strong {
+            font-weight: 750;
+        }
+
+        p {
+            margin-top: 4px;
+            font-size: 11px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        &.success {
+            background: #ecfdf5;
+            border-color: #bbf7d0;
+            color: #047857;
+        }
+
+        &.warning {
+            background: #fffbeb;
+            border-color: #fde68a;
+            color: #a16207;
+        }
+
+        &.danger {
+            background: #fff1f2;
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
+
+        &.neutral {
+            background: #f1f5f9;
+            border-color: #e2e8f0;
+            color: #64748b;
+        }
+    }
+
+    /* ======================================================
+       SCHEDULING CONFLICTS
+       ====================================================== */
+
+    .ts_conflict_panel {
+
+        padding: 18px;
+        margin-bottom: 18px;
+
+        background: #fff5f5;
+
+        border: 1px solid #fecaca;
+        border-left: 4px solid #ef4444;
+        border-radius: 11px;
+    }
+
+    .ts_conflict_heading {
+
+        display: flex;
+        align-items: flex-start;
+
+        gap: 12px;
+        margin-bottom: 16px;
+
+        color: #b91c1c;
+
+        > i {
+            font-size: 23px;
+        }
+
+        strong {
+            font-size: 14px;
+            font-weight: 750;
+        }
+
+        p {
+            margin-top: 5px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+    }
+
+    .ts_conflict_row {
+
+        display: flex;
+        align-items: flex-start;
+
+        gap: 12px;
+
+        padding: 13px;
+        margin-bottom: 9px;
+
+        background: white;
+        border: 1px solid #fee2e2;
+        border-radius: 8px;
+
+        > i {
+            color: #dc2626;
+            font-size: 18px;
+        }
+
+        strong {
+            color: #b91c1c;
+            font-size: 12px;
+        }
+
+        p {
+            margin-top: 5px;
+
+            color: #334155;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        small {
+            display: block;
+            margin-top: 5px;
+
+            color: var(--ts-muted);
+            font-size: 11px;
+        }
+    }
+
+    .ts_conflict_resolution {
+
+        margin-top: 14px;
+
+        color: #b91c1c;
+
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.6;
+    }
+
+    /* ======================================================
+       SCHEDULED DEPARTURES TABLE
+       ====================================================== */
+
+    .ts_table_panel {
+
+        margin-bottom: 20px;
+    }
+
+    .ts_table_wrapper {
+
+        overflow-x: auto;
+
+        border: 1px solid var(--ts-border);
+        border-radius: 10px;
+    }
+
+    .ts_table {
+
+        width: 100%;
+        min-width: 760px;
+
+        border-collapse: collapse;
+
+        font-size: 12px;
+
+        thead {
+            background: #edf2f7;
+        }
+
+        th {
+
+            padding: 14px;
+
+            color: #475569;
+            font-size: 11px;
+            font-weight: 750;
+
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        td {
+
+            padding: 15px 14px;
+
+            border-top: 1px solid #e5ebf1;
+
+            color: #475569;
+
+            vertical-align: middle;
+        }
+
+        tbody tr {
+
+            transition: background 0.16s ease;
+
+            &:nth-child(even) {
+                background: #f8fafc;
+            }
+
+            &:hover {
+                background: #f0fdf4;
+            }
+
+            &.selected {
+                background: #ecfdf5;
+            }
+        }
+    }
+
+    .ts_table_tour {
+
+        display: flex;
+        align-items: center;
+
+        gap: 9px;
+
+        strong {
+            display: block;
+
+            color: #047857;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        small {
+            display: block;
+            margin-top: 5px;
+            color: var(--ts-muted);
+            font-size: 10px;
+        }
+    }
+
+    .ts_table_capacity {
+
+        min-width: 65px;
+
+        strong {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--ts-text);
+            font-size: 11px;
+        }
+
+        .ts_progress_track {
+            height: 5px;
+        }
+    }
+
+    .ts_view_btn {
+
+        display: inline-flex;
+        align-items: center;
+
+        gap: 6px;
+
+        padding: 7px 11px;
+
+        background: white;
+        color: #008c50;
+
+        border: 1px solid #cbd8e5;
+        border-radius: 7px;
+
+        font-size: 11px;
+        font-weight: 650;
+
+        &:hover:not(:disabled) {
+            background: #dcfce7;
+            border-color: #86efac;
+        }
+    }
+
+    .ts_table_empty {
+
+        padding: 35px !important;
+
+        color: var(--ts-muted);
+
+        text-align: center;
+    }
+
+    /* ======================================================
+       LOADING AND EMPTY STATES
+       ====================================================== */
+
+    .ts_message {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        gap: 12px;
+
+        min-height: 180px;
+        padding: 30px;
+
+        background: white;
+
+        border: 1px solid var(--ts-border);
+        border-radius: var(--ts-radius);
+
+        color: var(--ts-muted);
+        font-size: 14px;
+
+        i {
+            color: var(--ts-green);
+            font-size: 22px;
+        }
+    }
+
+    .ts_empty {
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        min-height: 210px;
+
+        padding: 28px 12px;
+        gap: 12px;
+
+        text-align: center;
+
+        > i {
+            color: #9bb2c6;
+            font-size: 38px;
+        }
+
+        h4 {
+            color: #475569;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        p {
+            max-width: 260px;
+
+            color: var(--ts-muted);
+
+            font-size: 12px;
+            line-height: 1.7;
+        }
+    }
+
+    /* ======================================================
+       FOOTER
+       ====================================================== */
+
+    .ts_footer {
+
+        padding: 20px 12px 10px;
+
+        color: #8293a7;
+
+        text-align: center;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+    }
+
+    /* ======================================================
+       RESPONSIVE DESIGN
+       ====================================================== */
+
+    @media (max-width: 1500px) {
+
+        .ts_kpi_grid {
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+        }
+
+        .ts_kpi {
+            padding: 18px;
+        }
+
+        .ts_workspace {
+
+            grid-template-columns:
+                minmax(0, 2.2fr)
+                minmax(240px, 1fr);
+        }
+    }
+
+    @media (max-width: 1250px) {
+
+        .ts_workspace {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .ts_details_panel {
+            width: 100%;
+        }
+
+        .ts_selected_banner {
+            padding: 20px;
+        }
+
+        .ts_detail_list {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+        }
+
+        .ts_day_cell {
+            min-height: 100px;
+        }
+    }
+
+    @media (max-width: 1000px) {
+
+        .ts_sidebar {
+
+            width: 190px;
+            flex-basis: 190px;
+
+            padding: 25px 10px 16px;
+        }
+
+        .ts_brand {
+
+            padding: 6px;
+            gap: 8px;
+
+            .ts_logo {
+                width: 37px;
+                height: 37px;
+            }
+
+            strong {
+                font-size: 14px;
+            }
+
+            small {
+                font-size: 11px;
+            }
+        }
+
+        .ts_nav {
+
+            padding: 12px 9px;
+
+            font-size: 12px;
+            gap: 8px;
+        }
+
+        .ts_main {
+            padding: 20px;
+        }
+
+        .ts_panel {
+            padding: 16px;
+        }
+
+        .ts_resource_card {
+            padding: 15px;
+        }
+    }
+
+    @media (max-width: 768px) {
+
+        .ts_sidebar {
+
+            width: 64px;
+            flex-basis: 64px;
+
+            padding: 18px 8px;
+
+            .ts_brand {
+
+                justify-content: center;
+                padding: 0;
+                margin-bottom: 25px;
+
+                > div {
+                    display: none;
+                }
+
+                .ts_logo {
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+
+            .ts_sidebar_label,
+            .ts_sidebar_branding {
+                display: none;
+            }
+
+            .ts_nav {
+
+                justify-content: center;
+
+                padding: 13px 8px;
+
+                span {
+                    display: none;
+                }
+
+                i {
+                    font-size: 19px;
+                }
+            }
+        }
+
+        .ts_main {
+            padding: 15px;
+        }
+
+        .ts_header {
+
+            h1 {
+                font-size: 24px;
+            }
+
+            p {
+                font-size: 12px;
+            }
+        }
+
+        .ts_kpi_grid {
+            gap: 10px;
+        }
+
+        .ts_kpi {
+
+            flex-direction: column;
+
+            padding: 13px;
+
+            h2 {
+                font-size: 25px;
+            }
+        }
+
+        .ts_resource_grid,
+        .ts_detail_list {
+
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .ts_capacity_overview {
+            padding: 15px;
+        }
+
+        .ts_resource_actions {
+
+            button {
+                flex: 1 1 100%;
+            }
+        }
+
+        .ts_capacity_caption {
+            flex-wrap: wrap;
+        }
+
+        .ts_panel_header h3 {
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+
+        .ts_main {
+            padding: 10px;
+        }
+
+        .ts_kpi_grid {
+
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .ts_kpi {
+            flex-direction: row;
+        }
+
+        .ts_panel {
+            padding: 12px;
+        }
+
+        .ts_agenda_row {
+
+            grid-template-columns: minmax(0, 1fr);
+            gap: 7px;
+        }
+
+        .ts_agenda_time {
+            flex-direction: row;
+        }
+
+        .ts_header_actions {
+            width: 100%;
+
+            button {
+                flex: 1 1 auto;
+            }
+        }
+    }
+
+    /* ======================================================
+       ACCESSIBILITY - REDUCED MOTION
+       ====================================================== */
+
+    @media (prefers-reduced-motion: reduce) {
+
+        *,
+        *::before,
+        *::after {
+
+            transition: none !important;
+            animation: none !important;
+        }
+    }
+}

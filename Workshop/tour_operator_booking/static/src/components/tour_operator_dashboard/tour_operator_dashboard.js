@@ -21,6 +21,8 @@ export class TourOperatorDashboard extends Component {
         onWillStart(() => this.loadDashboard());
     }
 
+    // LOAD LIVE DASHBOARD STATISTICS
+
     async loadDashboard() {
         try {
             const now = new Date().toISOString()
@@ -48,11 +50,14 @@ export class TourOperatorDashboard extends Component {
             this.state.confirmedBookings = confirmed;
             this.state.upcomingTours = upcoming;
             this.state.error = false;
+
         } catch (error) {
             this.state.error = true;
             console.error(error);
         }
     }
+
+    // OPEN BOOKINGS
 
     openBookings() {
         return this.action.doAction(
@@ -60,17 +65,23 @@ export class TourOperatorDashboard extends Component {
         );
     }
 
+    // OPEN NEXUS PROFESSIONAL TOUR SCHEDULING
+
     openSchedules() {
         return this.action.doAction(
-            "tour_operator_booking.action_schedules"
+            "tour_operator_booking.action_tour_scheduling_dashboard"
         );
     }
 
+    // OPEN NEXUS PROFESSIONAL BOOKING REPORTS
+
     openReports() {
-    return this.action.doAction(
-        "tour_operator_booking.action_booking_reports_dashboard"
-    );
-}
+        return this.action.doAction(
+            "tour_operator_booking.action_booking_reports_dashboard"
+        );
+    }
+
+    // CREATE A NEW BOOKING
 
     addBooking() {
         return this.action.doAction({
@@ -82,14 +93,10 @@ export class TourOperatorDashboard extends Component {
         });
     }
 
+    // OPEN PROFESSIONAL SCHEDULING WORKSPACE
+
     scheduleTour() {
-        return this.action.doAction({
-            type: "ir.actions.act_window",
-            name: "Schedule Tour",
-            res_model: "tour.operator.schedule",
-            views: [[false, "form"]],
-            target: "current",
-        });
+        return this.openSchedules();
     }
 }
 
