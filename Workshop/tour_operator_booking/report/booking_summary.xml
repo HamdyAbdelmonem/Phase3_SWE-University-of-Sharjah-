@@ -12,7 +12,7 @@
         <field name="print_report_name">'All-Bookings-Summary'</field>
     </record>
 
-    <!-- All Bookings Summary PDF Template -->
+    
     <template id="booking_summary_document">
 
         <t t-call="web.html_container">
@@ -33,7 +33,7 @@
 
                     <hr/>
 
-                    <!-- Booking Statistics -->
+                    
                     <h3>Booking Overview</h3>
 
                     <table class="table table-bordered">
@@ -61,7 +61,7 @@
                         </tbody>
                     </table>
 
-                    <!-- Financial Summary -->
+               
                     <h3>Financial Summary</h3>
 
                     <table class="table table-bordered">
@@ -84,7 +84,7 @@
                         </tbody>
                     </table>
 
-                    <!-- Individual Booking Records -->
+                    
                     <h3>Booking Details</h3>
 
                     <t t-if="docs">
