@@ -1,0 +1,1335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="tour_operator_booking.CreateBooking">
+
+        <div class="cb_page">
+
+            <!-- ========================================== -->
+            <!-- NEXUS SIDEBAR                              -->
+            <!-- ========================================== -->
+
+            <aside class="cb_sidebar">
+
+                <div class="cb_brand">
+
+                    <img src="/tour_operator_booking/static/src/img/tour_logo.png"
+                         alt="Nexus Logo"
+                         class="cb_logo"/>
+
+                    <div>
+                        <strong>Tour Operator</strong>
+                        <small>Booking Suite</small>
+                    </div>
+
+                </div>
+
+                <div class="cb_sidebar_label">
+                    WORKSPACE
+                </div>
+
+                <nav class="cb_navigation">
+
+                    <button type="button"
+                            class="cb_nav"
+                            t-on-click="openDashboard"
+                            t-att-disabled="state.busy">
+
+                        <i class="fa fa-home"/>
+                        <span>Dashboard</span>
+
+                    </button>
+
+                    <button type="button"
+                            class="cb_nav active"
+                            t-on-click="openBookings"
+                            t-att-disabled="state.busy">
+
+                        <i class="fa fa-ticket"/>
+                        <span>Bookings</span>
+
+                    </button>
+
+                    <button type="button"
+                            class="cb_nav"
+                            t-on-click="openPackages"
+                            t-att-disabled="state.busy">
+
+                        <i class="fa fa-map-marker"/>
+                        <span>Tours &amp; Packages</span>
+
+                    </button>
+
+                    <button type="button"
+                            class="cb_nav"
+                            t-on-click="openResources"
+                            t-att-disabled="state.busy">
+
+                        <i class="fa fa-car"/>
+                        <span>Drivers &amp; Vehicles</span>
+
+                    </button>
+
+                    <button type="button"
+                            class="cb_nav"
+                            t-on-click="openOperations"
+                            t-att-disabled="state.busy">
+
+                        <i class="fa fa-calendar"/>
+                        <span>Operations</span>
+
+                    </button>
+
+                    <button type="button"
+                            class="cb_nav"
+                            t-on-click="openReports"
+                            t-att-disabled="state.busy">
+
+                        <i class="fa fa-bar-chart"/>
+                        <span>Reports</span>
+
+                    </button>
+
+                </nav>
+
+                <div class="cb_sidebar_footer">
+                    <strong>NEXUS</strong>
+                    <small>Tour Management System</small>
+                </div>
+
+            </aside>
+
+            <!-- ========================================== -->
+            <!-- MAIN WORKSPACE                             -->
+            <!-- ========================================== -->
+
+            <main class="cb_main">
+
+                <!-- PAGE HEADER -->
+
+                <header class="cb_header">
+
+                    <div>
+
+                        <div class="cb_breadcrumb">
+                            Bookings / Create Booking
+                        </div>
+
+                        <h1 t-if="!isLocked">
+                            Create Booking
+                        </h1>
+
+                        <h1 t-else="">
+                            Booking Details
+                        </h1>
+
+                        <p>
+                            Create and manage tour reservations
+                            for your customers.
+                        </p>
+
+                    </div>
+
+                    <div class="cb_header_actions">
+
+                        <button type="button"
+                                class="cb_secondary_btn"
+                                t-on-click="openBookings"
+                                t-att-disabled="state.busy">
+
+                            <i class="fa fa-arrow-left"/>
+                            Back to Bookings
+
+                        </button>
+
+                        <button type="button"
+                                class="cb_primary_btn"
+                                t-on-click="startNewBooking"
+                                t-att-disabled="state.busy || state.loading">
+
+                            <i class="fa fa-plus"/>
+                            New Booking
+
+                        </button>
+
+                    </div>
+
+                </header>
+
+                <!-- LOADING STATE -->
+
+                <div t-if="state.loading"
+                     class="cb_loading">
+
+                    <i class="fa fa-spinner fa-spin"/>
+                    <strong>Preparing booking workspace...</strong>
+
+                </div>
+
+                <t t-else="">
+
+                    <!-- ERROR MESSAGE -->
+
+                    <div t-if="state.error"
+                         class="cb_error"
+                         role="alert">
+
+                        <i class="fa fa-exclamation-circle"/>
+
+                        <div>
+                            <strong>Attention Required</strong>
+                            <p t-esc="state.error"/>
+                        </div>
+
+                    </div>
+
+                    <!-- BOOKING REFERENCE -->
+
+                    <div t-if="state.draft"
+                         class="cb_reference_banner">
+
+                        <div class="cb_reference_info">
+
+                            <div class="cb_reference_icon">
+                                <i class="fa fa-ticket"/>
+                            </div>
+
+                            <div>
+
+                                <small>Booking Reference</small>
+
+                                <strong t-esc="state.draft.name || 'Saved Booking'"/>
+
+                            </div>
+
+                        </div>
+
+                        <span t-attf-class="cb_status cb_status_{{state.draft.state}}">
+
+                            <i class="fa fa-circle"/>
+
+                            <t t-if="state.draft.state === 'confirmed'">
+                                Confirmed
+                            </t>
+
+                            <t t-elif="state.draft.state === 'cancelled'">
+                                Cancelled
+                            </t>
+
+                            <t t-else="">
+                                Draft
+                            </t>
+
+                        </span>
+
+                    </div>
+
+                    <!-- ================================== -->
+                    <!-- TWO COLUMN BOOKING WORKSPACE       -->
+                    <!-- ================================== -->
+
+                    <div class="cb_workspace">
+
+                        <!-- LEFT COLUMN -->
+
+                        <div class="cb_form_column">
+
+                            <!-- ========================== -->
+                            <!-- CUSTOMER SELECTION         -->
+                            <!-- ========================== -->
+
+                            <section class="cb_panel">
+
+                                <div class="cb_section_header">
+
+                                    <div class="cb_section_icon green">
+                                        <i class="fa fa-user"/>
+                                    </div>
+
+                                    <div class="cb_section_heading">
+
+                                        <h3>Customer</h3>
+
+                                        <p>
+                                            Select an existing customer
+                                            or create a new one.
+                                        </p>
+
+                                    </div>
+
+                                    <button type="button"
+                                            class="cb_small_btn"
+                                            t-on-click="toggleNewCustomer"
+                                            t-att-disabled="state.busy || isLocked">
+
+                                        <i class="fa fa-plus"/>
+                                        New Customer
+
+                                    </button>
+
+                                </div>
+
+                                <!-- CUSTOMER SEARCH -->
+
+                                <div t-if="!state.customer"
+                                     class="cb_customer_search">
+
+                                    <label for="cb_customer_input">
+                                        Search Customer
+                                    </label>
+
+                                    <div class="cb_search_input">
+
+                                        <i class="fa fa-search"/>
+
+                                        <input id="cb_customer_input"
+                                               type="text"
+                                               placeholder="Search by name, email or phone..."
+                                               autocomplete="off"
+                                               t-att-value="state.customerQuery"
+                                               t-on-input="onCustomerSearch"
+                                               t-att-disabled="state.busy || isLocked"/>
+
+                                    </div>
+
+                                    <div class="cb_search_results">
+
+                                        <div t-if="state.customerSearching"
+                                             class="cb_empty_small">
+
+                                            <i class="fa fa-spinner fa-spin"/>
+                                            Searching customers...
+
+                                        </div>
+
+                                        <t t-else="">
+
+                                            <button t-foreach="state.customers"
+                                                    t-as="customer"
+                                                    t-key="customer.id"
+                                                    type="button"
+                                                    class="cb_customer_result"
+                                                    t-on-click="() => this.selectCustomer(customer)"
+                                                    t-att-disabled="state.busy || isLocked">
+
+                                                <div class="cb_customer_avatar">
+
+                                                    <t t-esc="(customer.name || '?').slice(0, 1).toUpperCase()"/>
+
+                                                </div>
+
+                                                <div class="cb_customer_result_info">
+
+                                                    <strong t-esc="customer.name"/>
+
+                                                    <small t-esc="customer.email || customer.phone || 'Customer contact'"/>
+
+                                                </div>
+
+                                                <i class="fa fa-chevron-right"/>
+
+                                            </button>
+
+                                            <div t-if="!state.customers.length"
+                                                 class="cb_empty_small">
+
+                                                <i class="fa fa-users"/>
+                                                No matching customers found.
+
+                                            </div>
+
+                                        </t>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- SELECTED CUSTOMER -->
+
+                                <div t-if="state.customer"
+                                     class="cb_selected_customer">
+
+                                    <div class="cb_customer_avatar large">
+
+                                        <t t-esc="(state.customer.name || '?').slice(0, 1).toUpperCase()"/>
+
+                                    </div>
+
+                                    <div class="cb_customer_details">
+
+                                        <span class="cb_selected_label">
+                                            Selected Customer
+                                        </span>
+
+                                        <h3 t-esc="state.customer.name"/>
+
+                                        <div class="cb_contact_line">
+
+                                            <i class="fa fa-envelope"/>
+
+                                            <span t-esc="state.customer.email || 'No email provided'"/>
+
+                                        </div>
+
+                                        <div class="cb_contact_line">
+
+                                            <i class="fa fa-phone"/>
+
+                                            <span t-esc="state.customer.phone || 'No phone provided'"/>
+
+                                        </div>
+
+                                    </div>
+
+                                    <button t-if="!isLocked"
+                                            type="button"
+                                            class="cb_icon_btn"
+                                            title="Remove selected customer"
+                                            t-on-click="clearCustomer"
+                                            t-att-disabled="state.busy">
+
+                                        <i class="fa fa-times"/>
+
+                                    </button>
+
+                                </div>
+
+                                <!-- CREATE CUSTOMER FORM -->
+
+                                <div t-if="state.showNewCustomer &amp;&amp; !isLocked"
+                                     class="cb_new_customer">
+
+                                    <div class="cb_subheading">
+                                        <i class="fa fa-user-plus"/>
+                                        Create New Customer
+                                    </div>
+
+                                    <div class="cb_field">
+
+                                        <label for="cb_new_name">
+                                            Full Name *
+                                        </label>
+
+                                        <input id="cb_new_name"
+                                               type="text"
+                                               placeholder="Enter customer name"
+                                               t-model="state.newCustomer.name"
+                                               t-att-disabled="state.busy"/>
+
+                                    </div>
+
+                                    <div class="cb_field_grid">
+
+                                        <div class="cb_field">
+
+                                            <label for="cb_new_email">
+                                                Email Address
+                                            </label>
+
+                                            <input id="cb_new_email"
+                                                   type="email"
+                                                   placeholder="customer@example.com"
+                                                   t-model="state.newCustomer.email"
+                                                   t-att-disabled="state.busy"/>
+
+                                        </div>
+
+                                        <div class="cb_field">
+
+                                            <label for="cb_new_phone">
+                                                Phone Number
+                                            </label>
+
+                                            <input id="cb_new_phone"
+                                                   type="tel"
+                                                   placeholder="+971"
+                                                   t-model="state.newCustomer.phone"
+                                                   t-att-disabled="state.busy"/>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="cb_inline_actions">
+
+                                        <button type="button"
+                                                class="cb_secondary_btn"
+                                                t-on-click="toggleNewCustomer"
+                                                t-att-disabled="state.busy">
+
+                                            Cancel
+
+                                        </button>
+
+                                        <button type="button"
+                                                class="cb_primary_btn"
+                                                t-on-click="createCustomer"
+                                                t-att-disabled="state.busy || !state.newCustomer.name.trim()">
+
+                                            <i class="fa fa-check"/>
+                                            Create Customer
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </section>
+
+                            <!-- ========================== -->
+                            <!-- TOUR PACKAGE               -->
+                            <!-- ========================== -->
+
+                            <section class="cb_panel">
+
+                                <div class="cb_section_header">
+
+                                    <div class="cb_section_icon green">
+                                        <i class="fa fa-map-marker"/>
+                                    </div>
+
+                                    <div class="cb_section_heading">
+
+                                        <h3>Tour Package</h3>
+
+                                        <p>
+                                            Choose the experience
+                                            for this reservation.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="cb_field">
+
+                                    <label for="cb_package">
+                                        Select Tour Package *
+                                    </label>
+
+                                    <select id="cb_package"
+                                            t-on-change="onPackageChange"
+                                            t-att-disabled="state.busy || isLocked">
+
+                                        <option value=""
+                                                t-att-selected="!state.packageId">
+
+                                            Choose a tour package
+
+                                        </option>
+
+                                        <option t-foreach="state.packages"
+                                                t-as="pkg"
+                                                t-key="pkg.id"
+                                                t-att-value="pkg.id"
+                                                t-att-selected="state.packageId === pkg.id.toString()">
+
+                                            <t t-esc="pkg.name"/>
+
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div t-if="selectedPackage"
+                                     class="cb_package_preview">
+
+                                    <div class="cb_package_icon">
+                                        <i class="fa fa-map-signs"/>
+                                    </div>
+
+                                    <div class="cb_package_info">
+
+                                        <h3 t-esc="selectedPackage.name"/>
+
+                                        <p t-esc="selectedPackage.description || 'Tour package experience'"/>
+
+                                        <strong t-esc="formatMoney(selectedPackage.price_per_guest)"/>
+
+                                        <small>per guest</small>
+
+                                    </div>
+
+                                </div>
+
+                                <div t-if="!state.packages.length"
+                                     class="cb_info_note">
+
+                                    <i class="fa fa-info-circle"/>
+                                    No tour packages are currently available.
+
+                                </div>
+
+                            </section>
+
+                            <!-- ========================== -->
+                            <!-- DEPARTURE DATE AND TIME    -->
+                            <!-- ========================== -->
+
+                            <section class="cb_panel">
+
+                                <div class="cb_section_header">
+
+                                    <div class="cb_section_icon blue">
+                                        <i class="fa fa-calendar"/>
+                                    </div>
+
+                                    <div class="cb_section_heading">
+
+                                        <h3>Departure Date &amp; Time</h3>
+
+                                        <p>
+                                            Select a published
+                                            upcoming departure.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="cb_field">
+
+                                    <label for="cb_schedule">
+                                        Available Departures *
+                                    </label>
+
+                                    <select id="cb_schedule"
+                                            t-on-change="onScheduleChange"
+                                            t-att-disabled="state.busy || isLocked || !state.packageId">
+
+                                        <option value=""
+                                                t-att-selected="!state.scheduleId">
+
+                                            Choose a departure
+
+                                        </option>
+
+                                        <option t-foreach="state.schedules"
+                                                t-as="departure"
+                                                t-key="departure.id"
+                                                t-att-value="departure.id"
+                                                t-att-selected="state.scheduleId === departure.id.toString()">
+
+                                            <t t-esc="formatDateTime(departure.start_datetime)"/>
+
+                                            —
+
+                                            <t t-esc="departure.available_seats"/>
+
+                                            seats left
+
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div t-if="!state.packageId"
+                                     class="cb_info_note">
+
+                                    <i class="fa fa-info-circle"/>
+                                    Select a tour package first.
+
+                                </div>
+
+                                <div t-elif="!state.schedules.length &amp;&amp; !isLocked"
+                                     class="cb_info_note">
+
+                                    <i class="fa fa-info-circle"/>
+
+                                    No published future departures
+                                    are available for this package.
+
+                                </div>
+
+                                <div t-if="selectedSchedule"
+                                     class="cb_departure_preview">
+
+                                    <div class="cb_detail_item">
+
+                                        <i class="fa fa-calendar"/>
+
+                                        <div>
+
+                                            <small>Departure Date</small>
+
+                                            <strong t-esc="formatDate(selectedSchedule.start_datetime)"/>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="cb_detail_item">
+
+                                        <i class="fa fa-clock-o"/>
+
+                                        <div>
+
+                                            <small>Start Time</small>
+
+                                            <strong t-esc="formatTime(selectedSchedule.start_datetime)"/>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="cb_detail_item">
+
+                                        <i class="fa fa-clock-o"/>
+
+                                        <div>
+
+                                            <small>End Time</small>
+
+                                            <strong t-esc="formatTime(selectedSchedule.end_datetime)"/>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </section>
+
+                            <!-- ========================== -->
+                            <!-- NUMBER OF GUESTS           -->
+                            <!-- ========================== -->
+
+                            <section class="cb_panel">
+
+                                <div class="cb_section_header">
+
+                                    <div class="cb_section_icon purple">
+                                        <i class="fa fa-users"/>
+                                    </div>
+
+                                    <div class="cb_section_heading">
+
+                                        <h3>Number of Guests</h3>
+
+                                        <p>
+                                            Specify the total number
+                                            of passengers.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="cb_guest_layout">
+
+                                    <div class="cb_guest_counter">
+
+                                        <button type="button"
+                                                title="Decrease guest count"
+                                                t-on-click="decreaseGuests"
+                                                t-att-disabled="state.guests &lt;= 1 || state.busy || isLocked">
+
+                                            <i class="fa fa-minus"/>
+
+                                        </button>
+
+                                        <input type="number"
+                                               min="1"
+                                               step="1"
+                                               aria-label="Number of guests"
+                                               t-att-value="state.guests"
+                                               t-on-change="onGuestChange"
+                                               t-att-disabled="state.busy || isLocked"/>
+
+                                        <button type="button"
+                                                title="Increase guest count"
+                                                t-on-click="increaseGuests"
+                                                t-att-disabled="state.busy || isLocked">
+
+                                            <i class="fa fa-plus"/>
+
+                                        </button>
+
+                                    </div>
+
+                                    <div class="cb_guest_information">
+
+                                        <strong t-esc="state.guests"/>
+                                        <span>Guest(s)</span>
+
+                                    </div>
+
+                                </div>
+
+                                <div t-if="selectedSchedule &amp;&amp; !isLocked &amp;&amp; state.guests > availableSeats"
+                                     class="cb_inline_warning">
+
+                                    <i class="fa fa-exclamation-triangle"/>
+
+                                    Only
+
+                                    <strong t-esc="availableSeats"/>
+
+                                    seats are currently available.
+
+                                </div>
+
+                            </section>
+
+                            <!-- ========================== -->
+                            <!-- BOOKING SOURCE             -->
+                            <!-- ========================== -->
+
+                            <section class="cb_panel">
+
+                                <div class="cb_section_header">
+
+                                    <div class="cb_section_icon teal">
+                                        <i class="fa fa-globe"/>
+                                    </div>
+
+                                    <div class="cb_section_heading">
+
+                                        <h3>Booking Source</h3>
+
+                                        <p>
+                                            Identify how this
+                                            reservation was received.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="cb_source_grid">
+
+                                    <label t-attf-class="cb_source_option {{state.source === 'direct' ? 'selected' : ''}}">
+
+                                        <input type="radio"
+                                               name="cb_booking_source"
+                                               value="direct"
+                                               t-att-checked="state.source === 'direct'"
+                                               t-on-change="onSourceChange"
+                                               t-att-disabled="state.busy || isLocked"/>
+
+                                        <i class="fa fa-building"/>
+
+                                        <div>
+
+                                            <strong>Direct Booking</strong>
+
+                                            <small>
+                                                Customer or booking staff
+                                            </small>
+
+                                        </div>
+
+                                    </label>
+
+                                    <label t-attf-class="cb_source_option {{state.source === 'ota' ? 'selected' : ''}}">
+
+                                        <input type="radio"
+                                               name="cb_booking_source"
+                                               value="ota"
+                                               t-att-checked="state.source === 'ota'"
+                                               t-on-change="onSourceChange"
+                                               t-att-disabled="state.busy || isLocked"/>
+
+                                        <i class="fa fa-globe"/>
+
+                                        <div>
+
+                                            <strong>OTA Booking</strong>
+
+                                            <small>
+                                                Online travel agency
+                                            </small>
+
+                                        </div>
+
+                                    </label>
+
+                                </div>
+
+                            </section>
+
+                            <!-- SAVE DRAFT -->
+
+                            <section t-if="!isLocked"
+                                     class="cb_panel cb_draft_panel">
+
+                                <div class="cb_draft_information">
+
+                                    <i class="fa fa-info-circle"/>
+
+                                    <div>
+
+                                        <strong>Save your progress</strong>
+
+                                        <p>
+                                            Draft bookings do not reserve seats.
+                                            Availability is checked again
+                                            during confirmation.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <button type="button"
+                                        class="cb_secondary_btn"
+                                        t-on-click="saveDraft"
+                                        t-att-disabled="!canSave">
+
+                                    <i class="fa fa-save"/>
+                                    Save Draft
+
+                                </button>
+
+                            </section>
+
+                        </div>
+
+                        <!-- ================================== -->
+                        <!-- RIGHT COLUMN / LIVE SUMMARY        -->
+                        <!-- ================================== -->
+
+                        <aside class="cb_summary_column">
+
+                            <!-- AVAILABILITY STATUS -->
+
+                            <t t-set="availability"
+                               t-value="availabilityStatus"/>
+
+                            <section t-attf-class="cb_availability cb_availability_{{availability.type}}">
+
+                                <div class="cb_availability_icon">
+
+                                    <i t-att-class="availability.icon"/>
+
+                                </div>
+
+                                <div>
+
+                                    <h3 t-esc="availability.title"/>
+
+                                    <p t-esc="availability.message"/>
+
+                                </div>
+
+                            </section>
+
+                            <div t-if="state.availabilityMessage &amp;&amp; !isLocked"
+                                 class="cb_availability_result">
+
+                                <i class="fa fa-info-circle"/>
+
+                                <span t-esc="state.availabilityMessage"/>
+
+                            </div>
+
+                            <!-- TOUR DETAILS -->
+
+                            <section class="cb_panel cb_summary_panel">
+
+                                <div class="cb_summary_heading">
+
+                                    <i class="fa fa-map-marker"/>
+                                    <h3>Tour Details</h3>
+
+                                </div>
+
+                                <div t-if="selectedPackage"
+                                     class="cb_summary_tour">
+
+                                    <div class="cb_tour_artwork">
+                                        <i class="fa fa-map-signs"/>
+                                    </div>
+
+                                    <h3 t-esc="selectedPackage.name"/>
+
+                                    <p t-esc="selectedPackage.description || 'Selected tour experience'"/>
+
+                                </div>
+
+                                <div t-else=""
+                                     class="cb_empty_summary">
+
+                                    <i class="fa fa-map-marker"/>
+
+                                    <strong>No tour selected</strong>
+
+                                    <small>
+                                        Choose a tour package to
+                                        view its details.
+                                    </small>
+
+                                </div>
+
+                                <div t-if="selectedSchedule"
+                                     class="cb_summary_details">
+
+                                    <div class="cb_summary_detail">
+
+                                        <i class="fa fa-calendar"/>
+
+                                        <div>
+
+                                            <small>Departure Date</small>
+
+                                            <strong t-esc="formatDate(selectedSchedule.start_datetime)"/>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="cb_summary_detail">
+
+                                        <i class="fa fa-clock-o"/>
+
+                                        <div>
+
+                                            <small>Tour Time</small>
+
+                                            <strong>
+
+                                                <t t-esc="formatTime(selectedSchedule.start_datetime)"/>
+
+                                                —
+
+                                                <t t-esc="formatTime(selectedSchedule.end_datetime)"/>
+
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="cb_summary_detail">
+
+                                        <i class="fa fa-car"/>
+
+                                        <div>
+
+                                            <small>Assigned Vehicle</small>
+
+                                            <strong t-esc="selectedSchedule.vehicle_id ? selectedSchedule.vehicle_id[1] : 'Not assigned'"/>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="cb_summary_detail">
+
+                                        <i class="fa fa-user"/>
+
+                                        <div>
+
+                                            <small>Assigned Driver</small>
+
+                                            <strong t-esc="selectedSchedule.driver_id ? selectedSchedule.driver_id[1] : 'Not assigned'"/>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="cb_summary_detail">
+
+                                        <i class="fa fa-users"/>
+
+                                        <div>
+
+                                            <small>Requested Guests</small>
+
+                                            <strong t-esc="state.guests"/>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </section>
+
+                            <!-- ========================== -->
+                            <!-- DEPARTURE CAPACITY         -->
+                            <!-- ========================== -->
+
+                            <section t-if="selectedSchedule"
+                                     class="cb_panel cb_summary_panel">
+
+                                <div class="cb_summary_heading">
+
+                                    <i class="fa fa-pie-chart"/>
+                                    <h3>Departure Capacity</h3>
+
+                                </div>
+
+                                <div class="cb_capacity_header">
+
+                                    <span>Capacity Utilization</span>
+
+                                    <strong>
+
+                                        <t t-esc="capacityUtilization"/>%
+
+                                    </strong>
+
+                                </div>
+
+                                <div class="cb_progress_track">
+
+                                    <div class="cb_progress_fill"
+                                         t-attf-style="width: {{capacityUtilization}}%;"/>
+
+                                </div>
+
+                                <div class="cb_capacity_caption">
+
+                                    <t t-esc="reservedGuests"/>
+
+                                    of
+
+                                    <t t-esc="capacity"/>
+
+                                    seats reserved
+
+                                </div>
+
+                                <div class="cb_capacity_grid">
+
+                                    <div class="cb_capacity_item">
+
+                                        <strong t-esc="capacity"/>
+                                        <small>Capacity</small>
+
+                                    </div>
+
+                                    <div class="cb_capacity_item blue">
+
+                                        <strong t-esc="reservedGuests"/>
+                                        <small>Reserved</small>
+
+                                    </div>
+
+                                    <div class="cb_capacity_item green">
+
+                                        <strong t-esc="availableSeats"/>
+                                        <small>Available</small>
+
+                                    </div>
+
+                                </div>
+
+                                <div t-if="isAvailable &amp;&amp; !isLocked"
+                                     class="cb_remaining_note">
+
+                                    <i class="fa fa-check-circle"/>
+
+                                    <span>
+
+                                        <strong t-esc="remainingAfterBooking"/>
+
+                                        seats would remain after confirmation.
+
+                                    </span>
+
+                                </div>
+
+                            </section>
+
+                            <!-- ========================== -->
+                            <!-- PRICING SUMMARY            -->
+                            <!-- ========================== -->
+
+                            <section class="cb_panel cb_summary_panel">
+
+                                <div class="cb_summary_heading">
+
+                                    <i class="fa fa-money"/>
+                                    <h3>Pricing Summary</h3>
+
+                                </div>
+
+                                <div class="cb_price_rows">
+
+                                    <div class="cb_price_row">
+
+                                        <span>Price per Guest</span>
+
+                                        <strong t-esc="formatMoney(unitPrice)"/>
+
+                                    </div>
+
+                                    <div class="cb_price_row">
+
+                                        <span>Number of Guests</span>
+
+                                        <strong t-esc="state.guests"/>
+
+                                    </div>
+
+                                    <div class="cb_price_row">
+
+                                        <span>Booking Source</span>
+
+                                        <strong t-esc="state.source === 'ota' ? 'OTA' : 'Direct'"/>
+
+                                    </div>
+
+                                    <div class="cb_price_row">
+
+                                        <span>Currency</span>
+
+                                        <strong t-esc="state.currencyCode || '—'"/>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="cb_total_box">
+
+                                    <span>Total Booking Value</span>
+
+                                    <strong t-esc="formatMoney(totalPrice)"/>
+
+                                </div>
+
+                                <div class="cb_price_note">
+
+                                    <i class="fa fa-info-circle"/>
+
+                                    Booking value does not
+                                    represent payment received.
+
+                                </div>
+
+                            </section>
+
+                            <!-- ========================== -->
+                            <!-- BOOKING ACTIONS            -->
+                            <!-- ========================== -->
+
+                            <section class="cb_panel cb_action_panel">
+
+                                <t t-if="!isLocked">
+
+                                    <button type="button"
+                                            class="cb_secondary_btn cb_full_btn"
+                                            t-on-click="checkAvailability"
+                                            t-att-disabled="state.busy || !selectedSchedule">
+
+                                        <i class="fa fa-search"/>
+                                        Check Availability
+
+                                    </button>
+
+                                    <button type="button"
+                                            class="cb_primary_btn cb_full_btn"
+                                            t-on-click="confirmBooking"
+                                            t-att-disabled="!canSave">
+
+                                        <i class="fa fa-check"/>
+                                        Confirm &amp; Print Voucher
+
+                                    </button>
+
+                                    <div class="cb_action_note">
+
+                                        <i class="fa fa-shield"/>
+
+                                        Seats are reserved only
+                                        after successful confirmation.
+
+                                    </div>
+
+                                </t>
+
+                                <t t-else="">
+
+                                    <div t-if="state.draft.state === 'confirmed'"
+                                         class="cb_success_message">
+
+                                        <i class="fa fa-check-circle"/>
+
+                                        <h3>Booking Confirmed</h3>
+
+                                        <p>
+                                            Your customer's reservation
+                                            is successfully confirmed.
+                                        </p>
+
+                                    </div>
+
+                                    <button t-if="state.draft.state === 'confirmed'"
+                                            type="button"
+                                            class="cb_primary_btn cb_full_btn"
+                                            t-on-click="printVoucher"
+                                            t-att-disabled="state.busy">
+
+                                        <i class="fa fa-file-pdf-o"/>
+                                        Print Voucher &amp; QR
+
+                                    </button>
+
+                                    <button type="button"
+                                            class="cb_secondary_btn cb_full_btn"
+                                            t-on-click="openBookingDetails"
+                                            t-att-disabled="state.busy">
+
+                                        <i class="fa fa-eye"/>
+                                        View Booking Details
+
+                                    </button>
+
+                                    <button type="button"
+                                            class="cb_secondary_btn cb_full_btn"
+                                            t-on-click="startNewBooking"
+                                            t-att-disabled="state.busy">
+
+                                        <i class="fa fa-plus"/>
+                                        Create Another Booking
+
+                                    </button>
+
+                                </t>
+
+                                <div t-if="state.busy"
+                                     class="cb_processing">
+
+                                    <i class="fa fa-spinner fa-spin"/>
+                                    Processing request...
+
+                                </div>
+
+                            </section>
+
+                            <!-- COMPANY INFORMATION -->
+
+                            <div class="cb_company_note">
+
+                                <i class="fa fa-building"/>
+
+                                <span t-esc="state.companyName || 'Tour Operator'"/>
+
+                            </div>
+
+                        </aside>
+
+                    </div>
+
+                </t>
+
+                <!-- PAGE FOOTER -->
+
+                <footer class="cb_footer">
+
+                    Nexus | Tour Operator Booking Suite
+
+                </footer>
+
+            </main>
+
+        </div>
+
+    </t>
+
+</templates>

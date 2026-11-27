@@ -41,6 +41,11 @@
             "tour_operator_booking/static/src/components/tour_scheduling/tour_scheduling.xml",
             "tour_operator_booking/static/src/components/tour_scheduling/tour_scheduling.scss",
 
+            # Nexus Create Booking
+            "tour_operator_booking/static/src/components/create_booking/create_booking.js",
+            "tour_operator_booking/static/src/components/create_booking/create_booking.xml",
+            "tour_operator_booking/static/src/components/create_booking/create_booking.scss",
+
         ],
     },
 

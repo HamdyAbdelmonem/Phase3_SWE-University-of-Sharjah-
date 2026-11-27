@@ -29,6 +29,16 @@
     </record>
 
 
+    <!-- NEXUS CREATE BOOKING -->
+
+    <record id="action_create_booking_dashboard"
+            model="ir.actions.client">
+        <field name="name">Create Booking</field>
+        <field name="tag">tour_operator_booking.create_booking</field>
+        <field name="target">current</field>
+    </record>
+
+
     <!-- MAIN APPLICATION -->
 
     <menuitem id="menu_tour_root"
@@ -55,6 +65,16 @@
               groups="tour_operator_booking.group_booking_staff"
               action="action_bookings"
               sequence="10"/>
+
+
+    <!-- PROFESSIONAL CREATE BOOKING -->
+
+    <menuitem id="menu_create_booking"
+              name="Create Booking"
+              parent="menu_tour_root"
+              action="action_create_booking_dashboard"
+              groups="tour_operator_booking.group_booking_staff"
+              sequence="11"/>
 
 
     <!-- PROFESSIONAL OPERATIONS WORKSPACE -->

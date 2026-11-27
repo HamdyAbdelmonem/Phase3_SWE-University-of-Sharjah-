@@ -84,14 +84,10 @@ export class TourOperatorDashboard extends Component {
     // CREATE A NEW BOOKING
 
     addBooking() {
-        return this.action.doAction({
-            type: "ir.actions.act_window",
-            name: "Create Booking",
-            res_model: "tour.operator.booking",
-            views: [[false, "form"]],
-            target: "current",
-        });
-    }
+    return this.action.doAction(
+        "tour_operator_booking.action_create_booking_dashboard"
+    );
+}
 
     // OPEN PROFESSIONAL SCHEDULING WORKSPACE
 
