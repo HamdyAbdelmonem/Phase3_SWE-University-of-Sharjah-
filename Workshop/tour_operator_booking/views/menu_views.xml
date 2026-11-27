@@ -1,15 +1,28 @@
+
 <odoo>
 
-    <record id="action_tour_operator_dashboard" model="ir.actions.client">
+    <!-- Nexus Dashboard -->
+    <record id="action_tour_operator_dashboard"
+            model="ir.actions.client">
         <field name="name">Dashboard</field>
         <field name="tag">tour_operator_dashboard</field>
     </record>
 
+    <!-- Nexus Professional Booking Reports -->
+    <record id="action_booking_reports_dashboard"
+            model="ir.actions.client">
+        <field name="name">Booking Reports</field>
+        <field name="tag">tour_operator_booking.booking_reports</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Main Tour Operator Menu -->
     <menuitem id="menu_tour_root"
               name="Tour Operator"
               sequence="20"
               groups="tour_operator_booking.group_booking_staff,tour_operator_booking.group_operations_staff"/>
 
+    <!-- Dashboard -->
     <menuitem id="menu_dashboard"
               name="Dashboard"
               parent="menu_tour_root"
@@ -17,6 +30,7 @@
               groups="tour_operator_booking.group_tour_manager"
               sequence="1"/>
 
+    <!-- Bookings -->
     <menuitem id="menu_bookings"
               name="Bookings"
               parent="menu_tour_root"
@@ -24,34 +38,39 @@
               action="action_bookings"
               sequence="10"/>
 
+    <!-- Tour Setup -->
     <menuitem id="menu_setup"
               name="Tour Setup"
               parent="menu_tour_root"
               sequence="20"
               groups="tour_operator_booking.group_operations_staff"/>
 
+    <!-- Tour Packages -->
     <menuitem id="menu_packages"
               name="Tour Packages"
               parent="menu_setup"
               action="action_packages"
               sequence="10"/>
 
+    <!-- Tour Departures -->
     <menuitem id="menu_schedules"
               name="Tour Departures"
               parent="menu_setup"
               action="action_schedules"
               sequence="20"/>
 
+    <!-- Drivers and Vehicles -->
     <menuitem id="menu_resources"
               name="Drivers and Vehicles"
               parent="menu_setup"
               action="action_resources"
               sequence="30"/>
 
+    <!-- Professional Booking Reports -->
     <menuitem id="menu_report"
-              name="Booking Report"
+              name="Booking Reports"
               parent="menu_tour_root"
-              action="action_booking_report"
+              action="action_booking_reports_dashboard"
               groups="tour_operator_booking.group_tour_manager"
               sequence="30"/>
 

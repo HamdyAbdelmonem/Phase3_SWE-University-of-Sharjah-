@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="tour_operator_booking.BookingReports">
+
+        <div class="br_page">
+
+            <!-- NEXUS SIDEBAR -->
+            <aside class="br_sidebar">
+
+                <div class="br_brand">
+                    <img src="/tour_operator_booking/static/src/img/tour_logo.png"
+                         alt="Nexus Logo"
+                         class="br_logo"/>
+
+                    <div>
+                        <strong>Tour Operator</strong>
+                        <small>Booking Suite</small>
+                    </div>
+                </div>
+
+                <div class="br_sidebar_label">
+                    ANALYTICS
+                </div>
+
+                <div class="br_nav active">
+                    <i class="fa fa-bar-chart"/>
+                    <span>Booking Reports</span>
+                </div>
+
+                <div class="br_sidebar_footer">
+                    <strong>NEXUS</strong>
+                    <small>Tour Management System</small>
+                </div>
+
+            </aside>
+
+            <!-- MAIN CONTENT -->
+            <main class="br_main">
+
+                <!-- PAGE HEADER -->
+                <div class="br_header">
+
+                    <div>
+                        <div class="br_breadcrumb">
+                            Analytics / Booking Reports
+                        </div>
+
+                        <h1>Booking Reports</h1>
+
+                        <p>
+                            Analyze booking performance, tour demand
+                            and business insights.
+                        </p>
+                    </div>
+
+                    <button class="br_primary_btn"
+                            t-on-click="loadReports"
+                            t-att-disabled="state.loading">
+
+                        <i class="fa fa-refresh"/>
+                        Refresh Report
+
+                    </button>
+
+                </div>
+
+                <!-- LOADING STATE -->
+                <div t-if="state.loading" class="br_message">
+                    <i class="fa fa-spinner fa-spin"/>
+                    Loading booking analytics...
+                </div>
+
+                <!-- ERROR STATE -->
+                <div t-elif="state.error"
+                     class="br_error">
+
+                    <i class="fa fa-exclamation-circle"/>
+                    <t t-esc="state.error"/>
+
+                </div>
+
+                <t t-else="">
+
+                    <!-- FILTERS -->
+                    <div class="br_filters">
+
+                        <div class="br_filter">
+                            <label>Departure From</label>
+                            <input type="date"
+                                   t-model="state.dateFrom"/>
+                        </div>
+
+                        <div class="br_filter">
+                            <label>Departure To</label>
+                            <input type="date"
+                                   t-model="state.dateTo"/>
+                        </div>
+
+                        <div class="br_filter">
+                            <label>Tour Package</label>
+
+                            <select t-model="state.packageId">
+
+                                <option value="">
+                                    All Packages
+                                </option>
+
+                                <t t-foreach="packages"
+                                   t-as="pkg"
+                                   t-key="pkg.id">
+
+                                    <option t-att-value="pkg.id">
+                                        <t t-esc="pkg.name"/>
+                                    </option>
+
+                                </t>
+
+                            </select>
+                        </div>
+
+                        <div class="br_filter">
+                            <label>Booking Source</label>
+
+                            <select t-model="state.source">
+                                <option value="">All Sources</option>
+                                <option value="direct">Direct</option>
+                                <option value="ota">OTA</option>
+                            </select>
+                        </div>
+
+                        <div class="br_filter">
+                            <label>Booking Status</label>
+
+                            <select t-model="state.status">
+                                <option value="">All Statuses</option>
+                                <option value="draft">Draft</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+
+                        <button class="br_secondary_btn"
+                                t-on-click="resetFilters">
+
+                            <i class="fa fa-filter"/>
+                            Reset
+
+                        </button>
+
+                    </div>
+
+                    <div t-if="state.dateFrom &amp;&amp; state.dateTo &amp;&amp; state.dateFrom > state.dateTo"
+                         class="br_error">
+
+                        Start date cannot be later than end date.
+
+                    </div>
+
+                    <t t-set="stats" t-value="statistics"/>
+
+                    <!-- KPI CARDS -->
+                    <section class="br_kpi_grid">
+
+                        <article class="br_kpi">
+
+                            <div class="br_kpi_icon green">
+                                <i class="fa fa-ticket"/>
+                            </div>
+
+                            <div>
+                                <span>Total Bookings</span>
+
+                                <h2 t-esc="stats.total"/>
+
+                                <small>All matching reservations</small>
+                            </div>
+
+                        </article>
+
+                        <article class="br_kpi">
+
+                            <div class="br_kpi_icon blue">
+                                <i class="fa fa-check-circle"/>
+                            </div>
+
+                            <div>
+                                <span>Confirmed Bookings</span>
+
+                                <h2 t-esc="stats.confirmed"/>
+
+                                <small>
+                                    <t t-esc="stats.confirmationRate"/>%
+                                    of matching bookings
+                                </small>
+                            </div>
+
+                        </article>
+
+                        <article class="br_kpi">
+
+                            <div class="br_kpi_icon red">
+                                <i class="fa fa-times-circle"/>
+                            </div>
+
+                            <div>
+                                <span>Cancelled Bookings</span>
+
+                                <h2 t-esc="stats.cancelled"/>
+
+                                <small>Cancelled reservations</small>
+                            </div>
+
+                        </article>
+
+                        <article class="br_kpi">
+
+                            <div class="br_kpi_icon gold">
+                                <i class="fa fa-money"/>
+                            </div>
+
+                            <div>
+                                <span>Confirmed Booking Value</span>
+
+                                <h2 t-esc="formatMoney(stats.bookingValue)"/>
+
+                                <small>Value of confirmed bookings</small>
+                            </div>
+
+                        </article>
+
+                        <article class="br_kpi">
+
+                            <div class="br_kpi_icon purple">
+                                <i class="fa fa-users"/>
+                            </div>
+
+                            <div>
+                                <span>Confirmed Guests</span>
+
+                                <h2 t-esc="stats.guests"/>
+
+                                <small>Total reserved guests</small>
+                            </div>
+
+                        </article>
+
+                        <article class="br_kpi">
+
+                            <div class="br_kpi_icon teal">
+                                <i class="fa fa-line-chart"/>
+                            </div>
+
+                            <div>
+                                <span>Average Guests</span>
+
+                                <h2 t-esc="stats.averageGuests"/>
+
+                                <small>Per confirmed booking</small>
+                            </div>
+
+                        </article>
+
+                    </section>
+
+                    <!-- CHARTS -->
+                    <section class="br_charts_grid">
+
+                        <!-- BOOKING TREND LINE CHART -->
+                        <article class="br_panel">
+
+                            <div class="br_panel_header">
+                                <h3>Booking Trends</h3>
+                                <small>By departure date</small>
+                            </div>
+
+                            <div class="br_legend">
+
+                                <span>
+                                    <i class="br_dot total"/>
+                                    Total
+                                </span>
+
+                                <span>
+                                    <i class="br_dot confirmed"/>
+                                    Confirmed
+                                </span>
+
+                                <span>
+                                    <i class="br_dot cancelled"/>
+                                    Cancelled
+                                </span>
+
+                            </div>
+
+                            <t t-set="trend" t-value="bookingTrend"/>
+
+                            <t t-if="trend.length">
+
+                                <t t-set="maximum"
+                                   t-value="Math.max(1, ...trend.map(d => d.total))"/>
+
+                                <t t-set="step"
+                                   t-value="500 / Math.max(1, trend.length - 1)"/>
+
+                                <svg viewBox="0 0 560 210"
+                                     class="br_line_chart"
+                                     role="img"
+                                     aria-label="Booking trends by departure date">
+
+                                    <!-- GRID LINES -->
+                                    <g t-foreach="[0, 1, 2, 3, 4]"
+                                       t-as="level"
+                                       t-key="level">
+
+                                        <line x1="40"
+                                              x2="540"
+                                              t-att-y1="25 + level * 37.5"
+                                              t-att-y2="25 + level * 37.5"
+                                              stroke="#e2e8f0"/>
+
+                                        <text x="32"
+                                              t-att-y="29 + level * 37.5"
+                                              text-anchor="end"
+                                              font-size="11"
+                                              fill="#64748b">
+
+                                            <t t-esc="Math.round(maximum * (4 - level) / 4)"/>
+
+                                        </text>
+
+                                    </g>
+
+                                    <!-- TREND LINES AND POINTS -->
+                                    <g t-foreach="trend"
+                                       t-as="day"
+                                       t-key="day.date">
+
+                                        <t t-set="x"
+                                           t-value="trend.length === 1 ? 290 : 40 + day_index * step"/>
+
+                                        <t t-if="day_index > 0">
+
+                                            <t t-set="previous"
+                                               t-value="trend[day_index - 1]"/>
+
+                                            <t t-set="previousX"
+                                               t-value="40 + (day_index - 1) * step"/>
+
+                                            <line t-att-x1="previousX"
+                                                  t-att-y1="175 - previous.total / maximum * 150"
+                                                  t-att-x2="x"
+                                                  t-att-y2="175 - day.total / maximum * 150"
+                                                  stroke="#047857"
+                                                  stroke-width="3"/>
+
+                                            <line t-att-x1="previousX"
+                                                  t-att-y1="175 - previous.confirmed / maximum * 150"
+                                                  t-att-x2="x"
+                                                  t-att-y2="175 - day.confirmed / maximum * 150"
+                                                  stroke="#6ee7b7"
+                                                  stroke-width="3"/>
+
+                                            <line t-att-x1="previousX"
+                                                  t-att-y1="175 - previous.cancelled / maximum * 150"
+                                                  t-att-x2="x"
+                                                  t-att-y2="175 - day.cancelled / maximum * 150"
+                                                  stroke="#ef4444"
+                                                  stroke-width="2"/>
+
+                                        </t>
+
+                                        <circle t-att-cx="x"
+                                                t-att-cy="175 - day.total / maximum * 150"
+                                                r="5"
+                                                fill="#047857">
+
+                                            <title>
+                                                <t t-esc="day.date"/>
+                                                Total:
+                                                <t t-esc="day.total"/>
+                                            </title>
+
+                                        </circle>
+
+                                        <circle t-att-cx="x"
+                                                t-att-cy="175 - day.confirmed / maximum * 150"
+                                                r="3"
+                                                fill="#6ee7b7"/>
+
+                                        <circle t-att-cx="x"
+                                                t-att-cy="175 - day.cancelled / maximum * 150"
+                                                r="3"
+                                                fill="#ef4444"/>
+
+                                        <text t-if="trend.length &lt;= 6 || day_first || day_last"
+                                              t-att-x="x"
+                                              y="198"
+                                              text-anchor="middle"
+                                              font-size="10"
+                                              fill="#64748b">
+
+                                            <t t-esc="day.date.slice(5)"/>
+
+                                        </text>
+
+                                    </g>
+
+                                </svg>
+
+                                <small class="br_chart_note">
+                                    Dates with matching bookings are shown.
+                                </small>
+
+                            </t>
+
+                            <div t-else="" class="br_empty">
+                                <i class="fa fa-line-chart"/>
+                                No booking trend data available.
+                            </div>
+
+                        </article>
+
+                        <!-- BOOKING VALUE -->
+                        <article class="br_panel">
+
+                            <div class="br_panel_header">
+                                <h3>Booking Value</h3>
+                                <small>Confirmed bookings by departure date</small>
+                            </div>
+
+                            <div t-if="trend.length"
+                                 class="br_value_chart">
+
+                                <t t-set="maxValue"
+                                   t-value="Math.max(1, ...trend.map(d => d.value))"/>
+
+                                <div t-foreach="trend"
+                                     t-as="day"
+                                     t-key="day.date"
+                                     class="br_value_row">
+
+                                    <span t-esc="day.date"/>
+
+                                    <div class="br_value_track">
+
+                                        <div class="br_value_fill"
+                                             t-attf-style="width: {{day.value / maxValue * 100}}%;"/>
+
+                                    </div>
+
+                                    <strong t-esc="formatMoney(day.value)"/>
+
+                                </div>
+
+                            </div>
+
+                            <div t-else="" class="br_empty">
+                                <i class="fa fa-bar-chart"/>
+                                No booking value data available.
+                            </div>
+
+                        </article>
+
+                        <!-- STATUS DONUT -->
+                        <article class="br_panel">
+
+                            <div class="br_panel_header">
+                                <h3>Booking Status</h3>
+                                <small>Reservation distribution</small>
+                            </div>
+
+                            <t t-set="distribution"
+                               t-value="statusDistribution"/>
+
+                            <div class="br_donut_layout">
+
+                                <div t-if="stats.total"
+                                     class="br_donut"
+                                     t-attf-style="background: conic-gradient(#008c50 0% {{distribution[0].percentage}}%, #f59e0b {{distribution[0].percentage}}% {{distribution[0].percentage + distribution[1].percentage}}%, #ef4444 {{distribution[0].percentage + distribution[1].percentage}}% 100%);">
+
+                                    <div class="br_donut_center">
+
+                                        <strong t-esc="stats.total"/>
+                                        <span>Bookings</span>
+
+                                    </div>
+
+                                </div>
+
+                                <div t-else=""
+                                     class="br_donut br_donut_empty">
+
+                                    <div class="br_donut_center">
+                                        <strong>0</strong>
+                                        <span>Bookings</span>
+                                    </div>
+
+                                </div>
+
+                                <div class="br_status_legend">
+
+                                    <div t-foreach="distribution"
+                                         t-as="item"
+                                         t-key="item.label"
+                                         class="br_status_row">
+
+                                        <span class="br_color_dot"
+                                              t-attf-style="background: {{item.color}};"/>
+
+                                        <span t-esc="item.label"/>
+
+                                        <strong t-esc="item.count"/>
+
+                                        <small>
+                                            <t t-esc="Math.round(item.percentage)"/>%
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                        <!-- POPULAR TOUR PACKAGES -->
+                        <article class="br_panel">
+
+                            <div class="br_panel_header">
+                                <h3>Popular Tour Packages</h3>
+                                <small>Top five by confirmed bookings</small>
+                            </div>
+
+                            <t t-set="tours" t-value="popularTours"/>
+
+                            <div t-if="tours.length"
+                                 class="br_popular_tours">
+
+                                <div t-foreach="tours"
+                                     t-as="tour"
+                                     t-key="tour.id"
+                                     class="br_tour_row">
+
+                                    <div class="br_tour_label">
+
+                                        <span>
+                                            <t t-esc="tour.name"/>
+                                        </span>
+
+                                        <strong>
+                                            <t t-esc="tour.count"/>
+                                            bookings
+                                        </strong>
+
+                                    </div>
+
+                                    <div class="br_progress_track">
+
+                                        <div class="br_progress_fill"
+                                             t-attf-style="width: {{tour.count / tours[0].count * 100}}%;"/>
+
+                                    </div>
+
+                                    <small>
+                                        <t t-esc="tour.guests"/>
+                                        confirmed guests
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                            <div t-else="" class="br_empty">
+                                <i class="fa fa-map-marker"/>
+                                No confirmed tour bookings yet.
+                            </div>
+
+                        </article>
+
+                    </section>
+
+                    <!-- BOOKING CHANNELS -->
+                    <section class="br_panel br_channels">
+
+                        <div class="br_panel_header">
+                            <h3>Booking Channels</h3>
+                            <small>Direct and online travel agency bookings</small>
+                        </div>
+
+                        <div class="br_channel_grid">
+
+                            <div t-foreach="sourceDistribution"
+                                 t-as="channel"
+                                 t-key="channel.label"
+                                 class="br_channel">
+
+                                <i t-att-class="channel.label === 'Direct' ? 'fa fa-building' : 'fa fa-globe'"/>
+
+                                <div>
+                                    <span t-esc="channel.label"/>
+                                    <h2 t-esc="channel.count"/>
+                                </div>
+
+                                <strong>
+                                    <t t-esc="stats.total ? Math.round(channel.count / stats.total * 100) : 0"/>%
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <!-- DETAILED BOOKING TABLE -->
+                    <section class="br_panel br_table_panel">
+
+                        <div class="br_panel_header">
+
+                            <h3>Detailed Booking Records</h3>
+
+                            <small>
+                                <t t-esc="filteredBookings.length"/>
+                                matching records
+                            </small>
+
+                        </div>
+
+                        <div class="br_table_wrapper">
+
+                            <table class="br_table">
+
+                                <thead>
+                                    <tr>
+                                        <th>Reference</th>
+                                        <th>Customer</th>
+                                        <th>Tour Package</th>
+                                        <th>Departure</th>
+                                        <th>Guests</th>
+                                        <th>Source</th>
+                                        <th>Booking Value</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    <tr t-foreach="filteredBookings"
+                                        t-as="booking"
+                                        t-key="booking.id">
+
+                                        <td class="br_reference"
+                                            t-esc="booking.name"/>
+
+                                        <td t-esc="booking.customer_id ? booking.customer_id[1] : '—'"/>
+
+                                        <td t-esc="booking.package_id ? booking.package_id[1] : '—'"/>
+
+                                        <td t-esc="booking.departureDate || '—'"/>
+
+                                        <td t-esc="booking.number_of_guests"/>
+
+                                        <td>
+                                            <t t-esc="booking.booking_source === 'ota' ? 'OTA' : 'Direct'"/>
+                                        </td>
+
+                                        <td class="br_amount"
+                                            t-esc="formatMoney(booking.total_price)"/>
+
+                                        <td>
+                                            <span t-attf-class="br_status br_status_{{booking.state}}">
+                                                <t t-esc="formatStatus(booking.state)"/>
+                                            </span>
+                                        </td>
+
+                                        <td>
+
+                                            <button class="br_view_btn"
+                                                    t-on-click="() => this.openBooking(booking.id)">
+
+                                                <i class="fa fa-eye"/>
+                                                View
+
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                    <tr t-if="!filteredBookings.length">
+
+                                        <td colspan="9"
+                                            class="br_empty">
+
+                                            No bookings match the selected filters.
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </section>
+
+                </t>
+
+                <!-- PAGE FOOTER -->
+                <footer class="br_footer">
+                    Nexus | Tour Operator Booking Suite
+                </footer>
+
+            </main>
+
+        </div>
+
+    </t>
+
+</templates>

@@ -20,13 +20,21 @@
         "wizard/booking_report_wizard_views.xml",
         "views/menu_views.xml"
     ],
-        "assets": {
-        "web.assets_backend": [
-            "tour_operator_booking/static/src/components/tour_operator_dashboard/tour_operator_dashboard.js",
-            "tour_operator_booking/static/src/components/tour_operator_dashboard/tour_operator_dashboard.xml",
-            "tour_operator_booking/static/src/components/tour_operator_dashboard/tour_operator_dashboard.scss",
-        ],
-    },
+        
+"assets": {
+    "web.assets_backend": [
+        # Nexus Dashboard
+        "tour_operator_booking/static/src/components/tour_operator_dashboard/tour_operator_dashboard.js",
+        "tour_operator_booking/static/src/components/tour_operator_dashboard/tour_operator_dashboard.xml",
+        "tour_operator_booking/static/src/components/tour_operator_dashboard/tour_operator_dashboard.scss",
+
+        # Nexus Booking Reports
+        "tour_operator_booking/static/src/components/booking_reports/booking_reports.js",
+        "tour_operator_booking/static/src/components/booking_reports/booking_reports.xml",
+        "tour_operator_booking/static/src/components/booking_reports/booking_reports.scss",
+    ],
+},
+
     "application": True,
     "installable": True
 }

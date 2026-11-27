@@ -67,10 +67,10 @@ export class TourOperatorDashboard extends Component {
     }
 
     openReports() {
-        return this.action.doAction(
-            "tour_operator_booking.action_booking_report"
-        );
-    }
+    return this.action.doAction(
+        "tour_operator_booking.action_booking_reports_dashboard"
+    );
+}
 
     addBooking() {
         return this.action.doAction({
