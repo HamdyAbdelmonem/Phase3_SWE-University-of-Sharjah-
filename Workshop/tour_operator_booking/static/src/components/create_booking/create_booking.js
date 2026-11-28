@@ -1349,7 +1349,7 @@ export class CreateBooking extends Component {
     openPackages() {
 
         return this.navigateTo(
-            "tour_operator_booking.action_packages"
+            "tour_operator_booking.action_tour_packages_dashboard"
         );
     }
 

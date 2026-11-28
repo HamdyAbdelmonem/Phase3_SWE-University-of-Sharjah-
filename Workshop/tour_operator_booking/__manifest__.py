@@ -50,6 +50,10 @@
             "tour_operator_booking/static/src/components/resource_management/resource_management.js",
             "tour_operator_booking/static/src/components/resource_management/resource_management.xml",
             "tour_operator_booking/static/src/components/resource_management/resource_management.scss",
+            # Nexus Tour Packages
+            "tour_operator_booking/static/src/components/tour_packages/tour_packages.js",
+            "tour_operator_booking/static/src/components/tour_packages/tour_packages.xml",
+            "tour_operator_booking/static/src/components/tour_packages/tour_packages.scss",
             # Nexus Global Light / Dark Mode
             "tour_operator_booking/static/src/components/nexus_theme/nexus_theme.js",
             "tour_operator_booking/static/src/components/nexus_theme/nexus_theme.xml",

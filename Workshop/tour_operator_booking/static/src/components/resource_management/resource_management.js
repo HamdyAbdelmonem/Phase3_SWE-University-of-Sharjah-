@@ -941,7 +941,7 @@ export class ResourceManagement extends Component {
 
     openPackages() {
         return this.action.doAction(
-            "tour_operator_booking.action_packages"
+            "tour_operator_booking.action_tour_packages_dashboard"
         );
     }
 

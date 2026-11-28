@@ -1,0 +1,1635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="tour_operator_booking.TourPackages">
+
+        <div class="tp_page">
+
+            <!-- ============================================== -->
+            <!-- 01. NEXUS SIDEBAR                              -->
+            <!-- ============================================== -->
+
+            <aside class="tp_sidebar">
+
+                <div class="tp_brand">
+
+                    <img src="/tour_operator_booking/static/src/img/tour_logo.png"
+                         alt="Nexus Logo"
+                         class="tp_logo"/>
+
+                    <div class="tp_brand_text">
+
+                        <strong>Tour Operator</strong>
+
+                        <small>Booking Suite</small>
+
+                    </div>
+
+                </div>
+
+                <div class="tp_sidebar_label">
+                    WORKSPACE
+                </div>
+
+                <nav class="tp_navigation">
+
+                    <button t-if="state.canAccessDashboard"
+                            type="button"
+                            class="tp_nav"
+                            t-on-click="openDashboard">
+
+                        <i class="fa fa-home"/>
+                        <span>Dashboard</span>
+
+                    </button>
+
+                    <button t-if="state.canAccessBookings"
+                            type="button"
+                            class="tp_nav"
+                            t-on-click="openBookings">
+
+                        <i class="fa fa-ticket"/>
+                        <span>Bookings</span>
+
+                    </button>
+
+                    <button type="button"
+                            class="tp_nav active"
+                            aria-current="page">
+
+                        <i class="fa fa-map-marker"/>
+                        <span>Tours &amp; Packages</span>
+
+                    </button>
+
+                    <button t-if="state.canAccessOperations"
+                            type="button"
+                            class="tp_nav"
+                            t-on-click="openResources">
+
+                        <i class="fa fa-car"/>
+                        <span>Drivers &amp; Vehicles</span>
+
+                    </button>
+
+                    <button t-if="state.canAccessOperations"
+                            type="button"
+                            class="tp_nav"
+                            t-on-click="openOperations">
+
+                        <i class="fa fa-calendar"/>
+                        <span>Operations</span>
+
+                    </button>
+
+                    <button t-if="state.canAccessReports"
+                            type="button"
+                            class="tp_nav"
+                            t-on-click="openReports">
+
+                        <i class="fa fa-bar-chart"/>
+                        <span>Reports</span>
+
+                    </button>
+
+                </nav>
+
+                <div class="tp_sidebar_footer">
+
+                    <strong>NEXUS</strong>
+
+                    <small>Tour Management System</small>
+
+                </div>
+
+            </aside>
+
+
+            <!-- ============================================== -->
+            <!-- 02. MAIN WORKSPACE                             -->
+            <!-- ============================================== -->
+
+            <main class="tp_main">
+
+                <header class="tp_header">
+
+                    <div class="tp_header_content">
+
+                        <div class="tp_breadcrumb">
+
+                            Tour Setup / Package Management
+
+                        </div>
+
+                        <h1>Tours &amp; Packages</h1>
+
+                        <p>
+
+                            Manage your tour portfolio, pricing
+                            and departure performance.
+
+                        </p>
+
+                    </div>
+
+                    <div class="tp_header_actions">
+
+                        <button type="button"
+                                class="tp_secondary_btn"
+                                t-on-click="refresh"
+                                t-att-disabled="state.loading">
+
+                            <i class="fa fa-refresh"/>
+
+                            Refresh
+
+                        </button>
+
+                        <button t-if="state.canAccessDashboard"
+                                type="button"
+                                class="tp_primary_btn"
+                                t-on-click="openNewPackage"
+                                t-att-disabled="state.loading">
+
+                            <i class="fa fa-plus"/>
+
+                            New Package
+
+                        </button>
+
+                    </div>
+
+                </header>
+
+
+                <!-- ========================================== -->
+                <!-- 03. LOADING STATE                          -->
+                <!-- ========================================== -->
+
+                <div t-if="state.loading"
+                     class="tp_loading">
+
+                    <i class="fa fa-spinner fa-spin"/>
+
+                    <h3>Loading Tour Packages</h3>
+
+                    <p>
+
+                        Retrieving package information
+                        and departure statistics.
+
+                    </p>
+
+                </div>
+
+
+                <!-- ========================================== -->
+                <!-- 04. ERROR STATE                            -->
+                <!-- ========================================== -->
+
+                <div t-elif="state.error"
+                     class="tp_error">
+
+                    <i class="fa fa-exclamation-circle"/>
+
+                    <div>
+
+                        <h3>Unable to Load Tour Packages</h3>
+
+                        <p t-esc="state.error"/>
+
+                        <button type="button"
+                                class="tp_secondary_btn"
+                                t-on-click="refresh">
+
+                            <i class="fa fa-refresh"/>
+
+                            Try Again
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ========================================== -->
+                <!-- 05. WORKSPACE CONTENT                      -->
+                <!-- ========================================== -->
+
+                <t t-else="">
+
+                    <div t-if="state.statisticsWarning"
+                         class="tp_warning">
+
+                        <i class="fa fa-exclamation-triangle"/>
+
+                        <span t-esc="state.statisticsWarning"/>
+
+                    </div>
+
+                    <t t-set="stats"
+                       t-value="statistics"/>
+
+
+                    <!-- ====================================== -->
+                    <!-- 06. KPI STATISTICS                     -->
+                    <!-- ====================================== -->
+
+                    <section class="tp_kpi_grid">
+
+                        <article class="tp_kpi">
+
+                            <div class="tp_kpi_icon purple">
+
+                                <i class="fa fa-map-marker"/>
+
+                            </div>
+
+                            <div class="tp_kpi_content">
+
+                                <span>Total Packages</span>
+
+                                <h2 t-esc="stats.totalPackages"/>
+
+                                <small>
+
+                                    Accessible tour packages
+
+                                </small>
+
+                            </div>
+
+                        </article>
+
+                        <article class="tp_kpi">
+
+                            <div class="tp_kpi_icon blue">
+
+                                <i class="fa fa-calendar"/>
+
+                            </div>
+
+                            <div class="tp_kpi_content">
+
+                                <span>Upcoming Departures</span>
+
+                                <h2 t-esc="displayStatistic(stats.upcomingDepartures)"/>
+
+                                <small>
+
+                                    Future published departures
+
+                                </small>
+
+                            </div>
+
+                        </article>
+
+                        <article class="tp_kpi">
+
+                            <div class="tp_kpi_icon green">
+
+                                <i class="fa fa-money"/>
+
+                            </div>
+
+                            <div class="tp_kpi_content">
+
+                                <span>Average Package Price</span>
+
+                                <h2 class="tp_average_price"
+                                    t-esc="averagePriceLabel"/>
+
+                                <small>
+
+                                    Average price per guest
+
+                                </small>
+
+                            </div>
+
+                        </article>
+
+                        <article class="tp_kpi">
+
+                            <div class="tp_kpi_icon teal">
+
+                                <i class="fa fa-users"/>
+
+                            </div>
+
+                            <div class="tp_kpi_content">
+
+                                <span>Confirmed Guests</span>
+
+                                <h2 t-esc="displayStatistic(stats.confirmedGuests)"/>
+
+                                <small>
+
+                                    Confirmed guests across accessible departures
+
+                                </small>
+
+                            </div>
+
+                        </article>
+
+                    </section>
+
+
+                    <!-- ====================================== -->
+                    <!-- 07. PORTFOLIO OVERVIEW                 -->
+                    <!-- ====================================== -->
+
+                    <section class="tp_panel tp_overview">
+
+                        <div class="tp_panel_header">
+
+                            <div>
+
+                                <h3>
+
+                                    <i class="fa fa-pie-chart"/>
+
+                                    Portfolio Overview
+
+                                </h3>
+
+                                <p>
+
+                                    Monitor package activity
+                                    and scheduled departures.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="tp_overview_grid">
+
+                            <div class="tp_overview_item">
+
+                                <div class="tp_overview_icon purple">
+
+                                    <i class="fa fa-map"/>
+
+                                </div>
+
+                                <div>
+
+                                    <span>Tour Packages</span>
+
+                                    <strong t-esc="stats.totalPackages"/>
+
+                                </div>
+
+                            </div>
+
+                            <div class="tp_overview_item">
+
+                                <div class="tp_overview_icon green">
+
+                                    <i class="fa fa-check-circle"/>
+
+                                </div>
+
+                                <div>
+
+                                    <span>Packages with Upcoming Tours</span>
+
+                                    <strong t-esc="packagesWithUpcomingDepartures"/>
+
+                                </div>
+
+                            </div>
+
+                            <div class="tp_overview_item">
+
+                                <div class="tp_overview_icon blue">
+
+                                    <i class="fa fa-calendar-check-o"/>
+
+                                </div>
+
+                                <div>
+
+                                    <span>Total Departures</span>
+
+                                    <strong t-esc="displayStatistic(stats.totalDepartures)"/>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- ====================================== -->
+                    <!-- 08. SEARCH AND FILTERS                 -->
+                    <!-- ====================================== -->
+
+                    <section class="tp_panel tp_filter_panel">
+
+                        <div class="tp_filters">
+
+                            <div class="tp_field tp_search_field">
+
+                                <label for="tp_package_search">
+
+                                    Search Packages
+
+                                </label>
+
+                                <div class="tp_search">
+
+                                    <i class="fa fa-search"/>
+
+                                    <input id="tp_package_search"
+                                           type="search"
+                                           placeholder="Search by name, description or company..."
+                                           t-att-value="state.search"
+                                           t-on-input="onSearchChange"/>
+
+                                </div>
+
+                            </div>
+
+                            <div class="tp_field">
+
+                                <label for="tp_company_filter">
+
+                                    Company
+
+                                </label>
+
+                                <select id="tp_company_filter"
+                                        t-model="state.companyFilter">
+
+                                    <option value="all">
+
+                                        All Companies
+
+                                    </option>
+
+                                    <option t-foreach="companyOptions"
+                                            t-as="company"
+                                            t-key="company.id"
+                                            t-att-value="company.id">
+
+                                        <t t-esc="company.name"/>
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="tp_field">
+
+                                <label for="tp_departure_filter">
+
+                                    Departure Status
+
+                                </label>
+
+                                <select id="tp_departure_filter"
+                                        t-model="state.departureFilter"
+                                        t-att-disabled="!state.scheduleStatsAvailable">
+
+                                    <option value="all">
+
+                                        All Packages
+
+                                    </option>
+
+                                    <option value="upcoming">
+
+                                        With Upcoming Tours
+
+                                    </option>
+
+                                    <option value="no_upcoming">
+
+                                        No Upcoming Tours
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="tp_field">
+
+                                <label for="tp_sort_filter">
+
+                                    Sort By
+
+                                </label>
+
+                                <select id="tp_sort_filter"
+                                        t-model="state.sortBy">
+
+                                    <option value="name_asc">
+
+                                        Name: A to Z
+
+                                    </option>
+
+                                    <option value="name_desc">
+
+                                        Name: Z to A
+
+                                    </option>
+
+                                    <option value="price_asc">
+
+                                        Price: Low to High
+
+                                    </option>
+
+                                    <option value="price_desc">
+
+                                        Price: High to Low
+
+                                    </option>
+
+                                    <option value="departures_desc"
+                                            t-att-disabled="!state.scheduleStatsAvailable">
+
+                                        Most Upcoming Tours
+
+                                    </option>
+
+                                    <option value="guests_desc"
+                                            t-att-disabled="!state.scheduleStatsAvailable">
+
+                                        Most Confirmed Guests
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <button type="button"
+                                    class="tp_secondary_btn tp_reset_btn"
+                                    t-on-click="resetFilters">
+
+                                <i class="fa fa-filter"/>
+
+                                Reset
+
+                            </button>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- ====================================== -->
+                    <!-- 09. PACKAGE WORKSPACE GRID             -->
+                    <!-- ====================================== -->
+
+                    <div class="tp_workspace_grid">
+
+
+                        <!-- ================================== -->
+                        <!-- 10. TOUR PACKAGE COLLECTION        -->
+                        <!-- ================================== -->
+
+                        <section class="tp_panel tp_packages_panel">
+
+                            <div class="tp_panel_header">
+
+                                <div>
+
+                                    <h3>
+
+                                        <i class="fa fa-map-marker"/>
+
+                                        Tour Package Collection
+
+                                    </h3>
+
+                                    <p>
+
+                                        <t t-esc="filteredPackages.length"/>
+
+                                        matching tour packages
+
+                                    </p>
+
+                                </div>
+
+                                <button t-if="state.canAccessDashboard"
+                                        type="button"
+                                        class="tp_secondary_btn"
+                                        t-on-click="openNewPackage">
+
+                                    <i class="fa fa-plus"/>
+
+                                    Add Package
+
+                                </button>
+
+                            </div>
+
+
+                            <!-- PACKAGE CARDS -->
+
+                            <div t-if="filteredPackages.length"
+                                 class="tp_package_grid">
+
+                                <article t-foreach="filteredPackages"
+                                         t-as="item"
+                                         t-key="item.id"
+                                         t-attf-class="tp_package_card {{isSelected(item.id) ? 'selected' : ''}}">
+
+                                    <t t-set="artwork"
+                                       t-value="packageArtwork(item)"/>
+
+                                    <t t-set="itemStats"
+                                       t-value="packageStats(item.id)"/>
+
+
+                                    <!-- DECORATIVE ARTWORK -->
+
+                                    <div t-attf-class="tp_package_visual {{artwork.theme}}">
+
+                                        <span class="tp_visual_circle tp_circle_one"/>
+
+                                        <span class="tp_visual_circle tp_circle_two"/>
+
+                                        <div class="tp_artwork_icon">
+
+                                            <i t-attf-class="fa {{artwork.icon}}"/>
+
+                                        </div>
+
+                                        <span class="tp_visual_label">
+
+                                            NEXUS EXPERIENCES
+
+                                        </span>
+
+                                        <span t-if="!state.scheduleStatsAvailable"
+                                              class="tp_badge tp_badge_neutral">
+
+                                            <i class="fa fa-info-circle"/>
+
+                                            Statistics unavailable
+
+                                        </span>
+
+                                        <span t-elif="itemStats.upcomingDepartures"
+                                              class="tp_badge tp_badge_success">
+
+                                            <i class="fa fa-circle"/>
+
+                                            Upcoming Tours
+
+                                        </span>
+
+                                        <span t-else=""
+                                              class="tp_badge tp_badge_neutral">
+
+                                            <i class="fa fa-circle"/>
+
+                                            No Upcoming Tours
+
+                                        </span>
+
+                                    </div>
+
+
+                                    <!-- PACKAGE INFORMATION -->
+
+                                    <div class="tp_package_body">
+
+                                        <div class="tp_package_type">
+
+                                            TOUR EXPERIENCE
+
+                                        </div>
+
+                                        <h3 t-esc="item.name"/>
+
+                                        <div class="tp_package_company">
+
+                                            <i class="fa fa-building"/>
+
+                                            <span t-esc="companyName(item)"/>
+
+                                        </div>
+
+                                        <p class="tp_package_description"
+                                           t-esc="shortDescription(item)"/>
+
+
+                                        <!-- PACKAGE PRICE -->
+
+                                        <div class="tp_package_price">
+
+                                            <strong t-esc="packagePrice(item)"/>
+
+                                            <span>per guest</span>
+
+                                        </div>
+
+
+                                        <!-- PACKAGE STATISTICS -->
+
+                                        <div class="tp_card_statistics">
+
+                                            <div class="tp_card_stat">
+
+                                                <i class="fa fa-calendar"/>
+
+                                                <div>
+
+                                                    <strong t-esc="displayStatistic(itemStats.upcomingDepartures)"/>
+
+                                                    <small>Upcoming Tours</small>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="tp_card_stat">
+
+                                                <i class="fa fa-users"/>
+
+                                                <div>
+
+                                                    <strong t-esc="displayStatistic(itemStats.confirmedGuests)"/>
+
+                                                    <small>Confirmed Guests</small>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <!-- PACKAGE ACTIONS -->
+
+                                        <div class="tp_card_actions">
+
+                                            <button type="button"
+                                                    class="tp_view_btn"
+                                                    t-on-click="() => this.selectPackage(item.id)">
+
+                                                <i class="fa fa-eye"/>
+
+                                                View Details
+
+                                            </button>
+
+                                            <button t-if="state.canAccessDashboard"
+                                                    type="button"
+                                                    class="tp_icon_btn"
+                                                    title="Edit Package"
+                                                    aria-label="Edit Package"
+                                                    t-on-click="() => this.editPackage(item.id)">
+
+                                                <i class="fa fa-pencil"/>
+
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </article>
+
+                            </div>
+
+
+                            <!-- EMPTY PACKAGE COLLECTION -->
+
+                            <div t-else=""
+                                 class="tp_empty">
+
+                                <div class="tp_empty_icon">
+
+                                    <i class="fa fa-map-o"/>
+
+                                </div>
+
+                                <h3>No Tour Packages Found</h3>
+
+                                <p t-if="hasActiveFilters">
+
+                                    No packages match your current
+                                    search and filters.
+
+                                </p>
+
+                                <p t-else="">
+
+                                    No tour packages are available yet.
+
+                                </p>
+
+                                <button t-if="hasActiveFilters"
+                                        type="button"
+                                        class="tp_secondary_btn"
+                                        t-on-click="resetFilters">
+
+                                    <i class="fa fa-filter"/>
+
+                                    Reset Filters
+
+                                </button>
+
+                                <button t-elif="state.canAccessDashboard"
+                                        type="button"
+                                        class="tp_primary_btn"
+                                        t-on-click="openNewPackage">
+
+                                    <i class="fa fa-plus"/>
+
+                                    Create First Package
+
+                                </button>
+
+                            </div>
+
+                        </section>
+
+
+                        <!-- ================================== -->
+                        <!-- 11. SELECTED PACKAGE DETAILS       -->
+                        <!-- ================================== -->
+
+                        <aside class="tp_details_column">
+
+                            <section class="tp_panel tp_details_panel">
+
+                                <div class="tp_panel_header">
+
+                                    <div>
+
+                                        <h3>Selected Package</h3>
+
+                                        <p>
+
+                                            Tour information and performance
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <t t-if="selectedPackage">
+
+                                    <t t-set="selected"
+                                       t-value="selectedPackage"/>
+
+                                    <t t-set="selectedStats"
+                                       t-value="selectedPackageStats"/>
+
+                                    <t t-set="selectedArtwork"
+                                       t-value="packageArtwork(selected)"/>
+
+                                    <div t-attf-class="tp_selected_hero {{selectedArtwork.theme}}">
+
+                                        <div class="tp_selected_icon">
+
+                                            <i t-attf-class="fa {{selectedArtwork.icon}}"/>
+
+                                        </div>
+
+                                        <div class="tp_selected_label">
+
+                                            TOUR PACKAGE
+
+                                        </div>
+
+                                        <h2 t-esc="selected.name"/>
+
+                                        <div class="tp_selected_price">
+
+                                            <strong t-esc="packagePrice(selected)"/>
+
+                                            <span>per guest</span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- COMPANY INFORMATION -->
+
+                                    <div class="tp_detail_row">
+
+                                        <div class="tp_detail_icon">
+
+                                            <i class="fa fa-building"/>
+
+                                        </div>
+
+                                        <div>
+
+                                            <small>Company</small>
+
+                                            <strong t-esc="companyName(selected)"/>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- CURRENCY INFORMATION -->
+
+                                    <div class="tp_detail_row">
+
+                                        <div class="tp_detail_icon">
+
+                                            <i class="fa fa-money"/>
+
+                                        </div>
+
+                                        <div>
+
+                                            <small>Currency</small>
+
+                                            <strong t-esc="currencyCode(selected) || 'Not available'"/>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- NEXT DEPARTURE -->
+
+                                    <div class="tp_detail_row">
+
+                                        <div class="tp_detail_icon">
+
+                                            <i class="fa fa-calendar"/>
+
+                                        </div>
+
+                                        <div>
+
+                                            <small>Next Departure</small>
+
+                                            <strong t-if="!state.scheduleStatsAvailable">
+
+                                                Statistics unavailable
+
+                                            </strong>
+
+                                            <strong t-elif="selectedStats.nextDeparture"
+                                                    t-esc="formatDateTime(selectedStats.nextDeparture.start_datetime)"/>
+
+                                            <strong t-else="">
+
+                                                Not scheduled
+
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- DESCRIPTION -->
+
+                                    <div class="tp_description_box">
+
+                                        <h4>
+
+                                            <i class="fa fa-align-left"/>
+
+                                            Package Description
+
+                                        </h4>
+
+                                        <p t-esc="fullDescription(selected)"/>
+
+                                    </div>
+
+
+                                    <!-- SELECTED PACKAGE STATISTICS -->
+
+                                    <div class="tp_selected_stats">
+
+                                        <div>
+
+                                            <strong t-esc="displayStatistic(selectedStats.totalDepartures)"/>
+
+                                            <small>Total Departures</small>
+
+                                        </div>
+
+                                        <div>
+
+                                            <strong t-esc="displayStatistic(selectedStats.upcomingDepartures)"/>
+
+                                            <small>Upcoming Tours</small>
+
+                                        </div>
+
+                                        <div>
+
+                                            <strong t-esc="displayStatistic(selectedStats.confirmedGuests)"/>
+
+                                            <small>Confirmed Guests</small>
+
+                                        </div>
+
+                                        <div>
+
+                                            <strong t-esc="displayStatistic(selectedStats.draftDepartures)"/>
+
+                                            <small>Draft Departures</small>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- SELECTED PACKAGE ACTIONS -->
+
+                                    <div class="tp_selected_actions">
+
+                                        <button t-if="state.canAccessDashboard"
+                                                type="button"
+                                                class="tp_secondary_btn"
+                                                t-on-click="() => this.editPackage(selected.id)">
+
+                                            <i class="fa fa-pencil"/>
+
+                                            Edit Package
+
+                                        </button>
+
+                                        <button t-if="state.canAccessOperations"
+                                                type="button"
+                                                class="tp_secondary_btn"
+                                                t-on-click="() => this.openPackageDepartures(selected.id)">
+
+                                            <i class="fa fa-calendar"/>
+
+                                            Manage Departures
+
+                                        </button>
+
+                                    </div>
+
+                                </t>
+
+                                <div t-else=""
+                                     class="tp_empty tp_small_empty">
+
+                                    <div class="tp_empty_icon">
+
+                                        <i class="fa fa-hand-pointer-o"/>
+
+                                    </div>
+
+                                    <h4>No Package Selected</h4>
+
+                                    <p>
+
+                                        Select a tour package
+                                        to view its information.
+
+                                    </p>
+
+                                </div>
+
+                            </section>
+
+
+                            <!-- ============================== -->
+                            <!-- 12. CAPACITY OVERVIEW          -->
+                            <!-- ============================== -->
+
+                            <section t-if="selectedPackage"
+                                     class="tp_panel tp_capacity_panel">
+
+                                <div class="tp_panel_header">
+
+                                    <div>
+
+                                        <h3>
+
+                                            <i class="fa fa-pie-chart"/>
+
+                                            Departure Capacity
+
+                                        </h3>
+
+                                        <p>
+
+                                            Future published departures
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <t t-if="state.scheduleStatsAvailable">
+
+                                    <t t-set="capacityStats"
+                                       t-value="selectedPackageStats"/>
+
+                                    <div class="tp_capacity_heading">
+
+                                        <span>Seat Utilization</span>
+
+                                        <strong t-if="capacityStats.upcomingCapacity">
+
+                                            <t t-esc="selectedUtilization"/>%
+
+                                        </strong>
+
+                                        <strong t-else="">—</strong>
+
+                                    </div>
+
+                                    <div class="tp_progress_track"
+                                         role="progressbar"
+                                         aria-label="Upcoming departure seat utilization"
+                                         aria-valuemin="0"
+                                         aria-valuemax="100"
+                                         t-att-aria-valuenow="selectedUtilization">
+
+                                        <div class="tp_progress_fill"
+                                             t-att-style="'width: ' + selectedUtilization + '%;'"/>
+
+                                    </div>
+
+                                    <div class="tp_capacity_caption">
+
+                                        <t t-esc="capacityStats.upcomingReserved"/>
+
+                                        of
+
+                                        <t t-esc="capacityStats.upcomingCapacity"/>
+
+                                        seats reserved
+
+                                    </div>
+
+                                    <div class="tp_capacity_grid">
+
+                                        <div class="tp_capacity_item">
+
+                                            <strong t-esc="capacityStats.upcomingCapacity"/>
+
+                                            <small>Total Seats</small>
+
+                                        </div>
+
+                                        <div class="tp_capacity_item reserved">
+
+                                            <strong t-esc="capacityStats.upcomingReserved"/>
+
+                                            <small>Reserved</small>
+
+                                        </div>
+
+                                        <div class="tp_capacity_item available">
+
+                                            <strong t-esc="capacityStats.upcomingAvailable"/>
+
+                                            <small>Available</small>
+
+                                        </div>
+
+                                    </div>
+
+                                </t>
+
+                                <div t-else=""
+                                     class="tp_empty tp_small_empty">
+
+                                    <i class="fa fa-info-circle"/>
+
+                                    <p>
+
+                                        Capacity statistics
+                                        are currently unavailable.
+
+                                    </p>
+
+                                </div>
+
+                            </section>
+
+
+                            <!-- ============================== -->
+                            <!-- 13. UPCOMING DEPARTURES        -->
+                            <!-- ============================== -->
+
+                            <section t-if="selectedPackage"
+                                     class="tp_panel tp_departures_panel">
+
+                                <div class="tp_panel_header">
+
+                                    <div>
+
+                                        <h3>
+
+                                            <i class="fa fa-calendar"/>
+
+                                            Upcoming Departures
+
+                                        </h3>
+
+                                        <p>
+
+                                            Published future tours
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <t t-if="!state.scheduleStatsAvailable">
+
+                                    <div class="tp_empty tp_small_empty">
+
+                                        <i class="fa fa-info-circle"/>
+
+                                        <p>
+
+                                            Departure statistics
+                                            are currently unavailable.
+
+                                        </p>
+
+                                    </div>
+
+                                </t>
+
+                                <div t-elif="selectedUpcomingDepartures.length"
+                                     class="tp_departure_list">
+
+                                    <article t-foreach="selectedUpcomingDepartures.slice(0, 5)"
+                                             t-as="departure"
+                                             t-key="departure.id"
+                                             class="tp_departure_card">
+
+                                        <div class="tp_departure_heading">
+
+                                            <div class="tp_departure_icon">
+
+                                                <i class="fa fa-calendar"/>
+
+                                            </div>
+
+                                            <div>
+
+                                                <h4 t-esc="departure.name"/>
+
+                                                <span class="tp_badge tp_badge_success">
+
+                                                    <i class="fa fa-circle"/>
+
+                                                    <t t-esc="departureStateLabel(departure)"/>
+
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="tp_departure_date">
+
+                                            <i class="fa fa-clock-o"/>
+
+                                            <span t-esc="formatDateTime(departure.start_datetime)"/>
+
+                                        </div>
+
+                                        <div class="tp_departure_seats">
+
+                                            <span>
+
+                                                <t t-esc="departure.reserved_guests"/>
+
+                                                /
+
+                                                <t t-esc="departure.capacity"/>
+
+                                                reserved
+
+                                            </span>
+
+                                            <strong>
+
+                                                <t t-esc="departure.available_seats"/>
+
+                                                available
+
+                                            </strong>
+
+                                        </div>
+
+                                        <div class="tp_progress_track">
+
+                                            <div class="tp_progress_fill"
+                                                 t-att-style="'width: ' + capacityPercentage(departure) + '%;'"/>
+
+                                        </div>
+
+                                        <button t-if="state.canAccessOperations"
+                                                type="button"
+                                                class="tp_view_btn"
+                                                t-on-click="() => this.openDeparture(departure.id)">
+
+                                            <i class="fa fa-eye"/>
+
+                                            View Departure
+
+                                        </button>
+
+                                    </article>
+
+                                    <p t-if="selectedUpcomingDepartures.length > 5"
+                                       class="tp_departure_note">
+
+                                        Showing the first 5 upcoming departures.
+
+                                    </p>
+
+                                </div>
+
+                                <div t-else=""
+                                     class="tp_empty tp_small_empty">
+
+                                    <div class="tp_empty_icon">
+
+                                        <i class="fa fa-calendar-o"/>
+
+                                    </div>
+
+                                    <h4>No Upcoming Departures</h4>
+
+                                    <p>
+
+                                        There are no future published
+                                        departures for this package.
+
+                                    </p>
+
+                                </div>
+
+                                <button t-if="state.canAccessOperations"
+                                        type="button"
+                                        class="tp_secondary_btn tp_full_width"
+                                        t-on-click="openOperations">
+
+                                    <i class="fa fa-calendar"/>
+
+                                    Open Tour Scheduling
+
+                                </button>
+
+                            </section>
+
+                        </aside>
+
+                    </div>
+
+
+                    <!-- ====================================== -->
+                    <!-- 14. TOUR PACKAGE DIRECTORY             -->
+                    <!-- ====================================== -->
+
+                    <section class="tp_panel tp_directory_panel">
+
+                        <div class="tp_panel_header">
+
+                            <div>
+
+                                <h3>Tour Package Directory</h3>
+
+                                <p>
+
+                                    <t t-esc="filteredPackages.length"/>
+
+                                    matching package records
+
+                                </p>
+
+                            </div>
+
+                            <button type="button"
+                                    class="tp_secondary_btn"
+                                    t-on-click="openManagePackages">
+
+                                <i class="fa fa-list"/>
+
+                                Manage Records
+
+                            </button>
+
+                        </div>
+
+                        <div class="tp_table_wrapper">
+
+                            <table class="tp_table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Package Name</th>
+
+                                        <th>Company</th>
+
+                                        <th>Price Per Guest</th>
+
+                                        <th>Departures</th>
+
+                                        <th>Upcoming</th>
+
+                                        <th>Confirmed Guests</th>
+
+                                        <th>Action</th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <tr t-foreach="filteredPackages"
+                                        t-as="item"
+                                        t-key="item.id"
+                                        t-attf-class="{{isSelected(item.id) ? 'selected' : ''}}">
+
+                                        <t t-set="rowStats"
+                                           t-value="packageStats(item.id)"/>
+
+                                        <t t-set="rowArtwork"
+                                           t-value="packageArtwork(item)"/>
+
+                                        <td>
+
+                                            <div class="tp_table_package">
+
+                                                <div t-attf-class="tp_table_icon {{rowArtwork.theme}}">
+
+                                                    <i t-attf-class="fa {{rowArtwork.icon}}"/>
+
+                                                </div>
+
+                                                <strong t-esc="item.name"/>
+
+                                            </div>
+
+                                        </td>
+
+                                        <td t-esc="companyName(item)"/>
+
+                                        <td>
+
+                                            <strong class="tp_table_price"
+                                                    t-esc="packagePrice(item)"/>
+
+                                        </td>
+
+                                        <td t-esc="displayStatistic(rowStats.totalDepartures)"/>
+
+                                        <td t-esc="displayStatistic(rowStats.upcomingDepartures)"/>
+
+                                        <td t-esc="displayStatistic(rowStats.confirmedGuests)"/>
+
+                                        <td>
+
+                                            <div class="tp_table_actions">
+
+                                                <button type="button"
+                                                        class="tp_view_btn"
+                                                        title="Select Package"
+                                                        t-on-click="() => this.selectPackage(item.id)">
+
+                                                    <i class="fa fa-eye"/>
+
+                                                    Select
+
+                                                </button>
+
+                                                <button t-if="state.canAccessDashboard"
+                                                        type="button"
+                                                        class="tp_icon_btn"
+                                                        title="Edit Package"
+                                                        aria-label="Edit Package"
+                                                        t-on-click="() => this.editPackage(item.id)">
+
+                                                    <i class="fa fa-pencil"/>
+
+                                                </button>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                    <tr t-if="!filteredPackages.length">
+
+                                        <td colspan="7">
+
+                                            <div class="tp_empty tp_small_empty">
+
+                                                <i class="fa fa-folder-open-o"/>
+
+                                                <h4>No Matching Packages</h4>
+
+                                                <p>
+
+                                                    Adjust your search filters.
+
+                                                </p>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- ====================================== -->
+                    <!-- 15. WORKSPACE INFORMATION              -->
+                    <!-- ====================================== -->
+
+                    <section class="tp_information">
+
+                        <i class="fa fa-info-circle"/>
+
+                        <div>
+
+                            <strong>Understanding package statistics</strong>
+
+                            <p>
+
+                                Portfolio statistics reflect accessible records
+                                across the workspace. Upcoming departures include
+                                future published tours only. Confirmed guest
+                                counts exclude draft and cancelled bookings.
+                                Package creation and editing are restricted
+                                to Tour Managers.
+
+                            </p>
+
+                            <p>
+
+                                Average prices are calculated only when all
+                                packages share the same currency. Price sorting
+                                groups packages by currency without performing
+                                currency conversion.
+
+                            </p>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- ====================================== -->
+                    <!-- 16. WORKSPACE FOOTER                   -->
+                    <!-- ====================================== -->
+
+                    <footer class="tp_footer">
+
+                        Nexus Tour Operator Booking Suite
+
+                        <span>•</span>
+
+                        Package Management Workspace
+
+                    </footer>
+
+                </t>
+
+            </main>
+
+        </div>
+
+    </t>
+
+</templates>
