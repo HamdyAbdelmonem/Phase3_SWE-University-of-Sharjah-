@@ -16,22 +16,92 @@ export class BookingReports extends Component {
         this.action = useService("action");
 
         this.state = useState({
-            loading: true,
-            error: "",
-            bookings: [],
-            currency: "",
-            dateFrom: "",
-            dateTo: "",
-            packageId: "",
-            source: "",
-            status: "",
-        });
+    loading: true,
+    error: "",
+    bookings: [],
+    currency: "",
+    dateFrom: "",
+    dateTo: "",
+    packageId: "",
+    source: "",
+    status: "",
+
+    canAccessDashboard: false,
+    canAccessBookings: false,
+    canAccessOperations: false,
+});
 
         onWillStart(async () => {
-            await this.loadReports();
-        });
+    await Promise.all([
+        this.loadReports(),
+        this.loadNavigationPermissions(),
+    ]);
+});
     }
 
+        // =====================================================
+    // NEXUS SIDEBAR NAVIGATION
+    // =====================================================
+
+    async loadNavigationPermissions() {
+        try {
+            const [
+                manager,
+                bookingStaff,
+                operationsStaff,
+            ] = await Promise.all([
+                user.hasGroup(
+                    "tour_operator_booking.group_tour_manager"
+                ),
+                user.hasGroup(
+                    "tour_operator_booking.group_booking_staff"
+                ),
+                user.hasGroup(
+                    "tour_operator_booking.group_operations_staff"
+                ),
+            ]);
+
+            this.state.canAccessDashboard = manager;
+            this.state.canAccessBookings = bookingStaff;
+            this.state.canAccessOperations = operationsStaff;
+
+        } catch (error) {
+            console.error(
+                "Booking reports navigation permissions:",
+                error
+            );
+        }
+    }
+
+    openDashboard() {
+        return this.action.doAction(
+            "tour_operator_booking.action_tour_operator_dashboard"
+        );
+    }
+
+    openBookings() {
+        return this.action.doAction(
+            "tour_operator_booking.action_bookings"
+        );
+    }
+
+    openPackages() {
+        return this.action.doAction(
+            "tour_operator_booking.action_packages"
+        );
+    }
+
+    openResources() {
+        return this.action.doAction(
+            "tour_operator_booking.action_resource_management_dashboard"
+        );
+    }
+
+    openOperations() {
+        return this.action.doAction(
+            "tour_operator_booking.action_tour_scheduling_dashboard"
+        );
+    }
     // Retrieve real booking records from Odoo
     async loadReports() {
         this.state.loading = true;

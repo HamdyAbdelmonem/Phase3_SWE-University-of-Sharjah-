@@ -1061,3 +1061,172 @@
         }
     }
 }
+/* ==========================================
+   NEXUS - FULL HEIGHT SIDEBAR FIX
+   ========================================== */
+
+.br_page {
+
+    position: relative;
+    flex: 1 1 0;
+
+    width: 100%;
+    height: 100%;
+
+    min-width: 0;
+    min-height: 0;
+
+    overflow: hidden;
+    align-items: stretch;
+
+    .br_sidebar {
+
+        height: 100%;
+        min-height: 0;
+
+        flex-shrink: 0;
+
+        display: flex;
+        flex-direction: column;
+
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        scrollbar-width: thin;
+        scrollbar-color: #29635c transparent;
+
+    }
+
+    .br_brand,
+    .br_sidebar_label,
+    .br_nav {
+
+        flex-shrink: 0;
+
+    }
+
+    .br_sidebar_footer {
+
+        margin-top: auto;
+        flex-shrink: 0;
+
+    }
+
+    .br_main {
+
+        flex: 1;
+
+        height: 100%;
+        min-height: 0;
+        min-width: 0;
+
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        scrollbar-width: thin;
+        scrollbar-color: #a9bacb transparent;
+
+        overscroll-behavior: contain;
+
+    }
+
+}
+/* ==========================================
+   NEXUS - SIDEBAR NAVIGATION
+   ========================================== */
+
+.br_page {
+
+    .br_navigation {
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 9px;
+        margin-bottom: 30px;
+
+        flex-shrink: 0;
+
+    }
+
+    .br_nav {
+
+        display: flex;
+        align-items: center;
+
+        gap: 15px;
+
+        width: 100%;
+        min-height: 48px;
+
+        padding: 13px 15px;
+
+        border: none;
+        border-radius: 9px;
+
+        background: transparent;
+        color: #e0f2f1;
+
+        font-size: 14px;
+        font-weight: 600;
+
+        text-align: left;
+
+        cursor: pointer;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+
+        i {
+
+            width: 21px;
+
+            flex-shrink: 0;
+
+            font-size: 18px;
+            text-align: center;
+
+        }
+
+        &:hover {
+
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+
+        }
+
+        &:focus-visible {
+
+            outline: 2px solid var(--br-turquoise);
+            outline-offset: 2px;
+
+        }
+
+        &.active {
+
+            background: var(--br-primary);
+            color: #ffffff;
+
+            font-weight: 800;
+
+        }
+
+    }
+
+    @media (max-width: 768px) {
+
+        .br_nav {
+
+            justify-content: center;
+            padding: 14px 0;
+
+            span {
+                display: none;
+            }
+
+        }
+
+    }
+
+}

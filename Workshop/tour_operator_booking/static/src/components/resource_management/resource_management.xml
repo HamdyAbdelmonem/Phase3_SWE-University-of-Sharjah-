@@ -1,0 +1,1804 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="tour_operator_booking.ResourceManagement">
+
+        <div class="rm_page">
+
+            <!-- ========================================== -->
+            <!-- NEXUS SIDEBAR                              -->
+            <!-- ========================================== -->
+
+            <aside class="rm_sidebar">
+
+                <div class="rm_brand">
+
+                    <img src="/tour_operator_booking/static/src/img/tour_logo.png"
+                         alt="Nexus Logo"
+                         class="rm_logo"/>
+
+                    <div class="rm_brand_text">
+                        <strong>Tour Operator</strong>
+                        <small>Booking Suite</small>
+                    </div>
+
+                </div>
+
+                <div class="rm_sidebar_label">
+                    WORKSPACE
+                </div>
+
+                <nav class="rm_navigation">
+
+                    <button t-if="state.canAccessDashboard"
+                            type="button"
+                            class="rm_nav"
+                            t-on-click="openDashboard">
+
+                        <i class="fa fa-home"/>
+                        <span>Dashboard</span>
+
+                    </button>
+
+                    <button t-if="state.canAccessBookings"
+                            type="button"
+                            class="rm_nav"
+                            t-on-click="openBookings">
+
+                        <i class="fa fa-ticket"/>
+                        <span>Bookings</span>
+
+                    </button>
+
+                    <button t-if="state.canAccessOperations"
+                            type="button"
+                            class="rm_nav"
+                            t-on-click="openPackages">
+
+                        <i class="fa fa-map-marker"/>
+                        <span>Tours &amp; Packages</span>
+
+                    </button>
+
+                    <button type="button"
+                            class="rm_nav active"
+                            aria-current="page">
+
+                        <i class="fa fa-car"/>
+                        <span>Drivers &amp; Vehicles</span>
+
+                    </button>
+
+                    <button t-if="state.canAccessOperations"
+                            type="button"
+                            class="rm_nav"
+                            t-on-click="openOperations">
+
+                        <i class="fa fa-calendar"/>
+                        <span>Operations</span>
+
+                    </button>
+
+                    <button t-if="state.canAccessReports"
+                            type="button"
+                            class="rm_nav"
+                            t-on-click="openReports">
+
+                        <i class="fa fa-bar-chart"/>
+                        <span>Reports</span>
+
+                    </button>
+
+                </nav>
+
+                <div class="rm_sidebar_footer">
+                    <strong>NEXUS</strong>
+                    <small>Tour Management System</small>
+                </div>
+
+            </aside>
+
+
+            <!-- ========================================== -->
+            <!-- MAIN WORKSPACE                             -->
+            <!-- ========================================== -->
+
+            <main class="rm_main">
+
+                <!-- PAGE HEADER -->
+
+                <header class="rm_header">
+
+                    <div class="rm_header_content">
+
+                        <div class="rm_breadcrumb">
+                            Operations / Resource Management
+                        </div>
+
+                        <h1>Drivers &amp; Vehicles</h1>
+
+                        <p>
+                            Manage your operational resources,
+                            monitor availability and track
+                            tour assignments.
+                        </p>
+
+                    </div>
+
+                    <div class="rm_header_actions">
+
+                        <button type="button"
+                                class="rm_secondary_btn"
+                                t-on-click="refreshResources"
+                                t-att-disabled="state.loading || state.saving">
+
+                            <i class="fa fa-refresh"/>
+                            Refresh
+
+                        </button>
+
+                        <button t-if="state.canAccessOperations"
+                                type="button"
+                                class="rm_primary_btn"
+                                t-on-click="newResource"
+                                t-att-disabled="state.loading || state.saving">
+
+                            <i class="fa fa-plus"/>
+                            New Resource
+
+                        </button>
+
+                    </div>
+
+                </header>
+
+
+                <!-- ====================================== -->
+                <!-- AVAILABILITY PERIOD                    -->
+                <!-- ====================================== -->
+
+                <section class="rm_panel rm_period_panel">
+
+                    <div class="rm_panel_header">
+
+                        <div>
+                            <h3>
+                                <i class="fa fa-calendar"/>
+                                Availability Period
+                            </h3>
+
+                            <p>
+                                Monitor resource assignments
+                                during a selected date range.
+                            </p>
+                        </div>
+
+                        <div class="rm_period_shortcuts">
+
+                            <button type="button"
+                                    class="rm_secondary_btn"
+                                    t-on-click="showToday"
+                                    t-att-disabled="state.loading || state.saving">
+
+                                Today
+
+                            </button>
+
+                            <button type="button"
+                                    class="rm_secondary_btn"
+                                    t-on-click="showNextSevenDays"
+                                    t-att-disabled="state.loading || state.saving">
+
+                                Next 7 Days
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="rm_period_grid">
+
+                        <div class="rm_field">
+
+                            <label for="rm_date_from">
+                                Date From
+                            </label>
+
+                            <input id="rm_date_from"
+                                   type="date"
+                                   t-model="state.dateFrom"
+                                   t-att-disabled="state.loading || state.saving"/>
+
+                        </div>
+
+                        <div class="rm_field">
+
+                            <label for="rm_date_to">
+                                Date To
+                            </label>
+
+                            <input id="rm_date_to"
+                                   type="date"
+                                   t-model="state.dateTo"
+                                   t-att-disabled="state.loading || state.saving"/>
+
+                        </div>
+
+                        <button type="button"
+                                class="rm_primary_btn"
+                                t-on-click="applyPeriod"
+                                t-att-disabled="invalidDateRange || state.loading || state.saving">
+
+                            <i class="fa fa-search"/>
+                            Check Availability
+
+                        </button>
+
+                    </div>
+
+                    <div t-if="invalidDateRange"
+                         class="rm_error">
+
+                        <i class="fa fa-exclamation-circle"/>
+
+                        Please select a valid start and end date.
+
+                    </div>
+
+                    <div class="rm_period_note">
+
+                        <i class="fa fa-info-circle"/>
+
+                        Showing assignments for:
+
+                        <strong t-esc="periodLabel"/>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ====================================== -->
+                <!-- LOADING AND ERROR STATES               -->
+                <!-- ====================================== -->
+
+                <div t-if="state.loading"
+                     class="rm_loading">
+
+                    <i class="fa fa-spinner fa-spin"/>
+
+                    Loading operational resources...
+
+                </div>
+
+                <div t-elif="state.error"
+                     class="rm_error">
+
+                    <i class="fa fa-exclamation-circle"/>
+
+                    <span t-esc="state.error"/>
+
+                    <button type="button"
+                            class="rm_secondary_btn"
+                            t-on-click="refreshResources">
+
+                        Try Again
+
+                    </button>
+
+                </div>
+
+
+                <t t-else="">
+
+                    <t t-set="stats"
+                       t-value="statistics"/>
+
+
+                    <!-- ================================== -->
+                    <!-- LIVE KPI CARDS                     -->
+                    <!-- ================================== -->
+
+                    <section class="rm_kpi_grid">
+
+                        <!-- VEHICLES -->
+
+                        <article class="rm_kpi">
+
+                            <div class="rm_kpi_icon blue">
+
+                                <i class="fa fa-car"/>
+
+                            </div>
+
+                            <div class="rm_kpi_content">
+
+                                <span>Total Vehicles</span>
+
+                                <h2 t-esc="stats.totalVehicles"/>
+
+                                <small>
+                                    Registered company vehicles
+                                </small>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- DRIVERS -->
+
+                        <article class="rm_kpi">
+
+                            <div class="rm_kpi_icon purple">
+
+                                <i class="fa fa-users"/>
+
+                            </div>
+
+                            <div class="rm_kpi_content">
+
+                                <span>Total Drivers</span>
+
+                                <h2 t-esc="stats.totalDrivers"/>
+
+                                <small>
+                                    Registered tour drivers
+                                </small>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- AVAILABLE RESOURCES -->
+
+                        <article class="rm_kpi">
+
+                            <div class="rm_kpi_icon green">
+
+                                <i class="fa fa-check-circle"/>
+
+                            </div>
+
+                            <div class="rm_kpi_content">
+
+                                <span>Available Resources</span>
+
+                                <h2 t-esc="stats.available"/>
+
+                                <small>
+                                    No published assignments
+                                    in selected period
+                                </small>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- ASSIGNED RESOURCES -->
+
+                        <article class="rm_kpi">
+
+                            <div class="rm_kpi_icon gold">
+
+                                <i class="fa fa-calendar-check-o"/>
+
+                            </div>
+
+                            <div class="rm_kpi_content">
+
+                                <span>Assigned Resources</span>
+
+                                <h2 t-esc="stats.assigned"/>
+
+                                <small>
+                                    Assigned to published departures
+                                </small>
+
+                            </div>
+
+                        </article>
+
+                    </section>
+
+
+                    <!-- ================================== -->
+                    <!-- RESOURCE ASSIGNMENT OVERVIEW       -->
+                    <!-- ================================== -->
+
+                    <section class="rm_panel rm_utilization">
+
+                        <div class="rm_utilization_header">
+
+                            <h3>
+
+                                <i class="fa fa-pie-chart"/>
+
+                                Resource Assignment Overview
+
+                            </h3>
+
+                            <strong class="rm_utilization_value">
+
+                                <t t-esc="stats.assignmentRate"/>%
+
+                            </strong>
+
+                        </div>
+
+                        <div class="rm_progress_track">
+
+                            <div class="rm_progress_fill"
+                                 t-attf-style="width: {{stats.assignmentRate}}%;"/>
+
+                        </div>
+
+                        <div class="rm_utilization_labels">
+
+                            <span>
+
+                                <t t-esc="stats.assigned"/>
+
+                                of
+
+                                <t t-esc="stats.total"/>
+
+                                resources assigned
+
+                            </span>
+
+                            <span>
+
+                                <t t-esc="stats.available"/>
+
+                                available resources
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="rm_overview_grid">
+
+                            <div class="rm_overview_item">
+
+                                <div class="rm_overview_icon blue">
+
+                                    <i class="fa fa-car"/>
+
+                                </div>
+
+                                <div>
+
+                                    <span>Available Vehicles</span>
+
+                                    <strong>
+
+                                        <t t-esc="stats.availableVehicles"/>
+
+                                        /
+
+                                        <t t-esc="stats.totalVehicles"/>
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                            <div class="rm_overview_item">
+
+                                <div class="rm_overview_icon purple">
+
+                                    <i class="fa fa-user"/>
+
+                                </div>
+
+                                <div>
+
+                                    <span>Available Drivers</span>
+
+                                    <strong>
+
+                                        <t t-esc="stats.availableDrivers"/>
+
+                                        /
+
+                                        <t t-esc="stats.totalDrivers"/>
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                            <div class="rm_overview_item">
+
+                                <div class="rm_overview_icon teal">
+
+                                    <i class="fa fa-calendar"/>
+
+                                </div>
+
+                                <div>
+
+                                    <span>Departures with Assignments</span>
+
+                                    <strong t-esc="stats.scheduledTours"/>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- ================================== -->
+                    <!-- SEARCH AND FILTERS                 -->
+                    <!-- ================================== -->
+
+                    <section class="rm_panel rm_filters">
+
+                        <div class="rm_field rm_search_field">
+
+                            <label for="rm_search">
+
+                                Search Resources
+
+                            </label>
+
+                            <div class="rm_search">
+
+                                <i class="fa fa-search"/>
+
+                                <input id="rm_search"
+                                       type="search"
+                                       placeholder="Search by name or company..."
+                                       t-model="state.search"/>
+
+                            </div>
+
+                        </div>
+
+                        <div class="rm_field">
+
+                            <label for="rm_kind">
+
+                                Resource Type
+
+                            </label>
+
+                            <select id="rm_kind"
+                                    t-model="state.kindFilter">
+
+                                <option value="all">
+                                    All Resources
+                                </option>
+
+                                <option value="vehicle">
+                                    Vehicles
+                                </option>
+
+                                <option value="driver">
+                                    Drivers
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="rm_field">
+
+                            <label for="rm_status">
+
+                                Assignment Status
+
+                            </label>
+
+                            <select id="rm_status"
+                                    t-model="state.statusFilter">
+
+                                <option value="all">
+                                    All Statuses
+                                </option>
+
+                                <option value="available">
+                                    Available
+                                </option>
+
+                                <option value="assigned">
+                                    Assigned
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <button type="button"
+                                class="rm_secondary_btn"
+                                t-on-click="resetFilters">
+
+                            <i class="fa fa-filter"/>
+
+                            Reset
+
+                        </button>
+
+                    </section>
+
+
+                    <!-- ================================== -->
+                    <!-- RESOURCE MANAGEMENT WORKSPACE      -->
+                    <!-- ================================== -->
+
+                    <div class="rm_workspace_grid">
+
+                        <div class="rm_resource_sections">
+
+
+                            <!-- ========================== -->
+                            <!-- VEHICLE FLEET              -->
+                            <!-- ========================== -->
+
+                            <section t-if="state.kindFilter !== 'driver'"
+                                     class="rm_panel rm_fleet_panel">
+
+                                <div class="rm_panel_header">
+
+                                    <div>
+
+                                        <h3>
+
+                                            <i class="fa fa-car"/>
+
+                                            Vehicle Fleet
+
+                                        </h3>
+
+                                        <p>
+
+                                            <t t-esc="filteredVehicles.length"/>
+
+                                            matching vehicles
+
+                                        </p>
+
+                                    </div>
+
+                                    <button t-if="state.canAccessOperations"
+                                            type="button"
+                                            class="rm_secondary_btn"
+                                            t-on-click="newVehicle"
+                                            t-att-disabled="state.saving">
+
+                                        <i class="fa fa-plus"/>
+
+                                        Add Vehicle
+
+                                    </button>
+
+                                </div>
+
+
+                                <!-- VEHICLE CARDS -->
+
+                                <div t-if="filteredVehicles.length"
+                                     class="rm_resource_grid">
+
+                                    <article t-foreach="filteredVehicles"
+                                             t-as="vehicle"
+                                             t-key="vehicle.id"
+                                             t-attf-class="rm_resource_card {{state.selectedResourceId === vehicle.id ? 'selected' : ''}}">
+
+                                        <div class="rm_vehicle_visual">
+
+                                            <div class="rm_vehicle_icon">
+
+                                                <i class="fa fa-car"/>
+
+                                            </div>
+
+                                            <span t-attf-class="rm_status rm_status_{{resourceStatus(vehicle)}}">
+
+                                                <i class="fa fa-circle"/>
+
+                                                <t t-esc="resourceStatusLabel(vehicle)"/>
+
+                                            </span>
+
+                                        </div>
+
+                                        <div class="rm_resource_card_body">
+
+                                            <span class="rm_resource_type">
+
+                                                COMPANY VEHICLE
+
+                                            </span>
+
+                                            <h3 t-esc="vehicle.name"/>
+
+                                            <div class="rm_resource_company">
+
+                                                <i class="fa fa-building"/>
+
+                                                <t t-esc="companyName(vehicle)"/>
+
+                                            </div>
+
+                                            <div class="rm_assignment_count">
+
+                                                <span>
+
+                                                    Published Assignments
+
+                                                </span>
+
+                                                <strong t-esc="assignmentCount(vehicle)"/>
+
+                                            </div>
+
+                                            <div class="rm_card_actions">
+
+                                                <button type="button"
+                                                        class="rm_secondary_btn"
+                                                        t-on-click="() => this.selectResource(vehicle.id)">
+
+                                                    <i class="fa fa-eye"/>
+
+                                                    View Details
+
+                                                </button>
+
+                                                <button t-if="state.canAccessOperations"
+                                                        type="button"
+                                                        class="rm_icon_btn"
+                                                        title="Edit Vehicle"
+                                                        aria-label="Edit Vehicle"
+                                                        t-on-click="() => this.editResource(vehicle.id)"
+                                                        t-att-disabled="state.saving">
+
+                                                    <i class="fa fa-pencil"/>
+
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </article>
+
+                                </div>
+
+
+                                <!-- EMPTY VEHICLE STATE -->
+
+                                <div t-else=""
+                                     class="rm_empty">
+
+                                    <div class="rm_empty_icon">
+
+                                        <i class="fa fa-car"/>
+
+                                    </div>
+
+                                    <h4>
+
+                                        No vehicles found
+
+                                    </h4>
+
+                                    <p>
+                                        Add a company vehicle or
+                                        adjust your search filters.
+                                    </p>
+
+                                    <button t-if="state.canAccessOperations"
+                                            type="button"
+                                            class="rm_primary_btn"
+                                            t-on-click="newVehicle">
+
+                                        <i class="fa fa-plus"/>
+
+                                        Add Vehicle
+
+                                    </button>
+
+                                </div>
+
+                            </section>
+
+
+                            <!-- ========================== -->
+                            <!-- DRIVER MANAGEMENT          -->
+                            <!-- ========================== -->
+
+                            <section t-if="state.kindFilter !== 'vehicle'"
+                                     class="rm_panel rm_drivers_panel">
+
+                                <div class="rm_panel_header">
+
+                                    <div>
+
+                                        <h3>
+
+                                            <i class="fa fa-users"/>
+
+                                            Driver Management
+
+                                        </h3>
+
+                                        <p>
+
+                                            <t t-esc="filteredDrivers.length"/>
+
+                                            matching drivers
+
+                                        </p>
+
+                                    </div>
+
+                                    <button t-if="state.canAccessOperations"
+                                            type="button"
+                                            class="rm_secondary_btn"
+                                            t-on-click="newDriver"
+                                            t-att-disabled="state.saving">
+
+                                        <i class="fa fa-plus"/>
+
+                                        Add Driver
+
+                                    </button>
+
+                                </div>
+
+
+                                <!-- DRIVER CARDS -->
+
+                                <div t-if="filteredDrivers.length"
+                                     class="rm_resource_grid">
+
+                                    <article t-foreach="filteredDrivers"
+                                             t-as="driver"
+                                             t-key="driver.id"
+                                             t-attf-class="rm_resource_card rm_driver_card {{state.selectedResourceId === driver.id ? 'selected' : ''}}">
+
+                                        <div class="rm_driver_visual">
+
+                                            <div class="rm_driver_avatar">
+
+                                                <t t-esc="resourceInitials(driver.name)"/>
+
+                                            </div>
+
+                                            <span t-attf-class="rm_status rm_status_{{resourceStatus(driver)}}">
+
+                                                <i class="fa fa-circle"/>
+
+                                                <t t-esc="resourceStatusLabel(driver)"/>
+
+                                            </span>
+
+                                        </div>
+
+                                        <div class="rm_resource_card_body">
+
+                                            <span class="rm_resource_type">
+
+                                                TOUR DRIVER
+
+                                            </span>
+
+                                            <h3 t-esc="driver.name"/>
+
+                                            <div class="rm_resource_company">
+
+                                                <i class="fa fa-building"/>
+
+                                                <t t-esc="companyName(driver)"/>
+
+                                            </div>
+
+                                            <div class="rm_assignment_count">
+
+                                                <span>
+
+                                                    Published Assignments
+
+                                                </span>
+
+                                                <strong t-esc="assignmentCount(driver)"/>
+
+                                            </div>
+
+                                            <div class="rm_card_actions">
+
+                                                <button type="button"
+                                                        class="rm_secondary_btn"
+                                                        t-on-click="() => this.selectResource(driver.id)">
+
+                                                    <i class="fa fa-eye"/>
+
+                                                    View Details
+
+                                                </button>
+
+                                                <button t-if="state.canAccessOperations"
+                                                        type="button"
+                                                        class="rm_icon_btn"
+                                                        title="Edit Driver"
+                                                        aria-label="Edit Driver"
+                                                        t-on-click="() => this.editResource(driver.id)"
+                                                        t-att-disabled="state.saving">
+
+                                                    <i class="fa fa-pencil"/>
+
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </article>
+
+                                </div>
+
+
+                                <!-- EMPTY DRIVER STATE -->
+
+                                <div t-else=""
+                                     class="rm_empty">
+
+                                    <div class="rm_empty_icon">
+
+                                        <i class="fa fa-users"/>
+
+                                    </div>
+
+                                    <h4>
+
+                                        No drivers found
+
+                                    </h4>
+
+                                    <p>
+                                        Add a tour driver or
+                                        adjust your search filters.
+                                    </p>
+
+                                    <button t-if="state.canAccessOperations"
+                                            type="button"
+                                            class="rm_primary_btn"
+                                            t-on-click="newDriver">
+
+                                        <i class="fa fa-plus"/>
+
+                                        Add Driver
+
+                                    </button>
+
+                                </div>
+
+                            </section>
+
+                        </div>
+
+
+                        <!-- ============================== -->
+                        <!-- SELECTED RESOURCE DETAILS      -->
+                        <!-- ============================== -->
+
+                        <aside class="rm_details_column">
+
+                            <section class="rm_panel rm_details_panel">
+
+                                <div class="rm_panel_header">
+
+                                    <div>
+
+                                        <h3>Selected Resource</h3>
+
+                                        <p>
+
+                                            Resource details
+                                            and assigned tours
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <t t-if="selectedResource">
+
+                                    <t t-set="resource"
+                                       t-value="selectedResource"/>
+
+                                    <div class="rm_selected_hero">
+
+                                        <div t-attf-class="rm_selected_icon {{resource.kind}}">
+
+                                            <i t-if="resource.kind === 'vehicle'"
+                                               class="fa fa-car"/>
+
+                                            <t t-else="">
+
+                                                <t t-esc="resourceInitials(resource.name)"/>
+
+                                            </t>
+
+                                        </div>
+
+                                        <span t-attf-class="rm_status rm_status_{{resourceStatus(resource)}}">
+
+                                            <i class="fa fa-circle"/>
+
+                                            <t t-esc="resourceStatusLabel(resource)"/>
+
+                                        </span>
+
+                                        <h2 t-esc="resource.name"/>
+
+                                        <p t-esc="resourceKindLabel(resource.kind)"/>
+
+                                    </div>
+
+
+                                    <!-- COMPANY INFORMATION -->
+
+                                    <div class="rm_detail_row">
+
+                                        <div class="rm_detail_icon">
+
+                                            <i class="fa fa-building"/>
+
+                                        </div>
+
+                                        <div>
+
+                                            <span>Company</span>
+
+                                            <strong t-esc="companyName(resource)"/>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- RESOURCE TYPE -->
+
+                                    <div class="rm_detail_row">
+
+                                        <div class="rm_detail_icon">
+
+                                            <i class="fa fa-tag"/>
+
+                                        </div>
+
+                                        <div>
+
+                                            <span>Resource Type</span>
+
+                                            <strong t-esc="resourceKindLabel(resource.kind)"/>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- SELECTED PERIOD -->
+
+                                    <div class="rm_detail_row">
+
+                                        <div class="rm_detail_icon">
+
+                                            <i class="fa fa-calendar"/>
+
+                                        </div>
+
+                                        <div>
+
+                                            <span>Selected Period</span>
+
+                                            <strong t-esc="periodLabel"/>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- ASSIGNMENT STATISTICS -->
+
+                                    <div class="rm_selected_stats">
+
+                                        <div>
+
+                                            <strong t-esc="assignmentCount(resource)"/>
+
+                                            <span>Assignments</span>
+
+                                        </div>
+
+                                        <div>
+
+                                            <strong t-esc="resourceStatusLabel(resource)"/>
+
+                                            <span>Period Status</span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <button t-if="state.canAccessOperations"
+                                            type="button"
+                                            class="rm_secondary_btn rm_full_width"
+                                            t-on-click="editSelectedResource"
+                                            t-att-disabled="state.saving">
+
+                                        <i class="fa fa-pencil"/>
+
+                                        Edit Resource
+
+                                    </button>
+
+                                </t>
+
+
+                                <div t-else=""
+                                     class="rm_empty">
+
+                                    <div class="rm_empty_icon">
+
+                                        <i class="fa fa-info-circle"/>
+
+                                    </div>
+
+                                    <h4>No Resource Selected</h4>
+
+                                    <p>
+                                        Select a vehicle or driver
+                                        to view its details.
+                                    </p>
+
+                                </div>
+
+                            </section>
+
+
+                            <!-- ASSIGNED TOURS -->
+
+                            <section class="rm_panel rm_assignments_panel">
+
+                                <div class="rm_panel_header">
+
+                                    <div>
+
+                                        <h3>
+
+                                            <i class="fa fa-calendar"/>
+
+                                            Assigned Tours
+
+                                        </h3>
+
+                                        <p>Published departures</p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div t-if="selectedResource and selectedAssignments.length"
+                                     class="rm_assignment_list">
+
+                                    <article t-foreach="selectedAssignments"
+                                             t-as="departure"
+                                             t-key="departure.id"
+                                             class="rm_assignment_card">
+
+                                        <div class="rm_assignment_header">
+
+                                            <div class="rm_assignment_icon">
+
+                                                <i class="fa fa-map-marker"/>
+
+                                            </div>
+
+                                            <div>
+
+                                                <h4 t-esc="departure.name"/>
+
+                                                <small t-esc="packageName(departure)"/>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="rm_assignment_date">
+
+                                            <i class="fa fa-calendar"/>
+
+                                            <span t-esc="formatDateTime(departure.start_datetime)"/>
+
+                                        </div>
+
+                                        <div class="rm_assignment_date">
+
+                                            <i class="fa fa-clock-o"/>
+
+                                            <span t-esc="formatDateTime(departure.end_datetime)"/>
+
+                                        </div>
+
+
+                                        <div class="rm_assignment_capacity">
+
+                                            <span>Tour Capacity</span>
+
+                                            <strong>
+
+                                                <t t-esc="departure.reserved_guests"/>
+
+                                                /
+
+                                                <t t-esc="departure.capacity"/>
+
+                                            </strong>
+
+                                        </div>
+
+                                        <div class="rm_progress_track">
+
+                                            <div class="rm_progress_fill"
+                                                 t-attf-style="width: {{capacityPercentage(departure)}}%;"/>
+
+                                        </div>
+
+
+                                        <button type="button"
+                                                class="rm_secondary_btn rm_full_width"
+                                                t-on-click="() => this.openDeparture(departure.id)">
+
+                                            <i class="fa fa-external-link"/>
+
+                                            View Departure
+
+                                        </button>
+
+                                    </article>
+
+                                </div>
+
+
+                                <div t-elif="selectedResource"
+                                     class="rm_empty rm_small_empty">
+
+                                    <div class="rm_empty_icon green">
+
+                                        <i class="fa fa-check-circle"/>
+
+                                    </div>
+
+                                    <h4>No Published Assignments</h4>
+
+                                    <p>
+
+                                        This resource has no published
+                                        tour assignments overlapping
+                                        the selected period.
+
+                                    </p>
+
+                                </div>
+
+
+                                <div t-else=""
+                                     class="rm_empty rm_small_empty">
+
+                                    <i class="fa fa-calendar"/>
+
+                                    <p>
+                                        Select a resource to view
+                                        its assigned departures.
+                                    </p>
+
+                                </div>
+
+                                <button t-if="state.canAccessOperations"
+                                        type="button"
+                                        class="rm_secondary_btn rm_full_width"
+                                        t-on-click="openOperations">
+
+                                    <i class="fa fa-calendar"/>
+
+                                    Open Tour Scheduling
+
+                                </button>
+
+                            </section>
+
+                        </aside>
+
+                    </div>
+
+
+                    <!-- ================================== -->
+                    <!-- RESOURCE DIRECTORY TABLE           -->
+                    <!-- ================================== -->
+
+                                        <section class="rm_panel rm_directory_panel">
+
+                        <div class="rm_panel_header">
+
+                            <div>
+                                <h3>Resource Directory</h3>
+
+                                <p>
+                                    <t t-esc="filteredResources.length"/>
+                                    matching operational resources
+                                </p>
+                            </div>
+
+                            <button t-if="state.canAccessOperations"
+                                    type="button"
+                                    class="rm_secondary_btn"
+                                    t-on-click="openManageResources">
+
+                                <i class="fa fa-list"/>
+                                Manage Records
+
+                            </button>
+
+                        </div>
+
+                        <div class="rm_directory_split">
+
+                            <t t-foreach="['driver', 'vehicle']"
+                               t-as="directoryKind"
+                               t-key="directoryKind">
+
+                                <t t-set="directoryItems"
+                                   t-value="directoryKind === 'driver' ? filteredDrivers : filteredVehicles"/>
+
+                                <div t-attf-class="rm_directory_group rm_directory_{{directoryKind}}">
+
+                                    <!-- DIRECTORY HEADING -->
+
+                                    <div class="rm_directory_group_header">
+
+                                        <h3>
+
+                                            <i t-att-class="directoryKind === 'driver' ? 'fa fa-users' : 'fa fa-car'"/>
+
+                                            <t t-esc="directoryKind === 'driver' ? 'Drivers Directory' : 'Vehicles Directory'"/>
+
+                                        </h3>
+
+                                        <p>
+
+                                            <t t-esc="directoryItems.length"/>
+
+                                            <t t-esc="directoryKind === 'driver' ? ' matching drivers' : ' matching vehicles'"/>
+
+                                        </p>
+
+                                    </div>
+
+                                    <!-- DIRECTORY TABLE -->
+
+                                    <div class="rm_table_wrapper">
+
+                                        <table class="rm_table rm_directory_table">
+
+                                            <thead>
+                                                <tr>
+
+                                                    <th t-esc="directoryKind === 'driver' ? 'Driver Name' : 'Vehicle Name'"/>
+
+                                                    <th>Company</th>
+
+                                                    <th>Assignments</th>
+
+                                                    <th>Status</th>
+
+                                                    <th>Action</th>
+
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+
+                                                <tr t-foreach="directoryItems"
+                                                    t-as="item"
+                                                    t-key="item.id"
+                                                    t-attf-class="{{state.selectedResourceId === item.id ? 'selected' : ''}}">
+
+                                                    <td>
+
+                                                        <div class="rm_table_resource">
+
+                                                            <div t-attf-class="rm_table_icon {{item.kind}}">
+
+                                                                <i t-if="item.kind === 'driver'"
+                                                                   class="fa fa-user"/>
+
+                                                                <i t-else=""
+                                                                   class="fa fa-car"/>
+
+                                                            </div>
+
+                                                            <strong t-esc="item.name"/>
+
+                                                        </div>
+
+                                                    </td>
+
+                                                    <td t-esc="companyName(item)"/>
+
+                                                    <td>
+
+                                                        <strong t-esc="assignmentCount(item)"/>
+
+                                                    </td>
+
+                                                    <td>
+
+                                                        <span t-attf-class="rm_status rm_status_{{resourceStatus(item)}}">
+
+                                                            <i class="fa fa-circle"/>
+
+                                                            <t t-esc="resourceStatusLabel(item)"/>
+
+                                                        </span>
+
+                                                    </td>
+
+                                                    <td>
+
+                                                        <div class="rm_table_actions">
+
+                                                            <button type="button"
+                                                                    class="rm_view_btn"
+                                                                    title="Select Resource"
+                                                                    aria-label="Select Resource"
+                                                                    t-on-click="() => this.selectResource(item.id)">
+
+                                                                <i class="fa fa-eye"/>
+
+                                                            </button>
+
+                                                            <button t-if="state.canAccessOperations"
+                                                                    type="button"
+                                                                    class="rm_icon_btn"
+                                                                    title="Edit Resource"
+                                                                    aria-label="Edit Resource"
+                                                                    t-on-click="() => this.editResource(item.id)"
+                                                                    t-att-disabled="state.saving">
+
+                                                                <i class="fa fa-pencil"/>
+
+                                                            </button>
+
+                                                        </div>
+
+                                                    </td>
+
+                                                </tr>
+
+                                                <!-- EMPTY DIRECTORY -->
+
+                                                <tr t-if="!directoryItems.length">
+
+                                                    <td colspan="5">
+
+                                                        <div class="rm_empty">
+
+                                                            <i class="fa fa-folder-open-o"/>
+
+                                                            <h4 t-esc="directoryKind === 'driver' ? 'No Matching Drivers' : 'No Matching Vehicles'"/>
+
+                                                            <p>
+                                                                Adjust your search filters.
+                                                            </p>
+
+                                                        </div>
+
+                                                    </td>
+
+                                                </tr>
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </t>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- AVAILABILITY INFORMATION -->
+
+                    <div class="rm_information">
+
+                        <i class="fa fa-info-circle"/>
+
+                        <div>
+
+                            <strong>
+
+                                Understanding resource availability
+
+                            </strong>
+
+                            <p>
+
+                                Resources are marked as assigned when
+                                they have at least one published departure
+                                overlapping the selected period.
+
+                                Availability does not include maintenance,
+                                driver leave or other external commitments.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </t>
+
+
+                <!-- PAGE FOOTER -->
+
+                <footer class="rm_footer">
+
+                    Nexus | Tour Operator Booking Suite
+
+                </footer>
+
+            </main>
+
+
+            <!-- ========================================== -->
+            <!-- CREATE / EDIT RESOURCE MODAL               -->
+            <!-- ========================================== -->
+
+            <div t-if="state.showResourceForm"
+                 class="rm_modal_backdrop">
+
+                <section class="rm_modal"
+                         role="dialog"
+                         aria-modal="true"
+                         aria-labelledby="rm_modal_title">
+
+                    <div class="rm_modal_header">
+
+                        <div class="rm_modal_heading">
+
+                            <div class="rm_modal_icon">
+
+                                <i t-if="state.formKind === 'vehicle'"
+                                   class="fa fa-car"/>
+
+                                <i t-else=""
+                                   class="fa fa-user"/>
+
+                            </div>
+
+                            <div>
+
+                                <h2 id="rm_modal_title"
+                                    t-esc="resourceFormTitle"/>
+
+                                <p>
+
+                                    Manage your operational resources.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <button type="button"
+                                class="rm_modal_close"
+                                aria-label="Close"
+                                t-on-click="closeResourceForm"
+                                t-att-disabled="state.saving">
+
+                            <i class="fa fa-times"/>
+
+                        </button>
+
+                    </div>
+
+
+                    <form t-on-submit.prevent="saveResource">
+
+                        <div class="rm_modal_body">
+
+
+                            <!-- RESOURCE TYPE -->
+
+                            <div class="rm_field">
+
+                                <label for="rm_form_kind">
+
+                                    Resource Type *
+
+                                </label>
+
+                                <select id="rm_form_kind"
+                                        t-model="state.formKind"
+                                        t-att-disabled="isEditingResource || state.saving"
+                                        required="required">
+
+                                    <option value="vehicle">
+
+                                        Vehicle
+
+                                    </option>
+
+                                    <option value="driver">
+
+                                        Driver
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- RESOURCE NAME -->
+
+                            <div class="rm_field">
+
+                                <label for="rm_form_name">
+
+                                    Resource Name *
+
+                                </label>
+
+                                <input id="rm_form_name"
+                                       type="text"
+                                       t-model="state.formName"
+                                       t-att-placeholder="state.formKind === 'vehicle' ? 'e.g. Toyota Land Cruiser V01' : 'e.g. Ahmed Abdullah'"
+                                       t-att-disabled="state.saving"
+                                       required="required"/>
+
+                            </div>
+
+
+                            <!-- CREATION INFORMATION -->
+
+                            <div t-if="!isEditingResource"
+                                 class="rm_form_note">
+
+                                <i class="fa fa-building"/>
+
+                                <div>
+
+                                    <strong>Company Assignment</strong>
+
+                                    <p>
+
+                                        The resource will be created
+                                        under your active Odoo company.
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- EDITING INFORMATION -->
+
+                            <div t-else=""
+                                 class="rm_form_note">
+
+                                <i class="fa fa-info-circle"/>
+
+                                <div>
+
+                                    <strong>Editing Existing Resource</strong>
+
+                                    <p>
+
+                                        You can update the resource name.
+                                        The existing resource type
+                                        and company cannot be changed.
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- FORM ERROR -->
+
+                            <div t-if="state.formError"
+                                 class="rm_error"
+                                 role="alert">
+
+                                <i class="fa fa-exclamation-circle"/>
+
+                                <span t-esc="state.formError"/>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MODAL BUTTONS -->
+
+                        <div class="rm_modal_footer">
+
+                            <button type="button"
+                                    class="rm_secondary_btn"
+                                    t-on-click="closeResourceForm"
+                                    t-att-disabled="state.saving">
+
+                                Cancel
+
+                            </button>
+
+                            <button type="submit"
+                                    class="rm_primary_btn"
+                                    t-att-disabled="!canSaveResource">
+
+                                <i t-if="state.saving"
+                                   class="fa fa-spinner fa-spin"/>
+
+                                <i t-else=""
+                                   class="fa fa-save"/>
+
+                                <t t-if="state.saving">
+
+                                    Saving...
+
+                                </t>
+
+                                <t t-elif="isEditingResource">
+
+                                    Save Changes
+
+                                </t>
+
+                                <t t-else="">
+
+                                    Create Resource
+
+                                </t>
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </t>
+
+</templates>

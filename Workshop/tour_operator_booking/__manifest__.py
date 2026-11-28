@@ -20,7 +20,7 @@
         "report/booking_voucher.xml",
         "views/operational_resource_views.xml",
         "wizard/booking_report_wizard_views.xml",
-        "views/menu_views.xml"
+        "views/menu_views.xml",
     ],
 
     "assets": {
@@ -45,6 +45,15 @@
             "tour_operator_booking/static/src/components/create_booking/create_booking.js",
             "tour_operator_booking/static/src/components/create_booking/create_booking.xml",
             "tour_operator_booking/static/src/components/create_booking/create_booking.scss",
+
+            # Nexus Resource Management
+            "tour_operator_booking/static/src/components/resource_management/resource_management.js",
+            "tour_operator_booking/static/src/components/resource_management/resource_management.xml",
+            "tour_operator_booking/static/src/components/resource_management/resource_management.scss",
+            # Nexus Global Light / Dark Mode
+            "tour_operator_booking/static/src/components/nexus_theme/nexus_theme.js",
+            "tour_operator_booking/static/src/components/nexus_theme/nexus_theme.xml",
+            "tour_operator_booking/static/src/components/nexus_theme/nexus_theme.scss",
 
         ],
     },

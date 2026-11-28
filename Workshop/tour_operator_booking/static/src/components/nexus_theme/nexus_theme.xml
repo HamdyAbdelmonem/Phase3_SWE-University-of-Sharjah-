@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="tour_operator_booking.NexusThemeSwitch">
+
+        <div class="nexus_theme_systray">
+
+            <button type="button"
+                    class="nexus_theme_toggle"
+                    role="switch"
+                    aria-label="Dark mode"
+                    t-att-aria-checked="isDark ? 'true' : 'false'"
+                    t-att-title="toggleLabel"
+                    t-on-click="toggleTheme">
+
+                <!-- LIGHT MODE ICON -->
+
+                <i t-attf-class="fa fa-sun-o nexus_theme_sun {{!isDark ? 'active' : ''}}"
+                   aria-hidden="true"/>
+
+                <!-- SWITCH TRACK -->
+
+                <span t-attf-class="nexus_theme_track {{isDark ? 'dark' : ''}}"
+                      aria-hidden="true">
+
+                    <span class="nexus_theme_thumb"/>
+
+                </span>
+
+                <!-- DARK MODE ICON -->
+
+                <i t-attf-class="fa fa-moon-o nexus_theme_moon {{isDark ? 'active' : ''}}"
+                   aria-hidden="true"/>
+
+            </button>
+
+        </div>
+
+    </t>
+
+</templates>

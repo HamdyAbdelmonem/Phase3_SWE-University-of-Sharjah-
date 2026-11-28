@@ -1,0 +1,2754 @@
+/* =========================================================
+   NEXUS - TOUR OPERATOR BOOKING SUITE
+   Professional Drivers & Vehicles Workspace
+   ========================================================= */
+
+.rm_page {
+
+    /* =====================================================
+       01. NEXUS DESIGN SYSTEM
+       ===================================================== */
+
+    --rm-green: #008c50;
+    --rm-green-dark: #047857;
+    --rm-sidebar: #053b35;
+    --rm-turquoise: #09ddc3;
+    --rm-background: #f0f5fa;
+    --rm-white: #ffffff;
+    --rm-text: #172438;
+    --rm-muted: #64748b;
+    --rm-border: #dce5ee;
+
+    --rm-blue: #2563eb;
+    --rm-purple: #7c3aed;
+    --rm-gold: #b45309;
+    --rm-red: #dc2626;
+
+    --rm-shadow: 0 5px 22px rgba(15, 23, 42, 0.035);
+
+    display: flex;
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    min-width: 0;
+
+    flex: 1 1 0;
+
+    overflow: hidden;
+
+    background: var(--rm-background);
+    color: var(--rm-text);
+
+    font-family: inherit;
+    font-size: 14px;
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+        margin: 0;
+    }
+
+    button,
+    input,
+    select {
+        font-family: inherit;
+    }
+
+    button {
+        cursor: pointer;
+    }
+
+    button:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+    }
+
+
+    /* =====================================================
+       02. FULL-HEIGHT NEXUS SIDEBAR
+       ===================================================== */
+
+    .rm_sidebar {
+
+        width: 250px;
+        min-width: 250px;
+
+        height: 100%;
+        min-height: 0;
+
+        flex-shrink: 0;
+
+        display: flex;
+        flex-direction: column;
+
+        padding: 30px 16px 24px;
+
+        background: var(--rm-sidebar);
+        color: var(--rm-white);
+
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        scrollbar-width: thin;
+        scrollbar-color: #29635c transparent;
+    }
+
+    .rm_brand {
+
+        display: flex;
+        align-items: center;
+
+        gap: 14px;
+
+        padding: 8px 8px 28px;
+
+        flex-shrink: 0;
+    }
+
+    .rm_logo {
+
+        width: 48px;
+        height: 48px;
+
+        object-fit: contain;
+
+        flex-shrink: 0;
+    }
+
+    .rm_brand_text {
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 4px;
+
+        strong {
+            color: #ffffff;
+            font-size: 19px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        small {
+            color: #b6e3dc;
+            font-size: 13px;
+        }
+    }
+
+    .rm_sidebar_label {
+
+        margin: 24px 12px 16px;
+
+        color: #80bbb5;
+
+        font-size: 11px;
+        font-weight: 800;
+
+        letter-spacing: 2px;
+    }
+
+    .rm_navigation {
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 9px;
+
+        flex-shrink: 0;
+    }
+
+    .rm_nav {
+
+        display: flex;
+        align-items: center;
+
+        gap: 15px;
+
+        width: 100%;
+        min-height: 48px;
+
+        padding: 13px 15px;
+
+        border: none;
+        border-radius: 9px;
+
+        background: transparent;
+        color: #e0f2f1;
+
+        font-size: 14px;
+        font-weight: 600;
+
+        text-align: left;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+
+        i {
+
+            width: 21px;
+
+            font-size: 18px;
+
+            text-align: center;
+        }
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+
+        &.active {
+
+            background: var(--rm-green);
+            color: #ffffff;
+
+            font-weight: 800;
+        }
+    }
+
+    .rm_sidebar_footer {
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 9px;
+
+        margin-top: auto;
+
+        padding: 24px 12px 0;
+
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+        flex-shrink: 0;
+
+        strong {
+
+            color: var(--rm-turquoise);
+
+            font-size: 18px;
+            font-weight: 900;
+
+            letter-spacing: 4px;
+        }
+
+        small {
+
+            color: #80bbb5;
+
+            font-size: 12px;
+        }
+    }
+
+    .rm_navigation {
+        margin-bottom: 30px;
+    }
+
+
+    /* =====================================================
+       03. MAIN CONTENT AREA
+       ===================================================== */
+
+    .rm_main {
+
+        flex: 1;
+
+        min-width: 0;
+        min-height: 0;
+
+        height: 100%;
+
+        padding: 30px;
+
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        scrollbar-width: thin;
+        scrollbar-color: #a9bacb transparent;
+
+        overscroll-behavior: contain;
+    }
+
+    .rm_header {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 24px;
+
+        margin-bottom: 28px;
+    }
+
+    .rm_header_content {
+
+        min-width: 0;
+
+        h1 {
+
+            color: var(--rm-text);
+
+            font-size: 34px;
+            font-weight: 800;
+
+            line-height: 1.2;
+
+            letter-spacing: -0.8px;
+
+            margin-bottom: 10px;
+        }
+
+        p {
+
+            color: var(--rm-muted);
+
+            font-size: 15px;
+
+            line-height: 1.6;
+        }
+    }
+
+    .rm_breadcrumb {
+
+        color: var(--rm-green);
+
+        font-size: 13px;
+        font-weight: 700;
+
+        margin-bottom: 14px;
+    }
+
+    .rm_header_actions {
+
+        display: flex;
+        align-items: center;
+
+        flex-wrap: wrap;
+
+        gap: 12px;
+
+        flex-shrink: 0;
+    }
+
+
+    /* =====================================================
+       04. BUTTON SYSTEM
+       ===================================================== */
+
+    .rm_primary_btn,
+    .rm_secondary_btn,
+    .rm_view_btn,
+    .rm_icon_btn {
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        gap: 9px;
+
+        min-height: 43px;
+
+        padding: 11px 17px;
+
+        border-radius: 9px;
+
+        font-size: 13px;
+        font-weight: 700;
+
+        white-space: nowrap;
+
+        transition:
+            background 0.2s ease,
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+
+        i {
+            font-size: 15px;
+        }
+
+        &:focus-visible {
+
+            outline: 3px solid rgba(0, 140, 80, 0.28);
+
+            outline-offset: 2px;
+        }
+
+        &:not(:disabled):active {
+            transform: translateY(1px);
+        }
+    }
+
+    .rm_primary_btn {
+
+        border: 1px solid var(--rm-green);
+
+        background: var(--rm-green);
+        color: #ffffff;
+
+        &:hover:not(:disabled) {
+
+            background: #007743;
+            border-color: #007743;
+
+            box-shadow: 0 4px 12px rgba(0, 140, 80, 0.18);
+        }
+    }
+
+    .rm_secondary_btn {
+
+        background: #ffffff;
+
+        color: var(--rm-green-dark);
+
+        border: 1px solid var(--rm-border);
+
+        &:hover:not(:disabled) {
+
+            background: #ecfdf5;
+
+            border-color: #8bd5b0;
+        }
+    }
+
+    .rm_icon_btn {
+
+        width: 41px;
+        min-width: 41px;
+        height: 41px;
+
+        min-height: 41px;
+
+        padding: 0;
+
+        background: #ffffff;
+        color: var(--rm-green-dark);
+
+        border: 1px solid var(--rm-border);
+
+        &:hover:not(:disabled) {
+
+            background: #ecfdf5;
+
+            border-color: var(--rm-green);
+        }
+    }
+
+    .rm_view_btn {
+
+        min-height: 36px;
+
+        padding: 7px 12px;
+
+        background: #ffffff;
+        color: var(--rm-green);
+
+        border: 1px solid var(--rm-border);
+
+        font-size: 12px;
+
+        &:hover:not(:disabled) {
+
+            background: #ecfdf5;
+
+            border-color: var(--rm-green);
+        }
+    }
+
+    .rm_full_width {
+
+        width: 100%;
+
+        margin-top: 16px;
+    }
+
+
+    /* =====================================================
+       05. WHITE PANEL SYSTEM
+       ===================================================== */
+
+    .rm_panel {
+
+        min-width: 0;
+
+        padding: 24px;
+
+        background: var(--rm-white);
+
+        border: 1px solid var(--rm-border);
+        border-radius: 16px;
+
+        box-shadow: var(--rm-shadow);
+
+        margin-bottom: 24px;
+    }
+
+    .rm_panel_header {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        flex-wrap: wrap;
+
+        gap: 15px;
+
+        margin-bottom: 22px;
+
+        h3 {
+
+            display: flex;
+            align-items: center;
+
+            gap: 9px;
+
+            font-size: 19px;
+            font-weight: 800;
+
+            color: var(--rm-text);
+
+            i {
+                color: var(--rm-green);
+            }
+        }
+
+        p {
+
+            margin-top: 6px;
+
+            color: var(--rm-muted);
+
+            font-size: 13px;
+
+            line-height: 1.5;
+        }
+    }
+
+
+    /* =====================================================
+       06. FORM INPUTS
+       ===================================================== */
+
+    .rm_field {
+
+        display: flex;
+        flex-direction: column;
+
+        min-width: 0;
+
+        gap: 9px;
+
+        label {
+
+            font-size: 13px;
+            font-weight: 700;
+
+            color: #475569;
+        }
+
+        input,
+        select {
+
+            width: 100%;
+
+            min-width: 0;
+            min-height: 44px;
+
+            padding: 11px 13px;
+
+            border: 1px solid var(--rm-border);
+            border-radius: 9px;
+
+            background: #f7f9fc;
+
+            color: var(--rm-text);
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+
+            &:focus {
+
+                border-color: var(--rm-green);
+
+                box-shadow: 0 0 0 3px rgba(0, 140, 80, 0.09);
+
+                background: #ffffff;
+            }
+
+            &:disabled {
+
+                background: #edf2f7;
+
+                color: #94a3b8;
+
+                cursor: not-allowed;
+            }
+
+            &::placeholder {
+                color: #94a3b8;
+            }
+        }
+    }
+
+    .rm_search {
+
+        position: relative;
+
+        display: flex;
+        align-items: center;
+
+        > i {
+
+            position: absolute;
+
+            left: 14px;
+
+            color: #94a3b8;
+
+            font-size: 16px;
+
+            pointer-events: none;
+        }
+
+        input {
+
+            padding-left: 40px;
+        }
+    }
+
+
+    /* =====================================================
+       07. AVAILABILITY PERIOD
+       ===================================================== */
+
+    .rm_period_panel {
+
+        .rm_panel_header {
+
+            margin-bottom: 20px;
+        }
+    }
+
+    .rm_period_shortcuts {
+
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 8px;
+
+        .rm_secondary_btn {
+
+            min-height: 35px;
+
+            padding: 7px 13px;
+        }
+    }
+
+    .rm_period_grid {
+
+        display: grid;
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(0, 1fr)
+            auto;
+
+        align-items: end;
+
+        gap: 16px;
+    }
+
+    .rm_period_note {
+
+        display: flex;
+        align-items: center;
+
+        flex-wrap: wrap;
+
+        gap: 8px;
+
+        padding: 13px 15px;
+
+        margin-top: 18px;
+
+        background: #ecfdf5;
+
+        color: #047857;
+
+        border: 1px solid #d1fae5;
+        border-radius: 9px;
+
+        font-size: 12px;
+
+        strong {
+            font-weight: 800;
+        }
+
+        i {
+            font-size: 15px;
+        }
+    }
+
+
+    /* =====================================================
+       08. LOADING AND ERROR STATES
+       ===================================================== */
+
+    .rm_loading {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        gap: 12px;
+
+        min-height: 180px;
+
+        padding: 24px;
+
+        margin-bottom: 24px;
+
+        border: 1px solid var(--rm-border);
+        border-radius: 16px;
+
+        background: #ffffff;
+
+        color: var(--rm-muted);
+
+        i {
+
+            font-size: 24px;
+
+            color: var(--rm-green);
+        }
+    }
+
+    .rm_error {
+
+        display: flex;
+        align-items: center;
+
+        flex-wrap: wrap;
+
+        gap: 10px;
+
+        margin-top: 14px;
+        margin-bottom: 16px;
+
+        padding: 15px;
+
+        border: 1px solid #fecaca;
+        border-radius: 9px;
+
+        background: #fef2f2;
+
+        color: #b91c1c;
+
+        line-height: 1.5;
+
+        i {
+            font-size: 17px;
+        }
+
+        span {
+
+            flex: 1;
+
+            overflow-wrap: anywhere;
+        }
+    }
+
+
+    /* =====================================================
+       09. LIVE KPI CARDS
+       ===================================================== */
+
+    .rm_kpi_grid {
+
+        display: grid;
+
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        gap: 18px;
+
+        margin-bottom: 24px;
+    }
+
+    .rm_kpi {
+
+        display: flex;
+        align-items: flex-start;
+
+        gap: 15px;
+
+        min-width: 0;
+        min-height: 135px;
+
+        padding: 22px;
+
+        background: #ffffff;
+
+        border: 1px solid var(--rm-border);
+        border-radius: 15px;
+
+        box-shadow: var(--rm-shadow);
+
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+
+        &:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow: 0 9px 24px rgba(15, 23, 42, 0.07);
+        }
+    }
+
+    .rm_kpi_icon {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        flex-shrink: 0;
+
+        width: 48px;
+        height: 48px;
+
+        border-radius: 13px;
+
+        font-size: 23px;
+    }
+
+    .rm_kpi_icon,
+    .rm_overview_icon {
+
+        &.green {
+
+            color: #008c50;
+
+            background: #d8fbe7;
+        }
+
+        &.blue {
+
+            color: #2563eb;
+
+            background: #dbeafe;
+        }
+
+        &.purple {
+
+            color: #7c3aed;
+
+            background: #ede9fe;
+        }
+
+        &.gold {
+
+            color: #b45309;
+
+            background: #fef3c7;
+        }
+
+        &.teal {
+
+            color: #0d9488;
+
+            background: #ccfbf1;
+        }
+    }
+
+    .rm_kpi_content {
+
+        min-width: 0;
+
+        span {
+
+            color: var(--rm-muted);
+
+            font-size: 13px;
+            font-weight: 600;
+
+            line-height: 1.4;
+        }
+
+        h2 {
+
+            color: var(--rm-text);
+
+            font-size: 32px;
+            font-weight: 900;
+
+            margin: 9px 0 5px;
+
+            line-height: 1.2;
+        }
+
+        small {
+
+            display: block;
+
+            color: var(--rm-muted);
+
+            font-size: 11px;
+
+            line-height: 1.5;
+        }
+    }
+
+
+    /* =====================================================
+       10. RESOURCE ASSIGNMENT UTILIZATION
+       ===================================================== */
+
+    .rm_utilization_header {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 12px;
+
+        margin-bottom: 17px;
+
+        h3 {
+
+            display: flex;
+            align-items: center;
+
+            gap: 9px;
+
+            font-size: 16px;
+            font-weight: 800;
+
+            i {
+                color: var(--rm-green);
+            }
+        }
+    }
+
+    .rm_utilization_value {
+
+        font-size: 22px;
+        font-weight: 900;
+
+        color: var(--rm-green);
+    }
+
+    .rm_progress_track {
+
+        width: 100%;
+        height: 10px;
+
+        border-radius: 20px;
+
+        background: #e5edf4;
+
+        overflow: hidden;
+    }
+
+    .rm_progress_fill {
+
+        height: 100%;
+
+        border-radius: 20px;
+
+        background: linear-gradient(
+            90deg,
+            #008c50,
+            #20c997
+        );
+
+        transition: width 0.35s ease;
+    }
+
+    .rm_utilization_labels {
+
+        display: flex;
+        justify-content: space-between;
+
+        flex-wrap: wrap;
+
+        gap: 10px;
+
+        margin-top: 12px;
+
+        color: var(--rm-muted);
+
+        font-size: 12px;
+    }
+
+    .rm_overview_grid {
+
+        display: grid;
+
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+
+        gap: 14px;
+
+        margin-top: 23px;
+    }
+
+    .rm_overview_item {
+
+        display: flex;
+        align-items: center;
+
+        gap: 12px;
+
+        padding: 16px;
+
+        border: 1px solid var(--rm-border);
+        border-radius: 12px;
+
+        background: #f7f9fc;
+
+        span {
+
+            display: block;
+
+            font-size: 12px;
+
+            color: var(--rm-muted);
+
+            margin-bottom: 5px;
+        }
+
+        strong {
+
+            display: block;
+
+            font-size: 19px;
+            font-weight: 800;
+        }
+    }
+
+    .rm_overview_icon {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        flex-shrink: 0;
+
+        width: 42px;
+        height: 42px;
+
+        border-radius: 10px;
+
+        font-size: 19px;
+    }
+
+
+    /* =====================================================
+       11. SEARCH AND FILTER PANEL
+       ===================================================== */
+
+    .rm_filters {
+
+        display: grid;
+
+        grid-template-columns:
+            minmax(0, 1.6fr)
+            minmax(0, 1fr)
+            minmax(0, 1fr)
+            auto;
+
+        align-items: end;
+
+        gap: 15px;
+    }
+
+
+    /* =====================================================
+       12. RESOURCE WORKSPACE LAYOUT
+       ===================================================== */
+
+    .rm_workspace_grid {
+
+        display: grid;
+
+        grid-template-columns:
+            minmax(0, 1.8fr)
+            minmax(270px, 1fr);
+
+        align-items: start;
+
+        gap: 24px;
+    }
+
+    .rm_resource_sections,
+    .rm_details_column {
+
+        min-width: 0;
+    }
+
+    .rm_resource_grid {
+
+        display: grid;
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        gap: 17px;
+    }
+
+
+    /* =====================================================
+       13. VEHICLE AND DRIVER CARDS
+       ===================================================== */
+
+    .rm_resource_card {
+
+        min-width: 0;
+
+        background: #ffffff;
+
+        border: 1px solid var(--rm-border);
+        border-radius: 13px;
+
+        overflow: hidden;
+
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+
+        &:hover {
+
+            transform: translateY(-3px);
+
+            border-color: #9bd7bb;
+
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.07);
+        }
+
+        &.selected {
+
+            border-color: var(--rm-green);
+
+            box-shadow: 0 0 0 2px rgba(0, 140, 80, 0.11);
+        }
+    }
+
+    .rm_vehicle_visual,
+    .rm_driver_visual {
+
+        position: relative;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        min-height: 142px;
+
+        padding: 36px 16px 18px;
+
+        .rm_status {
+
+            position: absolute;
+
+            top: 12px;
+            right: 12px;
+        }
+    }
+
+    .rm_vehicle_visual {
+
+        background:
+            radial-gradient(
+                circle at center,
+                #e1edff,
+                transparent 75%
+            ),
+            linear-gradient(
+                135deg,
+                #f0f6ff,
+                #e5edf9
+            );
+    }
+
+    .rm_vehicle_icon {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 86px;
+        height: 86px;
+
+        border-radius: 23px;
+
+        color: #2563eb;
+
+        background: rgba(255, 255, 255, 0.8);
+
+        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.10);
+
+        font-size: 43px;
+    }
+
+    .rm_driver_visual {
+
+        background: linear-gradient(
+            135deg,
+            #f5f3ff,
+            #ede9fe
+        );
+    }
+
+    .rm_driver_avatar {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 79px;
+        height: 79px;
+
+        border: 4px solid rgba(255, 255, 255, 0.85);
+
+        border-radius: 50%;
+
+        background: #ddd6fe;
+
+        color: #6d28d9;
+
+        font-size: 27px;
+        font-weight: 900;
+
+        box-shadow: 0 6px 18px rgba(124, 58, 237, 0.12);
+    }
+
+    .rm_resource_card_body {
+
+        padding: 17px;
+
+        h3 {
+
+            color: var(--rm-text);
+
+            font-size: 17px;
+            font-weight: 800;
+
+            line-height: 1.4;
+
+            margin: 8px 0 10px;
+
+            overflow-wrap: anywhere;
+        }
+    }
+
+    .rm_resource_type {
+
+        color: var(--rm-muted);
+
+        font-size: 10px;
+        font-weight: 800;
+
+        letter-spacing: 1px;
+    }
+
+    .rm_resource_company {
+
+        display: flex;
+        align-items: center;
+
+        gap: 7px;
+
+        color: var(--rm-muted);
+
+        font-size: 12px;
+
+        overflow-wrap: anywhere;
+
+        i {
+            color: var(--rm-green);
+        }
+    }
+
+    .rm_assignment_count {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 10px;
+
+        padding: 13px 0;
+
+        margin-top: 15px;
+
+        border-top: 1px solid #edf2f7;
+        border-bottom: 1px solid #edf2f7;
+
+        span {
+
+            color: var(--rm-muted);
+
+            font-size: 11px;
+        }
+
+        strong {
+
+            font-size: 16px;
+            font-weight: 800;
+        }
+    }
+
+    .rm_card_actions {
+
+        display: flex;
+        align-items: center;
+
+        gap: 8px;
+
+        margin-top: 15px;
+
+        .rm_secondary_btn {
+
+            flex: 1;
+
+            min-width: 0;
+            min-height: 41px;
+
+            padding: 9px 10px;
+
+            font-size: 12px;
+        }
+    }
+
+
+    /* =====================================================
+       14. ASSIGNMENT STATUS INDICATORS
+       ===================================================== */
+
+    .rm_status {
+
+        display: inline-flex;
+        align-items: center;
+
+        gap: 6px;
+
+        width: fit-content;
+
+        padding: 7px 10px;
+
+        border-radius: 20px;
+
+        font-size: 11px;
+        font-weight: 800;
+
+        white-space: nowrap;
+
+        i {
+
+            font-size: 7px;
+        }
+    }
+
+    .rm_status_available {
+
+        color: #047857;
+
+        background: #d1fae5;
+    }
+
+    .rm_status_assigned {
+
+        color: #92400e;
+
+        background: #fef3c7;
+    }
+
+
+    /* =====================================================
+       15. SELECTED RESOURCE DETAILS
+       ===================================================== */
+
+    .rm_selected_hero {
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        gap: 12px;
+
+        padding: 20px;
+
+        margin-bottom: 20px;
+
+        border: 1px solid #bcebd9;
+        border-radius: 13px;
+
+        background: #ecfdf5;
+
+        h2 {
+
+            color: #064e3b;
+
+            font-size: 22px;
+            font-weight: 900;
+
+            line-height: 1.3;
+
+            overflow-wrap: anywhere;
+
+            max-width: 100%;
+        }
+
+        p {
+
+            color: #538478;
+
+            font-size: 13px;
+        }
+    }
+
+    .rm_selected_icon {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 60px;
+        height: 60px;
+
+        border-radius: 15px;
+
+        font-size: 26px;
+        font-weight: 900;
+
+        &.vehicle {
+
+            color: #2563eb;
+
+            background: #dbeafe;
+        }
+
+        &.driver {
+
+            color: #7c3aed;
+
+            background: #ede9fe;
+
+            border-radius: 50%;
+        }
+    }
+
+    .rm_detail_row {
+
+        display: flex;
+        align-items: center;
+
+        gap: 12px;
+
+        padding: 13px 0;
+
+        border-bottom: 1px solid #edf2f7;
+
+        > div:last-child {
+
+            min-width: 0;
+        }
+
+        span {
+
+            display: block;
+
+            color: var(--rm-muted);
+
+            font-size: 12px;
+
+            margin-bottom: 5px;
+        }
+
+        strong {
+
+            display: block;
+
+            color: var(--rm-text);
+
+            font-size: 13px;
+            font-weight: 700;
+
+            overflow-wrap: anywhere;
+        }
+    }
+
+    .rm_detail_icon {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 37px;
+        height: 37px;
+
+        flex-shrink: 0;
+
+        border-radius: 9px;
+
+        background: #eef4f8;
+
+        color: var(--rm-green);
+
+        font-size: 16px;
+    }
+
+    .rm_selected_stats {
+
+        display: grid;
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+
+        margin-top: 20px;
+
+        > div {
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            gap: 7px;
+
+            min-height: 83px;
+
+            padding: 12px 8px;
+
+            border-radius: 10px;
+
+            background: #f0f5fa;
+
+            text-align: center;
+
+            strong {
+
+                font-size: 17px;
+                font-weight: 800;
+
+                color: var(--rm-text);
+
+                overflow-wrap: anywhere;
+            }
+
+            span {
+
+                color: var(--rm-muted);
+
+                font-size: 11px;
+            }
+
+            &:last-child {
+
+                background: #ecfdf5;
+
+                strong {
+                    color: var(--rm-green-dark);
+                }
+            }
+        }
+    }
+
+
+    /* =====================================================
+       16. ASSIGNED TOUR CARDS
+       ===================================================== */
+
+    .rm_assignment_list {
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 13px;
+    }
+
+    .rm_assignment_card {
+
+        padding: 15px;
+
+        border: 1px solid var(--rm-border);
+        border-radius: 12px;
+
+        background: #f8fafc;
+    }
+
+    .rm_assignment_header {
+
+        display: flex;
+        align-items: flex-start;
+
+        gap: 11px;
+
+        margin-bottom: 15px;
+
+        > div:last-child {
+
+            min-width: 0;
+        }
+
+        h4 {
+
+            color: var(--rm-text);
+
+            font-size: 14px;
+            font-weight: 800;
+
+            line-height: 1.4;
+
+            overflow-wrap: anywhere;
+
+            margin-bottom: 5px;
+        }
+
+        small {
+
+            color: var(--rm-muted);
+
+            font-size: 11px;
+
+            overflow-wrap: anywhere;
+        }
+    }
+
+    .rm_assignment_icon {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        flex-shrink: 0;
+
+        width: 36px;
+        height: 36px;
+
+        border-radius: 9px;
+
+        color: var(--rm-green);
+
+        background: #d1fae5;
+
+        font-size: 17px;
+    }
+
+    .rm_assignment_date {
+
+        display: flex;
+        align-items: center;
+
+        gap: 9px;
+
+        margin: 10px 0;
+
+        color: var(--rm-muted);
+
+        font-size: 12px;
+
+        i {
+
+            color: var(--rm-green);
+
+            width: 14px;
+
+            flex-shrink: 0;
+        }
+    }
+
+    .rm_assignment_capacity {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 10px;
+
+        margin-top: 17px;
+        margin-bottom: 8px;
+
+        span {
+
+            color: var(--rm-muted);
+
+            font-size: 11px;
+        }
+
+        strong {
+
+            font-weight: 800;
+
+            font-size: 13px;
+        }
+    }
+
+    .rm_assignment_card {
+
+        .rm_progress_track {
+            height: 7px;
+        }
+    }
+
+
+    /* =====================================================
+       17. EMPTY STATES
+       ===================================================== */
+
+    .rm_empty {
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        gap: 12px;
+
+        min-height: 200px;
+
+        padding: 26px 18px;
+
+        text-align: center;
+
+        border: 1px dashed #d6e0ea;
+        border-radius: 12px;
+
+        background: #fafcfe;
+
+        > i {
+
+            color: #a5b4c5;
+
+            font-size: 30px;
+        }
+
+        h4 {
+
+            font-size: 15px;
+            font-weight: 800;
+
+            color: #475569;
+        }
+
+        p {
+
+            max-width: 300px;
+
+            color: var(--rm-muted);
+
+            font-size: 12px;
+
+            line-height: 1.7;
+        }
+
+        .rm_primary_btn {
+
+            margin-top: 5px;
+        }
+    }
+
+    .rm_empty_icon {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 62px;
+        height: 62px;
+
+        border-radius: 17px;
+
+        background: #edf2f7;
+
+        color: #94a3b8;
+
+        font-size: 28px;
+
+        &.green {
+
+            color: var(--rm-green);
+
+            background: #d1fae5;
+        }
+    }
+
+    .rm_small_empty {
+
+        min-height: 150px;
+
+        padding: 20px 14px;
+    }
+
+
+    /* =====================================================
+       18. RESOURCE DIRECTORY TABLE
+       ===================================================== */
+
+    .rm_table_wrapper {
+
+        width: 100%;
+
+        overflow-x: auto;
+
+        border: 1px solid var(--rm-border);
+        border-radius: 11px;
+
+        scrollbar-width: thin;
+    }
+
+    .rm_table {
+
+        width: 100%;
+
+        min-width: 720px;
+
+        border-collapse: collapse;
+
+        text-align: left;
+
+        th {
+
+            padding: 16px;
+
+            background: #edf3f8;
+
+            color: #475569;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            white-space: nowrap;
+        }
+
+        td {
+
+            padding: 15px 16px;
+
+            border-top: 1px solid #e7edf3;
+
+            color: #475569;
+
+            font-size: 13px;
+
+            vertical-align: middle;
+        }
+
+        tbody tr {
+
+            background: #ffffff;
+
+            transition: background 0.2s ease;
+
+            &:nth-child(even) {
+
+                background: #f8fafc;
+            }
+
+            &:hover,
+            &.selected {
+
+                background: #ecfdf5;
+            }
+        }
+
+        .rm_empty {
+
+            min-height: 130px;
+
+            border: none;
+        }
+    }
+
+    .rm_table_resource {
+
+        display: flex;
+        align-items: center;
+
+        gap: 10px;
+
+        strong {
+
+            color: var(--rm-green-dark);
+
+            font-weight: 700;
+        }
+    }
+
+    .rm_table_icon {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 35px;
+        height: 35px;
+
+        flex-shrink: 0;
+
+        border-radius: 9px;
+
+        font-size: 15px;
+
+        &.vehicle {
+
+            background: #dbeafe;
+
+            color: #2563eb;
+        }
+
+        &.driver {
+
+            background: #ede9fe;
+
+            color: #7c3aed;
+        }
+    }
+
+    .rm_table_actions {
+
+        display: flex;
+        align-items: center;
+
+        gap: 7px;
+
+        .rm_icon_btn {
+
+            width: 35px;
+            height: 35px;
+
+            min-width: 35px;
+            min-height: 35px;
+        }
+    }
+
+
+    /* =====================================================
+       19. INFORMATION PANEL
+       ===================================================== */
+
+    .rm_information {
+
+        display: flex;
+        align-items: flex-start;
+
+        gap: 13px;
+
+        padding: 18px;
+
+        background: #edf5ff;
+
+        border: 1px solid #dbeafe;
+        border-radius: 12px;
+
+        color: #475569;
+
+        > i {
+
+            color: #2563eb;
+
+            font-size: 21px;
+
+            margin-top: 2px;
+
+            flex-shrink: 0;
+        }
+
+        strong {
+
+            display: block;
+
+            color: #1e40af;
+
+            font-size: 13px;
+
+            margin-bottom: 6px;
+        }
+
+        p {
+
+            font-size: 12px;
+
+            line-height: 1.7;
+        }
+    }
+
+
+    /* =====================================================
+       20. CREATE / EDIT RESOURCE MODAL
+       ===================================================== */
+
+    .rm_modal_backdrop {
+
+        position: absolute;
+
+        inset: 0;
+
+        z-index: 1050;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 24px;
+
+        background: rgba(15, 23, 42, 0.55);
+
+        backdrop-filter: blur(3px);
+
+        overflow-y: auto;
+    }
+
+    .rm_modal {
+
+        display: flex;
+        flex-direction: column;
+
+        width: 100%;
+        max-width: 560px;
+
+        max-height: 100%;
+
+        overflow-y: auto;
+
+        background: #ffffff;
+
+        border: 1px solid var(--rm-border);
+        border-radius: 18px;
+
+        box-shadow: 0 25px 70px rgba(15, 23, 42, 0.25);
+
+        animation: rmModalEnter 0.2s ease-out;
+    }
+
+    @keyframes rmModalEnter {
+
+        from {
+
+            opacity: 0;
+
+            transform: translateY(12px) scale(0.98);
+        }
+
+        to {
+
+            opacity: 1;
+
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .rm_modal_header {
+
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+
+        gap: 15px;
+
+        padding: 24px;
+
+        border-bottom: 1px solid var(--rm-border);
+    }
+
+    .rm_modal_heading {
+
+        display: flex;
+        align-items: center;
+
+        gap: 14px;
+
+        h2 {
+
+            color: var(--rm-text);
+
+            font-size: 23px;
+            font-weight: 800;
+
+            line-height: 1.3;
+        }
+
+        p {
+
+            color: var(--rm-muted);
+
+            font-size: 12px;
+
+            margin-top: 6px;
+        }
+    }
+
+    .rm_modal_icon {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 49px;
+        height: 49px;
+
+        flex-shrink: 0;
+
+        border-radius: 12px;
+
+        color: var(--rm-green);
+
+        background: #d1fae5;
+
+        font-size: 23px;
+    }
+
+    .rm_modal_close {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        flex-shrink: 0;
+
+        width: 34px;
+        height: 34px;
+
+        border: none;
+        border-radius: 8px;
+
+        background: #f1f5f9;
+
+        color: var(--rm-muted);
+
+        font-size: 16px;
+
+        &:hover:not(:disabled) {
+
+            background: #fee2e2;
+
+            color: #dc2626;
+        }
+    }
+
+    .rm_modal_body {
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 20px;
+
+        padding: 25px;
+
+        .rm_field {
+
+            input,
+            select {
+
+                min-height: 48px;
+            }
+        }
+
+        .rm_error {
+
+            margin: 0;
+        }
+    }
+
+    .rm_form_note {
+
+        display: flex;
+        align-items: flex-start;
+
+        gap: 12px;
+
+        padding: 15px;
+
+        border-radius: 10px;
+
+        border: 1px solid #dbeafe;
+
+        background: #eff6ff;
+
+        > i {
+
+            color: #2563eb;
+
+            font-size: 18px;
+
+            flex-shrink: 0;
+        }
+
+        strong {
+
+            display: block;
+
+            color: #1e40af;
+
+            font-size: 12px;
+
+            margin-bottom: 5px;
+        }
+
+        p {
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+        }
+    }
+
+    .rm_modal_footer {
+
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        flex-wrap: wrap;
+
+        gap: 11px;
+
+        padding: 19px 24px;
+
+        border-top: 1px solid var(--rm-border);
+
+        background: #f8fafc;
+    }
+
+
+    /* =====================================================
+       21. PAGE FOOTER
+       ===================================================== */
+
+    .rm_footer {
+
+        padding: 28px 10px 10px;
+
+        text-align: center;
+
+        color: #8496aa;
+
+        font-size: 12px;
+
+        letter-spacing: 0.2px;
+    }
+
+
+    /* =====================================================
+       22. LARGE DESKTOP RESPONSIVENESS
+       ===================================================== */
+
+    @media (max-width: 1500px) {
+
+        .rm_kpi_grid {
+
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .rm_kpi {
+
+            min-height: 120px;
+        }
+    }
+
+
+    /* =====================================================
+       23. MEDIUM DESKTOP RESPONSIVENESS
+       ===================================================== */
+
+    @media (max-width: 1200px) {
+
+        .rm_sidebar {
+
+            width: 225px;
+            min-width: 225px;
+
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+        .rm_brand {
+
+            gap: 10px;
+
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+
+        .rm_logo {
+
+            width: 42px;
+            height: 42px;
+        }
+
+        .rm_brand_text strong {
+
+            font-size: 17px;
+        }
+
+        .rm_main {
+
+            padding: 24px;
+        }
+
+        .rm_header {
+
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .rm_workspace_grid {
+
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .rm_details_column {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+
+            align-items: start;
+
+            gap: 20px;
+        }
+
+        .rm_overview_grid {
+
+            gap: 10px;
+        }
+
+        .rm_overview_item {
+
+            padding: 12px;
+        }
+
+        .rm_filters {
+
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+
+    /* =====================================================
+       24. TABLET RESPONSIVENESS
+       ===================================================== */
+
+    @media (max-width: 992px) {
+
+        .rm_sidebar {
+
+            width: 205px;
+            min-width: 205px;
+        }
+
+        .rm_brand_text strong {
+
+            font-size: 15px;
+        }
+
+        .rm_brand_text small {
+
+            font-size: 11px;
+        }
+
+        .rm_nav {
+
+            font-size: 12px;
+
+            gap: 10px;
+
+            padding: 12px;
+        }
+
+        .rm_main {
+
+            padding: 20px;
+        }
+
+        .rm_header_content h1 {
+
+            font-size: 29px;
+        }
+
+        .rm_period_grid {
+
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+
+            > button {
+
+                grid-column: 1 / -1;
+            }
+        }
+
+        .rm_overview_grid {
+
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .rm_details_column {
+
+            grid-template-columns: minmax(0, 1fr);
+
+            gap: 0;
+        }
+    }
+
+
+    /* =====================================================
+       25. MOBILE RESPONSIVENESS
+       ===================================================== */
+
+    @media (max-width: 768px) {
+
+        flex-direction: column;
+
+        .rm_sidebar {
+
+            width: 100%;
+            min-width: 0;
+
+            height: auto;
+
+            padding: 12px;
+
+            overflow-y: visible;
+        }
+
+        .rm_brand {
+
+            padding: 0 4px 12px;
+        }
+
+        .rm_sidebar_label,
+        .rm_sidebar_footer {
+
+            display: none;
+        }
+
+        .rm_navigation {
+
+            flex-direction: row;
+
+            gap: 7px;
+
+            margin-bottom: 0;
+
+            overflow-x: auto;
+
+            padding-bottom: 3px;
+        }
+
+        .rm_nav {
+
+            width: auto;
+
+            min-height: 38px;
+
+            flex-shrink: 0;
+
+            padding: 8px 11px;
+
+            white-space: nowrap;
+
+            i {
+
+                font-size: 14px;
+
+                width: auto;
+            }
+        }
+
+        .rm_main {
+
+            height: auto;
+
+            padding: 16px;
+
+            flex: 1;
+        }
+
+        .rm_header {
+
+            gap: 16px;
+
+            margin-bottom: 20px;
+        }
+
+        .rm_header_content h1 {
+
+            font-size: 27px;
+        }
+
+        .rm_header_content p {
+
+            font-size: 13px;
+        }
+
+        .rm_header_actions {
+
+            width: 100%;
+
+            > button {
+
+                flex: 1;
+            }
+        }
+
+        .rm_panel {
+
+            padding: 17px;
+
+            margin-bottom: 17px;
+
+            border-radius: 13px;
+        }
+
+        .rm_kpi_grid {
+
+            gap: 12px;
+
+            margin-bottom: 17px;
+        }
+
+        .rm_kpi {
+
+            padding: 15px;
+
+            gap: 10px;
+
+            min-height: 110px;
+        }
+
+        .rm_kpi_icon {
+
+            width: 36px;
+            height: 36px;
+
+            font-size: 18px;
+        }
+
+        .rm_kpi_content h2 {
+
+            font-size: 25px;
+        }
+
+        .rm_kpi_content span {
+
+            font-size: 12px;
+        }
+
+        .rm_kpi_content small {
+
+            font-size: 10px;
+        }
+
+        .rm_resource_grid {
+
+            gap: 12px;
+        }
+
+        .rm_workspace_grid {
+
+            gap: 0;
+        }
+
+        .rm_modal_backdrop {
+
+            padding: 14px;
+        }
+
+        .rm_modal_header,
+        .rm_modal_body,
+        .rm_modal_footer {
+
+            padding: 18px;
+        }
+    }
+
+
+    /* =====================================================
+       26. SMALL MOBILE SCREENS
+       ===================================================== */
+
+    @media (max-width: 480px) {
+
+        .rm_kpi_grid,
+        .rm_resource_grid,
+        .rm_period_grid,
+        .rm_filters {
+
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .rm_kpi {
+
+            min-height: 100px;
+        }
+
+        .rm_header_actions {
+
+            flex-direction: column;
+
+            align-items: stretch;
+        }
+
+        .rm_header_actions > button {
+
+            width: 100%;
+        }
+
+        .rm_selected_stats {
+
+            gap: 8px;
+        }
+
+        .rm_modal_heading h2 {
+
+            font-size: 19px;
+        }
+
+        .rm_modal_icon {
+
+            width: 38px;
+            height: 38px;
+
+            font-size: 18px;
+        }
+    }
+
+
+    /* =====================================================
+       27. ACCESSIBILITY - REDUCED MOTION
+       ===================================================== */
+
+    @media (prefers-reduced-motion: reduce) {
+
+        *,
+        *::before,
+        *::after {
+
+            transition: none !important;
+
+            animation: none !important;
+        }
+    }
+}
+/* =====================================================
+   28. SPLIT RESOURCE DIRECTORY
+   ===================================================== */
+
+.rm_page {
+    .rm_directory_split {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+        align-items: start;
+    }
+
+    .rm_directory_group {
+        min-width: 0;
+        border: 1px solid var(--rm-border);
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--rm-white);
+    }
+
+    .rm_directory_group_header {
+        padding: 18px;
+        border-bottom: 1px solid var(--rm-border);
+
+        h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        p {
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--rm-muted);
+        }
+    }
+
+    .rm_directory_driver .rm_directory_group_header {
+        background: #f5f3ff;
+        color: #7c3aed;
+    }
+
+    .rm_directory_vehicle .rm_directory_group_header {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
+    .rm_directory_group .rm_table_wrapper {
+        border: none;
+        border-radius: 0;
+    }
+
+    .rm_directory_table {
+        min-width: 0;
+        width: 100%;
+
+        th,
+        td {
+            padding: 12px 8px;
+            font-size: 12px;
+            white-space: normal;
+        }
+
+        .rm_table_resource strong {
+            overflow-wrap: anywhere;
+        }
+
+        .rm_table_actions {
+            gap: 5px;
+        }
+
+        .rm_table_icon {
+            width: 28px;
+            height: 28px;
+            font-size: 12px;
+        }
+
+        .rm_view_btn,
+        .rm_icon_btn {
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            min-height: 30px;
+            padding: 0;
+        }
+
+        .rm_status {
+            padding: 5px 7px;
+            font-size: 10px;
+        }
+
+        th:nth-child(3),
+        td:nth-child(3) {
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 1380px) {
+        .rm_directory_split {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+}

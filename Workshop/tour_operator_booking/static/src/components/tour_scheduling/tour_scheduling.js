@@ -1211,7 +1211,7 @@ export class TourScheduling extends Component {
 
     openResources() {
         return this.action.doAction(
-            "tour_operator_booking.action_resources"
+            "tour_operator_booking.action_resource_management_dashboard"
         );
     }
 

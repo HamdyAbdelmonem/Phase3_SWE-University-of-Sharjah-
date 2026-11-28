@@ -1356,7 +1356,7 @@ export class CreateBooking extends Component {
     openResources() {
 
         return this.navigateTo(
-            "tour_operator_booking.action_resources"
+            "tour_operator_booking.action_resource_management_dashboard"
         );
     }
 

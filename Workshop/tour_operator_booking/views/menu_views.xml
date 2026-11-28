@@ -38,6 +38,14 @@
         <field name="target">current</field>
     </record>
 
+        <!-- NEXUS RESOURCE MANAGEMENT -->
+
+    <record id="action_resource_management_dashboard"
+            model="ir.actions.client">
+        <field name="name">Drivers and Vehicles</field>
+        <field name="tag">tour_operator_booking.resource_management</field>
+        <field name="target">current</field>
+    </record>
 
     <!-- MAIN APPLICATION -->
 
@@ -114,12 +122,12 @@
               sequence="20"/>
 
 
-    <!-- OPERATIONAL RESOURCES -->
+        <!-- PROFESSIONAL RESOURCE MANAGEMENT -->
 
     <menuitem id="menu_resources"
               name="Drivers and Vehicles"
               parent="menu_setup"
-              action="action_resources"
+              action="action_resource_management_dashboard"
               sequence="30"/>
 
 

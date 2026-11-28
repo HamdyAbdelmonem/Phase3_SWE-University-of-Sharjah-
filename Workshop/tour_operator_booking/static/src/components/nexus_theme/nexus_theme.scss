@@ -1,0 +1,1509 @@
+/* =========================================================
+   NEXUS - TOUR OPERATOR BOOKING SUITE
+   Global Light / Dark Theme
+   ========================================================= */
+
+
+/* =========================================================
+   01. TOP-RIGHT THEME SWITCH
+   ========================================================= */
+
+.nexus_theme_systray {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 100%;
+
+    padding: 0 8px;
+
+    flex-shrink: 0;
+
+}
+
+.nexus_theme_toggle {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 32px;
+
+    padding: 6px 10px;
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 30px;
+
+    background: rgba(0, 0, 0, 0.12);
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+
+    &:hover {
+
+        background: rgba(255, 255, 255, 0.12);
+
+        border-color: rgba(255, 255, 255, 0.35);
+
+    }
+
+    &:focus-visible {
+
+        outline: 2px solid #09ddc3;
+        outline-offset: 2px;
+
+    }
+
+}
+
+.nexus_theme_sun,
+.nexus_theme_moon {
+
+    font-size: 13px;
+
+    color: #cbd5e1;
+
+    transition: color 0.2s ease;
+
+}
+
+.nexus_theme_sun.active {
+
+    color: #fde68a;
+
+}
+
+.nexus_theme_moon.active {
+
+    color: #c4b5fd;
+
+}
+
+.nexus_theme_track {
+
+    position: relative;
+
+    display: inline-block;
+
+    width: 34px;
+    height: 18px;
+
+    flex-shrink: 0;
+
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.35);
+
+    transition: background 0.2s ease;
+
+    &.dark {
+
+        background: #008c50;
+
+        .nexus_theme_thumb {
+
+            transform: translateX(16px);
+
+        }
+
+    }
+
+}
+
+.nexus_theme_thumb {
+
+    position: absolute;
+
+    top: 2px;
+    left: 2px;
+
+    width: 14px;
+    height: 14px;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+
+    transition: transform 0.2s ease;
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .nexus_theme_toggle,
+    .nexus_theme_track,
+    .nexus_theme_thumb,
+    .nexus_theme_sun,
+    .nexus_theme_moon {
+
+        transition: none;
+
+    }
+
+}
+/* =========================================================
+   02. NEXUS GLOBAL DARK MODE
+   ========================================================= */
+
+html[data-nexus-theme="dark"] {
+
+    /* =====================================================
+       GLOBAL DARK DESIGN SYSTEM
+       ===================================================== */
+
+    --nexus-bg: #0f172a;
+    --nexus-surface: #1e293b;
+    --nexus-surface-alt: #273449;
+    --nexus-hover: #304158;
+    --nexus-border: #334155;
+
+    --nexus-text: #f1f5f9;
+    --nexus-muted: #a8b8cc;
+
+    --nexus-green: #34d399;
+    --nexus-green-bg: #103b32;
+
+    --nexus-blue: #93c5fd;
+    --nexus-blue-bg: #172f50;
+
+    --nexus-purple: #c4b5fd;
+    --nexus-purple-bg: #30254e;
+
+    --nexus-red: #fca5a5;
+    --nexus-red-bg: #48252d;
+
+    --nexus-gold: #fcd34d;
+    --nexus-gold-bg: #45381d;
+
+    --nexus-sidebar: #053b35;
+
+    color-scheme: dark;
+
+
+    /* =====================================================
+       03. ODOO GLOBAL NAVIGATION
+       ===================================================== */
+
+    .o_main_navbar {
+
+        background: #162235 !important;
+        border-color: var(--nexus-border) !important;
+
+        .o_menu_brand,
+        .o_nav_entry,
+        .o_menu_toggle,
+        .dropdown-toggle {
+
+            color: var(--nexus-text);
+
+        }
+
+        .o_nav_entry:hover,
+        .dropdown-toggle:hover {
+
+            background-color: var(--nexus-hover);
+
+        }
+
+    }
+
+    .nexus_theme_toggle {
+
+        background: var(--nexus-surface-alt);
+        border-color: var(--nexus-border);
+
+    }
+
+
+    /* =====================================================
+       04. SHARED NEXUS WORKSPACE COLORS
+       ===================================================== */
+
+    .tob_dashboard,
+    .br_page,
+    .ts_page,
+    .cb_page,
+    .rm_page {
+
+        background: var(--nexus-bg);
+        color: var(--nexus-text);
+
+    }
+
+    .tob_content,
+    .br_main,
+    .ts_main,
+    .cb_main,
+    .rm_main {
+
+        background: var(--nexus-bg);
+        scrollbar-color: #475569 transparent;
+
+        h1,
+        h2,
+        h3,
+        h4 {
+
+            color: var(--nexus-text);
+
+        }
+
+    }
+
+    .tob_sidebar,
+    .br_sidebar,
+    .ts_sidebar,
+    .cb_sidebar,
+    .rm_sidebar {
+
+        background: var(--nexus-sidebar);
+        color: #ffffff;
+
+    }
+
+
+    /* =====================================================
+       05. MAIN DASHBOARD
+       ===================================================== */
+
+    .tob_dashboard {
+
+        .tob_card,
+        .tob_action {
+
+            background: var(--nexus-surface);
+            border-color: var(--nexus-border);
+            color: var(--nexus-text);
+
+            box-shadow: none;
+
+        }
+
+        .tob_heading p,
+        .tob_card span,
+        .tob_action p {
+
+            color: var(--nexus-muted);
+
+        }
+
+        .tob_icon {
+
+            background: var(--nexus-green-bg);
+            color: var(--nexus-green);
+
+        }
+
+        .tob_action {
+
+            i {
+                color: var(--nexus-green);
+            }
+
+            &:hover {
+
+                background: var(--nexus-green-bg);
+                border-color: var(--nexus-green);
+
+            }
+
+        }
+
+        .tob_button {
+
+            background: #008c50;
+            color: #ffffff;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       06. BOOKING REPORTS
+       ===================================================== */
+
+    .br_page {
+
+        --br-background: var(--nexus-bg);
+        --br-text: var(--nexus-text);
+        --br-muted: var(--nexus-muted);
+        --br-border: var(--nexus-border);
+
+        .br_filters,
+        .br_panel,
+        .br_kpi,
+        .br_donut_center {
+
+            background: var(--nexus-surface);
+            box-shadow: none;
+
+        }
+
+        .br_breadcrumb,
+        .br_tour_label strong {
+
+            color: var(--nexus-green);
+
+        }
+
+        .br_kpi small,
+        .br_filter label,
+        .br_status_row > span,
+        .br_empty {
+
+            color: var(--nexus-muted);
+
+        }
+
+        .br_filter input,
+        .br_filter select {
+
+            background: var(--nexus-surface-alt);
+            border-color: var(--nexus-border);
+            color: var(--nexus-text);
+
+            &:focus {
+
+                background: var(--nexus-surface-alt);
+                border-color: var(--nexus-green);
+
+            }
+
+        }
+
+        .br_secondary_btn,
+        .br_view_btn {
+
+            background: var(--nexus-surface-alt);
+            border-color: var(--nexus-border);
+            color: var(--nexus-green);
+
+            &:hover {
+
+                background: var(--nexus-green-bg);
+                border-color: var(--nexus-green);
+                color: var(--nexus-green);
+
+            }
+
+        }
+
+        .br_channel {
+
+            background: var(--nexus-surface-alt);
+
+        }
+
+        .br_value_track,
+        .br_progress_track,
+        .br_donut_empty {
+
+            background: var(--nexus-surface-alt);
+
+        }
+
+        .br_status_row {
+
+            border-color: var(--nexus-border);
+
+        }
+
+        .br_line_chart {
+
+            text {
+                fill: var(--nexus-muted);
+            }
+
+            line[stroke="#e2e8f0"] {
+                stroke: var(--nexus-border);
+            }
+
+            line[stroke="#047857"] {
+                stroke: var(--nexus-green);
+            }
+
+            circle[fill="#047857"] {
+                fill: var(--nexus-green);
+            }
+
+        }
+
+        .br_table {
+
+            thead {
+                background: var(--nexus-surface-alt);
+            }
+
+            th,
+            td {
+
+                color: var(--nexus-text);
+                border-color: var(--nexus-border);
+
+            }
+
+            tbody tr {
+
+                background: var(--nexus-surface);
+                border-color: var(--nexus-border);
+
+                &:nth-child(even) {
+                    background: var(--nexus-surface-alt);
+                }
+
+                &:hover {
+                    background: var(--nexus-green-bg);
+                }
+
+            }
+
+        }
+
+        .br_reference {
+
+            color: var(--nexus-green) !important;
+
+        }
+
+        .br_message,
+        .br_status_confirmed {
+
+            background: var(--nexus-green-bg);
+            border-color: #245c4a;
+            color: var(--nexus-green);
+
+        }
+
+        .br_error,
+        .br_status_cancelled {
+
+            background: var(--nexus-red-bg);
+            border-color: #713b46;
+            color: var(--nexus-red);
+
+        }
+
+        .br_status_draft {
+
+            background: var(--nexus-gold-bg);
+            color: var(--nexus-gold);
+
+        }
+
+    }
+
+
+    /* =====================================================
+       07. TOUR SCHEDULING AND OPERATIONS
+       ===================================================== */
+
+    .ts_page {
+
+        --ts-background: var(--nexus-bg);
+        --ts-white: var(--nexus-surface);
+        --ts-text: var(--nexus-text);
+        --ts-muted: var(--nexus-muted);
+        --ts-border: var(--nexus-border);
+        --ts-green-dark: var(--nexus-green);
+
+        .ts_panel,
+        .ts_kpi,
+        .ts_capacity_overview,
+        .ts_message {
+
+            background: var(--nexus-surface);
+            border-color: var(--nexus-border);
+            box-shadow: none;
+
+        }
+
+        .ts_breadcrumb,
+        .ts_capacity_heading i,
+        .ts_capacity_heading > strong:last-child,
+        .ts_table_tour strong {
+
+            color: var(--nexus-green);
+
+        }
+
+        .ts_filters,
+        .ts_view_switch,
+        .ts_weekdays,
+        .ts_week_day_header,
+        .ts_day_calendar,
+        .ts_resource_card {
+
+            background: var(--nexus-surface-alt);
+            border-color: var(--nexus-border);
+
+        }
+
+        .ts_view_switch button:not(.active),
+        .ts_weekday,
+        .ts_week_day_header,
+        .ts_day_number,
+        .ts_filter label,
+        .ts_resource_card label,
+        .ts_empty h4 {
+
+            color: var(--nexus-muted);
+
+        }
+
+        select {
+
+            background: var(--nexus-surface-alt);
+            color: var(--nexus-text);
+
+            border-color: var(--nexus-border);
+
+            &:disabled {
+                background: var(--nexus-bg);
+            }
+
+        }
+
+        .ts_secondary_btn,
+        .ts_view_btn,
+        .ts_icon_btn,
+        .ts_today_btn {
+
+            background: var(--nexus-surface-alt);
+            color: var(--nexus-green);
+            border-color: var(--nexus-border);
+
+            &:hover:not(:disabled) {
+
+                background: var(--nexus-green-bg);
+                color: var(--nexus-green);
+                border-color: var(--nexus-green);
+
+            }
+
+        }
+
+
+        /* Monthly and weekly calendars */
+
+        .ts_day_cell {
+
+            background: var(--nexus-surface);
+            border-color: var(--nexus-border);
+
+            &.weekend {
+                background: var(--nexus-surface-alt);
+            }
+
+            &.outside {
+
+                background: var(--nexus-bg);
+
+                .ts_day_number {
+                    color: #94a3b8;
+                }
+
+            }
+
+            &.today {
+
+                background: var(--nexus-green-bg);
+
+                .ts_day_number {
+
+                    background: #008c50;
+                    color: #ffffff;
+
+                }
+
+            }
+
+        }
+
+        .ts_week_column {
+
+            border-color: var(--nexus-border);
+
+            &.weekend {
+                background: var(--nexus-surface-alt);
+            }
+
+            &.today {
+
+                background: var(--nexus-green-bg);
+
+                .ts_week_day_header {
+
+                    background: #174b3d;
+                    color: var(--nexus-green);
+
+                }
+
+            }
+
+        }
+
+        .ts_week_day_header:hover:not(:disabled),
+        .ts_day_number:hover:not(:disabled) {
+
+            background: var(--nexus-green-bg);
+            color: var(--nexus-green);
+
+        }
+
+        .ts_legend_draft,
+        .ts_progress_track {
+
+            background: var(--nexus-surface-alt);
+
+        }
+
+
+        /* Selected departure */
+
+        .ts_selected_banner {
+
+            background: var(--nexus-green-bg);
+            border-color: #245c4a;
+
+            h2 {
+                color: var(--nexus-green);
+            }
+
+            p {
+                color: var(--nexus-muted);
+            }
+
+        }
+
+        .ts_detail_row > i {
+
+            background: var(--nexus-surface-alt);
+            color: var(--nexus-green);
+
+        }
+
+        .ts_detail_capacity {
+
+            border-color: var(--nexus-border);
+
+        }
+
+        .ts_seat_stat {
+
+            background: var(--nexus-surface-alt);
+
+            small {
+                color: var(--nexus-muted);
+            }
+
+            &.reserved {
+
+                background: var(--nexus-blue-bg);
+
+                strong {
+                    color: var(--nexus-blue);
+                }
+
+            }
+
+            &.available {
+
+                background: var(--nexus-green-bg);
+
+                strong {
+                    color: var(--nexus-green);
+                }
+
+            }
+
+        }
+
+
+        /* Alerts and scheduling conflicts */
+
+        .ts_alert.success,
+        .ts_resource_status.success,
+        .ts_status_published {
+
+            background: var(--nexus-green-bg);
+            color: var(--nexus-green);
+            border-color: #245c4a;
+
+        }
+
+        .ts_alert.warning,
+        .ts_resource_status.warning,
+        .ts_status_draft {
+
+            background: var(--nexus-gold-bg);
+            color: var(--nexus-gold);
+            border-color: #725c2b;
+
+        }
+
+        .ts_alert.danger,
+        .ts_resource_status.danger,
+        .ts_conflict_panel {
+
+            background: var(--nexus-red-bg);
+            color: var(--nexus-red);
+            border-color: #713b46;
+
+        }
+
+        .ts_alert.neutral,
+        .ts_resource_status.neutral {
+
+            background: var(--nexus-surface-alt);
+            color: var(--nexus-muted);
+            border-color: var(--nexus-border);
+
+        }
+
+        .ts_pending_notice {
+
+            color: var(--nexus-gold);
+
+        }
+
+        .ts_conflict_row {
+
+            background: var(--nexus-surface);
+            border-color: #713b46;
+
+            strong,
+            > i {
+
+                color: var(--nexus-red);
+
+            }
+
+            p {
+                color: var(--nexus-text);
+            }
+
+        }
+
+        .ts_conflict_heading,
+        .ts_conflict_resolution {
+
+            color: var(--nexus-red);
+
+        }
+
+
+        /* Scheduled departures table */
+
+        .ts_table {
+
+            thead {
+                background: var(--nexus-surface-alt);
+            }
+
+            th,
+            td {
+
+                color: var(--nexus-text);
+                border-color: var(--nexus-border);
+
+            }
+
+            tbody tr {
+
+                background: var(--nexus-surface);
+
+                &:nth-child(even) {
+                    background: var(--nexus-surface-alt);
+                }
+
+                &:hover,
+                &.selected {
+
+                    background: var(--nexus-green-bg);
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    /* =====================================================
+       08. CREATE BOOKING
+       ===================================================== */
+
+    .cb_page {
+
+        --cb-background: var(--nexus-bg);
+        --cb-white: var(--nexus-surface);
+        --cb-text: var(--nexus-text);
+        --cb-muted: var(--nexus-muted);
+        --cb-border: var(--nexus-border);
+
+        --cb-blue: var(--nexus-blue);
+        --cb-blue-light: var(--nexus-blue-bg);
+
+        --cb-purple: var(--nexus-purple);
+        --cb-purple-light: var(--nexus-purple-bg);
+
+        --cb-red: var(--nexus-red);
+        --cb-red-light: var(--nexus-red-bg);
+
+        --cb-green-light: var(--nexus-green-bg);
+
+        --cb-teal: #5eead4;
+        --cb-teal-light: #16443f;
+
+        --cb-shadow: none;
+
+        .cb_panel,
+        .cb_reference_banner,
+        .cb_loading,
+        .cb_availability_result {
+
+            background: var(--nexus-surface);
+            border-color: var(--nexus-border);
+
+        }
+
+        .cb_breadcrumb,
+        .cb_subheading,
+        .cb_selected_label,
+        .cb_processing,
+        .cb_summary_heading i,
+        .cb_capacity_header strong {
+
+            color: var(--nexus-green);
+
+        }
+
+        .cb_field label,
+        .cb_customer_search > label,
+        .cb_empty_summary h4 {
+
+            color: var(--nexus-muted);
+
+        }
+
+        .cb_field input,
+        .cb_field select,
+        .cb_search_input {
+
+            background: var(--nexus-surface-alt);
+            border-color: var(--nexus-border);
+            color: var(--nexus-text);
+
+            &:focus,
+            &:focus-within {
+
+                background: var(--nexus-surface-alt);
+                border-color: var(--nexus-green);
+
+            }
+
+        }
+
+        .cb_search_input input {
+
+            background: transparent;
+            color: var(--nexus-text);
+
+        }
+
+        .cb_field input:disabled,
+        .cb_field select:disabled {
+
+            background: var(--nexus-bg);
+
+        }
+
+        .cb_customer_result {
+
+            background: var(--nexus-surface);
+            color: var(--nexus-text);
+
+            &:hover {
+                background: var(--nexus-green-bg);
+            }
+
+        }
+
+        .cb_secondary_btn,
+        .cb_small_btn,
+        .cb_icon_btn {
+
+            background: var(--nexus-surface-alt);
+            border-color: var(--nexus-border);
+            color: var(--nexus-green);
+
+            &:hover:not(:disabled) {
+
+                background: var(--nexus-green-bg);
+                color: var(--nexus-green);
+
+            }
+
+        }
+
+        .cb_new_customer,
+        .cb_package_preview,
+        .cb_departure_preview,
+        .cb_source_option,
+        .cb_guest_counter {
+
+            background: var(--nexus-surface-alt);
+            border-color: var(--nexus-border);
+
+        }
+
+        .cb_guest_counter button,
+        .cb_guest_counter input {
+
+            background: var(--nexus-surface-alt);
+            color: var(--nexus-text);
+
+            &:hover {
+
+                background: var(--nexus-green-bg);
+                color: var(--nexus-green);
+
+            }
+
+        }
+
+        .cb_selected_customer,
+        .cb_total_box,
+        .cb_remaining_note,
+        .cb_source_option.selected {
+
+            background: var(--nexus-green-bg);
+            border-color: #245c4a;
+            color: var(--nexus-green);
+
+        }
+
+        .cb_customer_details h3,
+        .cb_contact_line,
+        .cb_total_box strong,
+        .cb_total_box span {
+
+            color: var(--nexus-green);
+
+        }
+
+        .cb_customer_avatar,
+        .cb_package_icon {
+
+            background: var(--nexus-green-bg);
+            color: var(--nexus-green);
+
+        }
+
+        .cb_summary_detail > i {
+
+            background: var(--nexus-surface-alt);
+            color: var(--nexus-green);
+
+        }
+
+        .cb_progress_track,
+        .cb_capacity_item {
+
+            background: var(--nexus-surface-alt);
+
+        }
+
+        .cb_capacity_item.reserved {
+
+            background: var(--nexus-blue-bg);
+
+            strong {
+                color: var(--nexus-blue);
+            }
+
+        }
+
+        .cb_capacity_item.available {
+
+            background: var(--nexus-green-bg);
+
+            strong {
+                color: var(--nexus-green);
+            }
+
+        }
+
+        .cb_availability_success,
+        .cb_status_confirmed {
+
+            background: var(--nexus-green-bg);
+            border-color: #245c4a;
+            color: var(--nexus-green);
+
+        }
+
+        .cb_availability_danger,
+        .cb_error,
+        .cb_status_cancelled {
+
+            background: var(--nexus-red-bg);
+            border-color: #713b46;
+            color: var(--nexus-red);
+
+        }
+
+        .cb_availability_neutral,
+        .cb_info_note {
+
+            background: var(--nexus-blue-bg);
+            border-color: var(--nexus-border);
+            color: var(--nexus-blue);
+
+        }
+
+        .cb_inline_warning,
+        .cb_status_draft {
+
+            background: var(--nexus-gold-bg);
+            border-color: #725c2b;
+            color: var(--nexus-gold);
+
+        }
+
+    }
+
+
+    /* =====================================================
+       09. DRIVERS AND VEHICLES
+       ===================================================== */
+
+    .rm_page {
+
+        --rm-background: var(--nexus-bg);
+        --rm-white: var(--nexus-surface);
+        --rm-text: var(--nexus-text);
+        --rm-muted: var(--nexus-muted);
+        --rm-border: var(--nexus-border);
+
+        --rm-green-dark: var(--nexus-green);
+
+        .rm_panel,
+        .rm_kpi,
+        .rm_resource_card,
+        .rm_modal,
+        .rm_directory_group {
+
+            background: var(--nexus-surface);
+            border-color: var(--nexus-border);
+            box-shadow: none;
+
+        }
+
+        .rm_breadcrumb,
+        .rm_utilization_value,
+        .rm_panel_header h3 i,
+        .rm_resource_company i {
+
+            color: var(--nexus-green);
+
+        }
+
+        .rm_overview_item,
+        .rm_assignment_card,
+        .rm_empty,
+        .rm_selected_stats > div {
+
+            background: var(--nexus-surface-alt);
+            border-color: var(--nexus-border);
+
+        }
+
+        .rm_empty h4,
+        .rm_field label {
+
+            color: var(--nexus-muted);
+
+        }
+
+        .rm_field input,
+        .rm_field select,
+        .rm_search {
+
+            background: var(--nexus-surface-alt);
+            border-color: var(--nexus-border);
+            color: var(--nexus-text);
+
+        }
+
+        .rm_search input {
+
+            background: transparent;
+            color: var(--nexus-text);
+
+        }
+
+        .rm_secondary_btn,
+        .rm_icon_btn,
+        .rm_view_btn {
+
+            background: var(--nexus-surface-alt);
+            border-color: var(--nexus-border);
+            color: var(--nexus-green);
+
+            &:hover:not(:disabled) {
+
+                background: var(--nexus-green-bg);
+                border-color: var(--nexus-green);
+                color: var(--nexus-green);
+
+            }
+
+        }
+
+
+        /* Vehicle and driver cards */
+
+        .rm_vehicle_visual {
+
+            background: linear-gradient(
+                135deg,
+                #1e3a5f,
+                #172f50
+            );
+
+        }
+
+        .rm_driver_visual {
+
+            background: linear-gradient(
+                135deg,
+                #392b57,
+                #30254e
+            );
+
+        }
+
+        .rm_vehicle_icon {
+
+            background: #27466e;
+            color: var(--nexus-blue);
+
+        }
+
+        .rm_driver_avatar {
+
+            background: #44366b;
+            color: var(--nexus-purple);
+            border-color: #65538d;
+
+        }
+
+        .rm_assignment_count,
+        .rm_detail_row,
+        .rm_modal_header,
+        .rm_modal_footer {
+
+            border-color: var(--nexus-border);
+
+        }
+
+        .rm_selected_hero,
+        .rm_period_note {
+
+            background: var(--nexus-green-bg);
+            border-color: #245c4a;
+            color: var(--nexus-green);
+
+            h2 {
+                color: var(--nexus-green);
+            }
+
+            p {
+                color: var(--nexus-muted);
+            }
+
+        }
+
+        .rm_detail_icon {
+
+            background: var(--nexus-surface-alt);
+            color: var(--nexus-green);
+
+        }
+
+        .rm_progress_track {
+
+            background: var(--nexus-surface-alt);
+
+        }
+
+        .rm_status_available {
+
+            background: var(--nexus-green-bg);
+            color: var(--nexus-green);
+
+        }
+
+        .rm_status_assigned {
+
+            background: var(--nexus-gold-bg);
+            color: var(--nexus-gold);
+
+        }
+
+
+        /* Separate resource directories */
+
+        .rm_directory_driver .rm_directory_group_header {
+
+            background: var(--nexus-purple-bg);
+            color: var(--nexus-purple);
+
+            h3 {
+                color: var(--nexus-purple);
+            }
+
+        }
+
+        .rm_directory_vehicle .rm_directory_group_header {
+
+            background: var(--nexus-blue-bg);
+            color: var(--nexus-blue);
+
+            h3 {
+                color: var(--nexus-blue);
+            }
+
+        }
+
+        .rm_table {
+
+            thead,
+            thead th {
+
+                background: var(--nexus-surface-alt);
+
+            }
+
+            th,
+            td {
+
+                color: var(--nexus-text);
+                border-color: var(--nexus-border);
+
+            }
+
+            tbody tr {
+
+                background: var(--nexus-surface);
+
+                &:nth-child(even) {
+                    background: var(--nexus-surface-alt);
+                }
+
+                &:hover,
+                &.selected {
+
+                    background: var(--nexus-green-bg);
+
+                }
+
+            }
+
+        }
+
+        .rm_table_resource strong {
+
+            color: var(--nexus-green);
+
+        }
+
+        .rm_information,
+        .rm_form_note {
+
+            background: var(--nexus-blue-bg);
+            border-color: var(--nexus-border);
+            color: var(--nexus-blue);
+
+            strong,
+            i {
+
+                color: var(--nexus-blue);
+
+            }
+
+            p {
+                color: var(--nexus-muted);
+            }
+
+        }
+
+        .rm_error {
+
+            background: var(--nexus-red-bg);
+            border-color: #713b46;
+            color: var(--nexus-red);
+
+        }
+
+    }
+
+
+    /* =====================================================
+       10. STANDARD ODOO BACKEND VIEWS
+       ===================================================== */
+
+    .o_web_client {
+
+        --bs-body-bg: var(--nexus-bg);
+        --bs-body-color: var(--nexus-text);
+        --bs-border-color: var(--nexus-border);
+        --bs-secondary-color: var(--nexus-muted);
+        --bs-tertiary-bg: var(--nexus-surface-alt);
+
+        background: var(--nexus-bg);
+        color: var(--nexus-text);
+
+        .o_action_manager,
+        .o_content,
+        .o_view_controller,
+        .o_form_view,
+        .o_list_view,
+        .o_kanban_view,
+        .o_calendar_view {
+
+            background-color: var(--nexus-bg);
+            color: var(--nexus-text);
+
+        }
+
+        .o_control_panel,
+        .o_form_sheet,
+        .o_form_sheet_bg,
+        .o_form_statusbar,
+        .o_searchview,
+        .o_kanban_record {
+
+            background-color: var(--nexus-surface);
+            color: var(--nexus-text);
+            border-color: var(--nexus-border);
+
+        }
+
+        .o_input,
+        .form-control,
+        .form-select {
+
+            background-color: var(--nexus-surface-alt);
+            color: var(--nexus-text);
+            border-color: var(--nexus-border);
+
+        }
+
+        .o_form_label,
+        .o_field_widget {
+
+            color: var(--nexus-text);
+
+        }
+
+        .o_list_table {
+
+            --bs-table-color: var(--nexus-text);
+            --bs-table-bg: var(--nexus-surface);
+            --bs-table-striped-bg: var(--nexus-surface-alt);
+            --bs-table-striped-color: var(--nexus-text);
+            --bs-table-hover-bg: var(--nexus-hover);
+            --bs-table-hover-color: var(--nexus-text);
+            --bs-table-border-color: var(--nexus-border);
+
+            color: var(--nexus-text);
+
+            thead,
+            th {
+
+                background-color: var(--nexus-surface-alt);
+                color: var(--nexus-text);
+
+            }
+
+            td {
+
+                border-color: var(--nexus-border);
+
+            }
+
+        }
+
+    }
+
+
+    /* =====================================================
+       11. ODOO DROPDOWNS AND DIALOGS
+       ===================================================== */
+
+    .dropdown-menu,
+    .modal-content,
+    .popover {
+
+        --bs-dropdown-bg: var(--nexus-surface);
+        --bs-dropdown-color: var(--nexus-text);
+        --bs-dropdown-link-color: var(--nexus-text);
+        --bs-dropdown-link-hover-bg: var(--nexus-hover);
+        --bs-dropdown-link-hover-color: var(--nexus-text);
+
+        background-color: var(--nexus-surface);
+        color: var(--nexus-text);
+        border-color: var(--nexus-border);
+
+    }
+
+    .dropdown-item {
+
+        color: var(--nexus-text);
+
+        &:hover,
+        &:focus {
+
+            background-color: var(--nexus-hover);
+            color: var(--nexus-text);
+
+        }
+
+    }
+
+    .modal-header,
+    .modal-footer {
+
+        border-color: var(--nexus-border);
+
+    }
+
+    .modal-body,
+    .modal-title,
+    .popover-body {
+
+        color: var(--nexus-text);
+
+    }
+
+    .btn-close {
+
+        filter: invert(1);
+
+    }
+
+}

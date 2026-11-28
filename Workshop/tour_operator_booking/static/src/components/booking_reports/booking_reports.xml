@@ -20,13 +20,71 @@
                 </div>
 
                 <div class="br_sidebar_label">
-                    ANALYTICS
-                </div>
+    WORKSPACE
+</div>
 
-                <div class="br_nav active">
-                    <i class="fa fa-bar-chart"/>
-                    <span>Booking Reports</span>
-                </div>
+<nav class="br_navigation">
+
+    <button t-if="state.canAccessDashboard"
+            type="button"
+            class="br_nav"
+            t-on-click="openDashboard">
+
+        <i class="fa fa-home"/>
+        <span>Dashboard</span>
+
+    </button>
+
+    <button t-if="state.canAccessBookings"
+            type="button"
+            class="br_nav"
+            t-on-click="openBookings">
+
+        <i class="fa fa-ticket"/>
+        <span>Bookings</span>
+
+    </button>
+
+    <button t-if="state.canAccessOperations"
+            type="button"
+            class="br_nav"
+            t-on-click="openPackages">
+
+        <i class="fa fa-map-marker"/>
+        <span>Tours &amp; Packages</span>
+
+    </button>
+
+    <button t-if="state.canAccessOperations"
+            type="button"
+            class="br_nav"
+            t-on-click="openResources">
+
+        <i class="fa fa-car"/>
+        <span>Drivers &amp; Vehicles</span>
+
+    </button>
+
+    <button t-if="state.canAccessOperations"
+            type="button"
+            class="br_nav"
+            t-on-click="openOperations">
+
+        <i class="fa fa-calendar"/>
+        <span>Operations</span>
+
+    </button>
+
+    <button type="button"
+            class="br_nav active"
+            aria-current="page">
+
+        <i class="fa fa-bar-chart"/>
+        <span>Reports</span>
+
+    </button>
+
+</nav>
 
                 <div class="br_sidebar_footer">
                     <strong>NEXUS</strong>
